@@ -3,9 +3,11 @@ package be.tomtruyen.cryptotracker.domain;
 import org.springframework.http.HttpStatus;
 
 public enum VerifyResult {
-    SUCCESS(true, "Email verified", HttpStatus.OK),
-    ERR_MISSING_PARAMETERS(false, "Missing parameters", HttpStatus.BAD_REQUEST),
-    ERR_NOT_FOUND(false, "Failed to verify email", HttpStatus.NOT_FOUND),
+    SUCCESS(true, "Email verified.", HttpStatus.OK),
+    ERR_MISSING_PARAMETERS(false, "Missing parameters.", HttpStatus.BAD_REQUEST),
+    ERR_EMPTY_EMAIL(false, "Missing email.", HttpStatus.BAD_REQUEST),
+    ERR_ALREADY_VERIFIED(true, "Email already verified.", HttpStatus.BAD_REQUEST),
+    ERR_NOT_FOUND(false, "Failed to verify email.", HttpStatus.NOT_FOUND),
     ERR_UNKNOWN(false, "Something went wrong. Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
 
     private final boolean success;

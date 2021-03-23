@@ -1,5 +1,6 @@
 package be.tomtruyen.cryptotracker.services;
 
+import be.tomtruyen.cryptotracker.domain.User;
 import be.tomtruyen.cryptotracker.domain.VerifyResult;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,11 +26,19 @@ public class VerifyService {
             try {
                 DatabaseService databaseService = new DatabaseService();
 
-                boolean emailExists = databaseService.verifyUser(email);
+                User user = databaseService.findUserByEmail(email);
 
-                if(!emailExists) {
+                if(user == null) {
                     result = VerifyResult.ERR_NOT_FOUND;
+                } else {
+                    boolean emailAlreadyVerified = databaseService.verifyUser(email);
+                    if(emailAlreadyVerified) {
+                        result = VerifyResult.ERR_ALREADY_VERIFIED;
+                    }
                 }
+
+
+
 
                 databaseService.closeConnection();
             } catch (SQLException se) {
@@ -56,6 +65,8 @@ public class VerifyService {
         String email = (String) body.getOrDefault("email", null);
 
         if(email == null) return VerifyResult.ERR_MISSING_PARAMETERS;
+
+        if(email.isEmpty()) return VerifyResult.ERR_EMPTY_EMAIL;
 
         return VerifyResult.SUCCESS;
     }
