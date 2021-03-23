@@ -1,13 +1,14 @@
 package be.tomtruyen.cryptotracker.services;
 
 import be.tomtruyen.cryptotracker.domain.User;
+import be.tomtruyen.cryptotracker.interfaces.DatabaseServiceInterface;
 import org.springframework.stereotype.Service;
 
 import java.sql.*;
 import java.util.Properties;
 
 @Service
-public class DatabaseService {
+public class DatabaseService implements DatabaseServiceInterface {
     // useAffectedRows=true ==> Makes it so that when no rows are updated the updateCount = 0, otherwise if
     // The query was still found it would return 1, because there was a matching result.
     final private String database = "jdbc:mysql://localhost:3306/cryptotracker?useAffectedRows=true";
