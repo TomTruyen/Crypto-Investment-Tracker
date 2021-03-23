@@ -16,3 +16,23 @@
     </b-form>
   </div>
 </template>
+
+<script>
+
+export default {
+  mounted() {
+    this.checkLoggedIn();
+  },
+  methods: {
+    checkLoggedIn() {
+        let cookie = this.$cookie.get('access_token');
+        if (cookie == null) cookie = '';
+
+        this.$store.commit('setIsLoggedIn', true);
+
+        if(cookie != "") this.$router.push('/');
+      },
+  }
+}
+
+</script>
