@@ -9,6 +9,9 @@ Vue.use(VueRouter)
 const routes = [{
         path: '/',
         name: 'Home',
+        meta: {
+            requiresAuth: true
+        },
         component: Home
     },
     {
