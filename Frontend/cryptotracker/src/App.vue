@@ -5,15 +5,17 @@
 <template>
   <div>
   <!-- Logged out view -->
-    <b-nav align="right" v-if="cookie == ''">
-      <b-nav-item to="/login">Login</b-nav-item>
-      <b-nav-item to="/register">Register</b-nav-item>
-    </b-nav>
-  <!-- Logged in view -->
-    <b-nav align="right" v-if="cookie != ''">
-      <b-nav-item to="/">Home</b-nav-item>
-      <b-nav-item to="/" v-on:click="logout">Logout</b-nav-item>
-    </b-nav>
+    <div v-if="!['Verify'].includes($route.name)">
+      <b-nav align="right" v-if="cookie == ''">
+        <b-nav-item to="/login">Login</b-nav-item>
+        <b-nav-item to="/register">Register</b-nav-item>
+      </b-nav>
+    <!-- Logged in view -->
+      <b-nav align="right" v-if="cookie != ''">
+        <b-nav-item to="/">Home</b-nav-item>
+        <b-nav-item to="/" v-on:click="logout">Logout</b-nav-item>
+      </b-nav>
+    </div>
     <router-view />
   </div>
 </template>
