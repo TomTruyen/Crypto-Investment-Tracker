@@ -1,0 +1,34 @@
+import axios from 'axios';
+import LoginResult from '../models/LoginResult';
+
+export default class API {
+    static async login(email, password) {
+        let options = {
+            method: 'POST',
+            baseURL: 'http://localhost:8888/',
+            url: '/login',
+            header: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "Access-Control-Allow-Origin": "*"
+            },
+            data: {
+                'email': email,
+                'password': password
+            }
+        };
+
+        let result = new LoginResult();
+        await axios.request(options).then((res) => {
+            if (res.data != null) {
+                result = LoginResult.fromJSON(res.data);
+            }
+        }).catch((err) => {
+            result = LoginResult.fromJSON(err.response.data);
+        });
+
+        console.clear();
+
+        return result;
+    }
+}
