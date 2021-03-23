@@ -4,9 +4,9 @@ import org.springframework.http.HttpStatus;
 
 public enum LoginResult {
     SUCCESS(true, "", HttpStatus.OK),
-    ERR_MISSING_PARAMETERS(false, "Missing parameters", HttpStatus.BAD_REQUEST),
-    ERR_NOT_FOUND(false, "Invalid email/password combination", HttpStatus.NOT_FOUND),
-    ERR_NOT_VERIFIED(false, "Email not verified", HttpStatus.BAD_REQUEST),
+    ERR_MISSING_PARAMETERS(false, "Missing parameters.", HttpStatus.BAD_REQUEST),
+    ERR_NOT_FOUND(false, "Invalid email/password combination.", HttpStatus.NOT_FOUND),
+    ERR_NOT_VERIFIED(false, "Email not verified.", HttpStatus.BAD_REQUEST),
     ERR_UNKNOWN(false, "Something went wrong. Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
 
     private final boolean success;

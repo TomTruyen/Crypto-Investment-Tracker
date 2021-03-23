@@ -15,9 +15,6 @@ import java.util.Map;
 public class RegisterController {
     @PostMapping
     public ResponseEntity<Object> doRegister(@RequestBody Map<String, Object> body) {
-        System.out.println("REGISTER ");
-        System.out.println(body);
-
         return RegisterService.register(body);
     }
 }
