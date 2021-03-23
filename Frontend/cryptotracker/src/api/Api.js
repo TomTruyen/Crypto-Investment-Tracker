@@ -1,6 +1,7 @@
 import axios from 'axios';
 import LoginResult from '../models/LoginResult';
 import RegisterResult from '../models/RegisterResult';
+import VerifyResult from '../models/VerifyResult';
 
 export default class API {
     static async login(email, password) {
@@ -58,7 +59,36 @@ export default class API {
             result = RegisterResult.fromJSON(err.response.data);
         });
 
-        // console.clear();
+        console.clear();
+
+        return result;
+    }
+
+    static async verify(email) {
+        let options = {
+            method: 'POST',
+            baseURL: 'http://localhost:8888/',
+            url: '/verify',
+            header: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "Access-Control-Allow-Origin": "*"
+            },
+            data: {
+                'email': email,
+            }
+        };
+
+        let result = new VerifyResult();
+        await axios.request(options).then((res) => {
+            if (res.data != null) {
+                result = VerifyResult.fromJSON(res.data);
+            }
+        }).catch((err) => {
+            result = VerifyResult.fromJSON(err.response.data);
+        });
+
+        console.clear();
 
         return result;
     }

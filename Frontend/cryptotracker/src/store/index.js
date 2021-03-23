@@ -10,6 +10,7 @@ export default new Vuex.Store({
         isLoggedIn: false,
         loginResult: null,
         registerResult: null,
+        VerifyResult: null,
     },
     getters: {
         isLoggedIn(state) {
@@ -20,6 +21,9 @@ export default new Vuex.Store({
         },
         getRegister(state) {
             return state.registerResult;
+        },
+        getVerify(state) {
+            return state.VerifyResult;
         }
     },
     mutations: {
@@ -32,6 +36,9 @@ export default new Vuex.Store({
         },
         register(state, registerResult) {
             state.registerResult = registerResult;
+        },
+        verify(state, VerifyResult) {
+            state.VerifyResult = VerifyResult;
         }
     },
     actions: {
@@ -44,6 +51,12 @@ export default new Vuex.Store({
             API.register(data['email'], data['password']).then((registerResult) => {
                 context.commit('register', registerResult);
             });
+        },
+        verify(context, email) {
+            API.verify(email).then((VerifyResult) => {
+                context.commit('verify', VerifyResult);
+            });
         }
+
     }
 })

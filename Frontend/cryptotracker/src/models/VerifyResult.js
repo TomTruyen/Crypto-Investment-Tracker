@@ -1,4 +1,4 @@
-export default class RegisterResult {
+export default class VerifyResult {
     constructor(success, status, message, token, time) {
         this._setSuccess(success);
         this._setStatus(status);
@@ -27,7 +27,7 @@ export default class RegisterResult {
     }
 
     static fromJSON(json) {
-        return new RegisterResult(
+        return new VerifyResult(
             json['success'],
             json['status'],
             json['message'],
