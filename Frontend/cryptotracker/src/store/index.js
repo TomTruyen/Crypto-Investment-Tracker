@@ -24,7 +24,7 @@ export default new Vuex.Store({
         },
         getVerify(state) {
             return state.VerifyResult;
-        }
+        },
     },
     mutations: {
         setIsLoggedIn(state, value) {
@@ -39,7 +39,7 @@ export default new Vuex.Store({
         },
         verify(state, VerifyResult) {
             state.VerifyResult = VerifyResult;
-        }
+        },
     },
     actions: {
         login(context, data) {

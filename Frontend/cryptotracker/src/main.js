@@ -17,14 +17,15 @@ Vue.use(IconsPlugin);
 
 router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
-        // this route requires auth, check if logged in
-        // if not, redirect to login page.
         if (!store.getters.isLoggedIn) {
+            document.title = 'Login | CryptoTracker';
             next({ name: 'Login' })
         } else {
+            document.title = to.meta.title;
             next();
         }
     } else {
+        document.title = to.meta.title;
         next() // does not require auth, make sure to always call next()!
     }
 })

@@ -11,23 +11,33 @@ const routes = [{
         path: '/',
         name: 'Home',
         meta: {
-            requiresAuth: true
+            requiresAuth: true,
+            title: 'Home | CryptoTracker'
         },
         component: Home
     },
     {
         path: '/login',
         name: 'Login',
+        meta: {
+            title: 'Login | CryptoTracker'
+        },
         component: Login
     },
     {
         path: '/register',
         name: 'Register',
+        meta: {
+            title: 'Register | CryptoTracker'
+        },
         component: Register
     },
     {
         path: '/verify',
         name: 'Verify',
+        meta: {
+            title: 'Verify | CryptoTracker'
+        },
         component: Verify
     }
 ]
