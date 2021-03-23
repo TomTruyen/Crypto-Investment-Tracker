@@ -3,13 +3,14 @@ package be.tomtruyen.cryptotracker.services;
 import be.tomtruyen.cryptotracker.domain.VerifyResult;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
-import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.Base64;
 import java.util.Date;
 import java.util.Map;
 
+@Service
 public class VerifyService {
     public static ResponseEntity<Object> verify(Map<String, Object> body) {
         VerifyResult result = validate(body);

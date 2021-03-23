@@ -1,17 +1,18 @@
 package be.tomtruyen.cryptotracker.services;
 
 import be.tomtruyen.cryptotracker.domain.RegisterResult;
-import be.tomtruyen.cryptotracker.domain.User;
 import be.tomtruyen.cryptotracker.utils.Utils;
-import jdk.jshell.execution.Util;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Date;
 import java.util.Map;
 
+@Service
 public class RegisterService {
     public static ResponseEntity<Object> register(Map<String, Object> body){
         RegisterResult result = validate(body);

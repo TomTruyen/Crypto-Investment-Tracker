@@ -5,6 +5,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.stereotype.Service;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
@@ -14,6 +15,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.Map;
 
+@Service
 public class JWTService {
     private static final String SECRET_KEY = "TOM_CRYPTO_TRACKER";
     private static final String TOKEN_PREFIX = "Bearer ";
