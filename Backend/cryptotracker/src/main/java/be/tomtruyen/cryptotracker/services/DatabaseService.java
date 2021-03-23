@@ -59,6 +59,25 @@ public class DatabaseService implements DatabaseServiceInterface {
         return user;
     }
 
+    public User findUserByEmail(String email) throws SQLException {
+        String query = "SELECT * FROM users WHERE email = ? LIMIT 1";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, email);
+
+        ResultSet rs = preparedStatement.executeQuery();
+
+        User user = null;
+        while(rs.next()) {
+            int id = rs.getInt("id");
+            boolean verified = rs.getBoolean("verified");
+
+            user = new User(id, email, password, verified);
+        }
+
+        return user;
+    }
+
     public void addUser(String email, String password) throws SQLException {
         String query = "INSERT INTO users (email, password, verified) VALUES (?, ?, ?)";
 
@@ -79,6 +98,6 @@ public class DatabaseService implements DatabaseServiceInterface {
 
         preparedStatement.executeUpdate();
 
-        return preparedStatement.getUpdateCount() > 0;
+        return preparedStatement.getUpdateCount() <= 0;
     }
 }
