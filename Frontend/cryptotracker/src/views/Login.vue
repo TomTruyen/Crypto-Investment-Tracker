@@ -4,7 +4,7 @@
       <h3>Login</h3>
       <hr />
       <b-alert variant="danger" show v-if="loginResult != null && loginResult.message != ''">{{ loginResult.message }}</b-alert>
-      <b-form-group label="Email address:" label-for="email" v-on:submit="login">
+      <b-form-group label="Email address:" label-for="email">
         <b-form-input id="email" type="text" placeholder="Email" v-model="email"></b-form-input>
       </b-form-group>
       <b-form-group label="Password:" label-for="password">

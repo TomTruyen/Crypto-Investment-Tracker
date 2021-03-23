@@ -1,5 +1,6 @@
 import axios from 'axios';
 import LoginResult from '../models/LoginResult';
+import RegisterResult from '../models/RegisterResult';
 
 export default class API {
     static async login(email, password) {
@@ -28,6 +29,36 @@ export default class API {
         });
 
         console.clear();
+
+        return result;
+    }
+
+    static async register(email, password) {
+        let options = {
+            method: 'POST',
+            baseURL: 'http://localhost:8888/',
+            url: '/register',
+            header: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "Access-Control-Allow-Origin": "*"
+            },
+            data: {
+                'email': email,
+                'password': password
+            }
+        };
+
+        let result = new RegisterResult();
+        await axios.request(options).then((res) => {
+            if (res.data != null) {
+                result = RegisterResult.fromJSON(res.data);
+            }
+        }).catch((err) => {
+            result = RegisterResult.fromJSON(err.response.data);
+        });
+
+        // console.clear();
 
         return result;
     }
