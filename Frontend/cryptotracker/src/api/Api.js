@@ -92,4 +92,33 @@ export default class API {
 
         return result;
     }
+
+    static async resendVerification(email) {
+        let options = {
+            method: 'POST',
+            baseURL: 'http://localhost:8888/',
+            url: '/verify/resend',
+            header: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "Access-Control-Allow-Origin": "*"
+            },
+            data: {
+                'email': email,
+            }
+        };
+
+        let result = new VerifyResult();
+        await axios.request(options).then((res) => {
+            if (res.data != null) {
+                result = VerifyResult.fromJSON(res.data);
+            }
+        }).catch((err) => {
+            result = VerifyResult.fromJSON(err.response.data);
+        });
+
+        console.clear();
+
+        return result;
+    }
 }

@@ -10,7 +10,8 @@ export default new Vuex.Store({
         isLoggedIn: false,
         loginResult: null,
         registerResult: null,
-        VerifyResult: null,
+        verifyResult: null,
+        resendVerificationResult: null,
     },
     getters: {
         isLoggedIn(state) {
@@ -23,8 +24,11 @@ export default new Vuex.Store({
             return state.registerResult;
         },
         getVerify(state) {
-            return state.VerifyResult;
+            return state.verifyResult;
         },
+        getResendVerificationResult(state) {
+            return state.resendVerificationResult;
+        }
     },
     mutations: {
         setIsLoggedIn(state, value) {
@@ -37,9 +41,12 @@ export default new Vuex.Store({
         register(state, registerResult) {
             state.registerResult = registerResult;
         },
-        verify(state, VerifyResult) {
-            state.VerifyResult = VerifyResult;
+        verify(state, verifyResult) {
+            state.verifyResult = verifyResult;
         },
+        resendVerification(state, verifyResult) {
+            state.resendVerificationResult = verifyResult;
+        }
     },
     actions: {
         login(context, data) {
@@ -53,10 +60,14 @@ export default new Vuex.Store({
             });
         },
         verify(context, email) {
-            API.verify(email).then((VerifyResult) => {
-                context.commit('verify', VerifyResult);
+            API.verify(email).then((verifyResult) => {
+                context.commit('verify', verifyResult);
+            });
+        },
+        resendVerification(context, email) {
+            API.resendVerification(email).then((verifyResult) => {
+                context.commit('resendVerification', verifyResult);
             });
         }
-
     }
 })

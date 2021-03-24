@@ -4,6 +4,12 @@
       <h3>Login</h3>
       <hr />
       <b-alert variant="danger" show v-if="loginResult != null && loginResult.message != ''">{{ loginResult.message }}</b-alert>
+      <b-alert variant="danger" show v-if="verifyResult != null && !verifyResult.success && verifyResult.message != ''">{{ verifyResult.message }}</b-alert>
+      <b-alert variant="success" show v-if="verifyResult != null && verifyResult.success && verifyResult.message != ''">{{ verifyResult.message }}</b-alert>
+      <b-link v-if="verifyResult == null && loginResult != null && loginResult.message.toLowerCase().includes('mail not verified')" v-on:click="resendVerification">
+        {{getVerificationMessage}}
+      <br/><br />
+      </b-link>
       <b-alert variant="danger" show v-if="loginResult == null && getErrorMessage != null">{{ getErrorMessage }}</b-alert>
       <b-form-group label="Email address:" label-for="email">
         <b-form-input id="email" type="text" placeholder="Email" v-model="email"></b-form-input>
@@ -19,6 +25,7 @@
 <script>
   import {eventBus} from '@/events/event.js';
   import Utils from '@/utils/Utils.js';
+  import API from './../api/Api.js';
 
   export default {
     mounted() {
@@ -30,6 +37,7 @@
         email: '',
         password: '',
         errorMessage: null,
+        verificationMessage: 'Resend verification email',
       };
     },
     watch: {
@@ -41,14 +49,20 @@
 
           this.$router.push('/');
         }
-      }
+      },
     },
     computed: {
       loginResult() {
         return this.$store.getters.getLogin;
       },
+      verifyResult() {
+        return this.$store.getters.getResendVerificationResult;
+      },
       getErrorMessage() {
         return this.$data.errorMessage;
+      },
+      getVerificationMessage() {
+        return this.$data.verificationMessage;
       }
     },
     methods: {
@@ -69,6 +83,13 @@
           });
         }
       },
+      resendVerification() {
+        if(!this.$data.sendingVerification) {
+          this.$data.verificationMessage = "Sending email...";
+
+          this.$store.dispatch('resendVerification', this.$data.email);
+        }
+      },
       checkLoggedIn() {
         let cookie = this.$cookie.get('access_token');
         if (cookie == null) cookie = '';
@@ -81,6 +102,7 @@
         this.$data.email = "";
         this.$data.password = "";
         this.$data.errorMessage = null;
+        this.$data.verificationMessage = 'Resend verification email';
       }
     }
   }

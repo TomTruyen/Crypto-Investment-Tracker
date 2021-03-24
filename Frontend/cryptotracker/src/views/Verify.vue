@@ -39,8 +39,6 @@
     },
     methods: {
         verify() {
-            console.log("EMAIL" + this.$data.email);
-
             this.$store.dispatch('verify', this.$data.email);
         },
         checkLoggedIn() {

@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 
 public enum VerifyResult {
     SUCCESS(true, "Email verified.", HttpStatus.OK),
+    SUCCESS_RESEND(true, "Email sent.", HttpStatus.OK),
     ERR_MISSING_PARAMETERS(false, "Missing parameters.", HttpStatus.BAD_REQUEST),
     ERR_EMPTY_EMAIL(false, "Missing email.", HttpStatus.BAD_REQUEST),
     ERR_ALREADY_VERIFIED(true, "Email already verified.", HttpStatus.BAD_REQUEST),

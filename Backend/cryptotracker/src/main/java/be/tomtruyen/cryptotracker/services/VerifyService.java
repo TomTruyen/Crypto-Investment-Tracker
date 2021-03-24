@@ -61,6 +61,42 @@ public class VerifyService {
         );
     }
 
+    public static ResponseEntity<Object> resend(Map<String, Object> body) {
+        VerifyResult result = validate(body);
+
+        boolean success = result.isSuccess();
+
+        if(success) {
+            String email = ((String) body.getOrDefault("email", "")).trim();
+
+            try {
+                DatabaseService databaseService = new DatabaseService();
+
+                EmailService.sendEmail(email);
+
+                databaseService.closeConnection();
+
+                result = VerifyResult.SUCCESS_RESEND;
+            } catch (SQLException se) {
+                se.printStackTrace();
+                result = VerifyResult.ERR_UNKNOWN;
+            }
+        }
+
+        success = result.isSuccess();
+        String message = result.getMessage();
+        HttpStatus status = result.getStatus();
+
+        return ResponseEntity.status(status).body(
+                Map.of(
+                        "path", "/verify",
+                        "success", success,
+                        "message", message,
+                        "time", new Date()
+                )
+        );
+    }
+
     private static VerifyResult validate(Map<String, Object> body) {
         String email = (String) body.getOrDefault("email", null);
 

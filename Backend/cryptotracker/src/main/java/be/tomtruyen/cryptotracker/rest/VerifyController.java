@@ -17,4 +17,9 @@ public class VerifyController {
     public ResponseEntity<Object> doVerify(@RequestBody Map<String, Object> body) {
         return VerifyService.verify(body);
     }
+
+    @PostMapping(path = "/resend")
+    public ResponseEntity<Object> resendVerification(@RequestBody Map<String, Object> body) {
+        return VerifyService.resend(body);
+    }
 }
