@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <b-form>
+    <b-form v-on:submit.prevent="login">
       <h3>Login</h3>
       <hr />
       <b-alert variant="danger" show v-if="loginResult != null && loginResult.message != ''">{{ loginResult.message }}</b-alert>
@@ -11,7 +11,7 @@
       <b-form-group label="Password:" label-for="password">
         <b-form-input id="password" type="password" placeholder="Password" v-model="password"></b-form-input>
       </b-form-group>
-      <b-button type="button" variant="primary" v-on:click="login">Login</b-button>
+      <b-button type="submit" variant="primary">Login</b-button>
     </b-form>
   </div>
 </template>

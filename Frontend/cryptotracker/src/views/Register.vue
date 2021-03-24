@@ -1,6 +1,6 @@
 <template>
   <div class="register">
-    <b-form>
+    <b-form v-on:submit.prevent="register">
       <h3>Register</h3>
       <hr />
       <b-alert variant="success" show v-if="registerResult != null && registerResult.success">{{ registerResult.message }}</b-alert>
@@ -15,7 +15,7 @@
       <b-form-group label="Repeat password:" label-for="repeat-password">
         <b-form-input id="repeat-password" type="password" placeholder="Repeat password" v-model="repeatPassword"></b-form-input>
       </b-form-group>
-      <b-button type="button" variant="primary" v-on:click="register">Register</b-button>
+      <b-button type="submit" variant="primary">Register</b-button>
     </b-form>
   </div>
 </template>
