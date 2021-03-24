@@ -25,6 +25,7 @@ import Utils from '@/utils/Utils.js';
 
 export default {
   mounted() {
+    this.resetFields();
     this.checkLoggedIn();
   },
   data: function () {
@@ -76,6 +77,11 @@ export default {
 
       if(cookie != "") this.$router.push('/');
     },
+    resetFields() {
+      this.$data.email = "";
+      this.$data.password = "";
+      this.$data.errorMessage = null;
+    }
   }
 }
 

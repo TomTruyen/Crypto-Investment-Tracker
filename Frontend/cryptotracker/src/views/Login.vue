@@ -22,6 +22,7 @@
 
   export default {
     mounted() {
+     this.resetFields();
      this.checkLoggedIn();
     },
     data: function () {
@@ -76,6 +77,11 @@
 
         if(cookie != "") this.$router.push('/');
       },
+      resetFields() {
+        this.$data.email = "";
+        this.$data.password = "";
+        this.$data.errorMessage = null;
+      }
     }
   }
 </script>
