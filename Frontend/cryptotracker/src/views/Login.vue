@@ -4,6 +4,7 @@
       <h3>Login</h3>
       <hr />
       <b-alert variant="danger" show v-if="loginResult != null && loginResult.message != ''">{{ loginResult.message }}</b-alert>
+      <b-alert variant="danger" show v-if="loginResult == null && getErrorMessage != null">{{ getErrorMessage }}</b-alert>
       <b-form-group label="Email address:" label-for="email">
         <b-form-input id="email" type="text" placeholder="Email" v-model="email"></b-form-input>
       </b-form-group>
@@ -17,6 +18,7 @@
 
 <script>
   import {eventBus} from '@/events/event.js';
+  import Utils from '@/utils/Utils.js';
 
   export default {
     mounted() {
@@ -26,6 +28,7 @@
       return{
         email: '',
         password: '',
+        errorMessage: null,
       };
     },
     watch: {
@@ -42,14 +45,28 @@
     computed: {
       loginResult() {
         return this.$store.getters.getLogin;
+      },
+      getErrorMessage() {
+        return this.$data.errorMessage;
       }
     },
     methods: {
       login() {
-        this.$store.dispatch('login', {
-          'email': this.$data.email,
-          'password': this.$data.password
-        });
+        let isValidEmail = Utils.isValidEmail(this.$data.email);
+        let isNotEmptyPassword = this.$data.password.length > 0;
+
+        if(!isValidEmail) {
+          this.errorMessage = "Invalid email";
+        } else if (!isNotEmptyPassword) {
+          this.errorMessage = "Password can't be empty";
+        }
+
+        if(isValidEmail && isNotEmptyPassword) {
+          this.$store.dispatch('login', {
+            'email': this.$data.email,
+            'password': this.$data.password
+          });
+        }
       },
       checkLoggedIn() {
         let cookie = this.$cookie.get('access_token');

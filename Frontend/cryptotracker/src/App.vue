@@ -14,7 +14,7 @@
       <b-nav align="right" v-if="cookie != ''">
         <b-nav-item to="/">Home</b-nav-item>
         <b-nav-item to="/history">History</b-nav-item>
-        <b-nav-item to="/" v-on:click="logout">Logout</b-nav-item>
+        <b-nav-item v-on:click="logout">Logout</b-nav-item>
       </b-nav>
     </div>
     <router-view />
@@ -46,6 +46,8 @@ export default {
     logout() {
       this.$cookie.delete('access_token');
       this.cookie = '';
+
+      this.$router.push('/login');
     }
   }
 }
