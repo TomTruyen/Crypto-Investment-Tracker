@@ -4,17 +4,29 @@ import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import Verify from '../views/Verify.vue'
+import NotFound from '../views/NotFound.vue';
+import History from '../views/History.vue';
 
 Vue.use(VueRouter)
 
 const routes = [{
         path: '/',
+        alias: '/home',
         name: 'Home',
         meta: {
             requiresAuth: true,
             title: 'Home | CryptoTracker'
         },
         component: Home
+    },
+    {
+        path: '/history',
+        name: 'History',
+        meta: {
+            requiresAuth: true,
+            title: 'History | CryptoTracker'
+        },
+        component: History
     },
     {
         path: '/login',
@@ -39,6 +51,14 @@ const routes = [{
             title: 'Verify | CryptoTracker'
         },
         component: Verify
+    },
+    {
+        path: '*',
+        name: 'Not Found',
+        meta: {
+            title: 'Not Found | CryptoTracker'
+        },
+        component: NotFound
     }
 ]
 
