@@ -5,6 +5,22 @@
     color: #2c3e50;
 }
 
+.nav {
+    height: 56px;
+    background-color: #1c1c1c;
+}
+
+.nav>li>a {
+    line-height: 38px;
+    height: 100%;
+    color: #fff;
+    transition: color .2s ease-in-out;
+}
+
+.nav>li>a:hover {
+    color: lightseagreen;
+}
+
 .login,
 .register,
 .verify,
@@ -26,4 +42,24 @@
 
 .not-found>* {
     text-align: center;
+}
+
+@media only screen and (max-width: 768px) {
+    .login>form,
+    .register>form,
+    .verify>form,
+    .not-found>div {
+        width: 75%;
+        padding: 2rem;
+    }
+}
+
+@media only screen and (max-width: 576px) {
+    .login>form,
+    .register>form,
+    .verify>form,
+    .not-found>div {
+        width: 100%;
+        padding: 2rem;
+    }
 }
