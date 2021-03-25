@@ -25,6 +25,8 @@ public class CmcService {
     private static final String API_KEY = "585fc9c4-b56a-401d-8d64-31c70ccf507f";
 
     public static void fetchPrices() {
+        System.out.println("Updating Prices");
+
         String uri = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest";
         List<NameValuePair> parameters = new ArrayList<>();
         parameters.add(new BasicNameValuePair("start", "1"));
