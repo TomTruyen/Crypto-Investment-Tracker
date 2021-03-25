@@ -2,7 +2,6 @@ package be.tomtruyen.cryptotracker.services;
 
 import be.tomtruyen.cryptotracker.domain.Crypto;
 import be.tomtruyen.cryptotracker.domain.CryptoResult;
-import be.tomtruyen.cryptotracker.domain.VerifyResult;
 import be.tomtruyen.cryptotracker.utils.Utils;
 import io.jsonwebtoken.Claims;
 import org.springframework.http.HttpStatus;
@@ -18,7 +17,7 @@ public class CryptoService {
     public static ResponseEntity<Object> get(Map<String, String> header) {
         List<Crypto> cryptos = new ArrayList<>();
 
-        CryptoResult result = validate(header);
+        CryptoResult result = validate(header, null);
 
         boolean success = result.isSuccess();
 
@@ -58,7 +57,52 @@ public class CryptoService {
         );
     }
 
-    private static CryptoResult validate(Map<String, String> header) {
+    public static ResponseEntity<Object> buy(Map<String, String> header, Map<String, Object> body) {
+        CryptoResult result = validate(header, body);
+
+        boolean success = result.isSuccess();
+
+        if(success) {
+            try {
+                DatabaseService databaseService = new DatabaseService();
+
+                String token = header.getOrDefault("authorization", "");
+                Claims claims = JWTService.verifyToken(token);
+
+                assert claims != null;
+                int id = (int) claims.getOrDefault("id", -1);
+
+                if(id == -1) throw new SQLException();
+
+                String name = (String) body.get("name");
+                String ticker = (String) body.get("ticker");
+                double buyAmount = (double) body.get("buyAmount");
+                double buyPrice = (double) body.get("buyPrice");
+
+                databaseService.buyCrypto(id, name, ticker, buyAmount, buyPrice);
+
+                databaseService.closeConnection();
+            } catch (SQLException se) {
+                result = CryptoResult.ERR_UNKNOWN;
+                se.printStackTrace();
+            }
+        }
+
+        success = result.isSuccess();
+        String message = result.getMessage();
+        HttpStatus status = result.getStatus();
+
+        return ResponseEntity.status(status).body(
+                Map.of(
+                        "path", "/crypto",
+                        "success", success,
+                        "message", message,
+                        "time", new Date()
+                )
+        );
+    }
+
+    private static CryptoResult validate(Map<String, String> header, Map<String, Object> body) {
         if (!header.containsKey("authorization")) return CryptoResult.ERR_MISSING_PARAMETERS;
 
         String token = header.getOrDefault("authorization", "");
@@ -71,6 +115,23 @@ public class CryptoService {
         Date expiration = Utils.getDateFromMillis((long) claims.getOrDefault("expiration", System.currentTimeMillis()));
 
         if (date.after(expiration)) return CryptoResult.ERR_EXPIRED_TOKEN;
+
+        if(body != null) {
+            if(!body.containsKey("name") || !body.containsKey("ticker") || !body.containsKey("buyAmount") || !body.containsKey("buyPrice")) return CryptoResult.ERR_MISSING_PARAMETERS;
+
+            String name = (String) body.get("name");
+            String ticker = (String) body.get("ticker");
+            double buyAmount = (double) body.get("buyAmount");
+            double buyPrice = (double) body.get("buyPrice");
+
+            if(name.isEmpty()) return CryptoResult.ERR_NAME_EMPTY;
+
+            if(ticker.isEmpty()) return CryptoResult.ERR_TICKER_EMPTY;
+
+            if(buyAmount <= 0) return CryptoResult.ERR_AMOUNT_GREATER_THAN_ZERO;
+
+            if(buyPrice <= 0) return CryptoResult.ERR_PRICE_GREATER_THAN_ZERO;
+        }
 
         return CryptoResult.SUCCESS;
     }

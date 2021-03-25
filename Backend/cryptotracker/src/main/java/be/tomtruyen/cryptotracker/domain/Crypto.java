@@ -1,22 +1,25 @@
 package be.tomtruyen.cryptotracker.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Date;
+
 
 public class Crypto {
     private int id;
+    @JsonIgnore
     private int userId;
     private String name;
     private String ticker;
-    private int buyAmount;
+    private double buyAmount;
     private double buyPrice;
     private Date buyDate;
-    private int sellAmount;
+    private double sellAmount;
     private double sellPrice;
     private Date sellDate;
 
-    public Crypto(int id, String name, String ticker, int buyAmount, double buyPrice, Date buyDate, int sellAmount, double sellPrice, Date sellDate) {
+    public Crypto(int id, String name, String ticker, double buyAmount, double buyPrice, Date buyDate, double sellAmount, double sellPrice, Date sellDate) {
         this.id = id;
-        this.userId = userId;
         this.name = name;
         this.ticker = ticker;
         this.buyAmount = buyAmount;
@@ -59,11 +62,11 @@ public class Crypto {
         this.ticker = ticker;
     }
 
-    public int getBuyAmount() {
+    public double getBuyAmount() {
         return buyAmount;
     }
 
-    public void setBuyAmount(int buyAmount) {
+    public void setBuyAmount(double buyAmount) {
         this.buyAmount = buyAmount;
     }
 
@@ -83,11 +86,11 @@ public class Crypto {
         this.buyDate = buyDate;
     }
 
-    public int getSellAmount() {
+    public double getSellAmount() {
         return sellAmount;
     }
 
-    public void setSellAmount(int sellAmount) {
+    public void setSellAmount(double sellAmount) {
         this.sellAmount = sellAmount;
     }
 

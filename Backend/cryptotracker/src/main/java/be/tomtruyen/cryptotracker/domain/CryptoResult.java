@@ -7,6 +7,10 @@ public enum CryptoResult {
     ERR_MISSING_PARAMETERS(false, "Missing authorization.", HttpStatus.BAD_REQUEST),
     ERR_INVALID_AUTH(false, "Invalid authorization.", HttpStatus.BAD_REQUEST),
     ERR_EXPIRED_TOKEN(false, "Token expired.", HttpStatus.BAD_REQUEST),
+    ERR_NAME_EMPTY(false, "Name can't be empty.", HttpStatus.BAD_REQUEST),
+    ERR_TICKER_EMPTY(false, "Name can't be empty.", HttpStatus.BAD_REQUEST),
+    ERR_PRICE_GREATER_THAN_ZERO(false, "Buy price must be greater than 0.", HttpStatus.BAD_REQUEST),
+    ERR_AMOUNT_GREATER_THAN_ZERO(false, "Buy amount must be greater than 0.", HttpStatus.BAD_REQUEST),
     ERR_UNKNOWN(false, "Something went wrong. Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
 
     private final boolean success;

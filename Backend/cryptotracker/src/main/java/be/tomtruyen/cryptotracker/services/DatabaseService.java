@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -117,10 +116,10 @@ public class DatabaseService implements DatabaseServiceInterface {
             int id = rs.getInt("id");
             String name = rs.getString("name");
             String ticker = rs.getString("ticker");
-            int buyAmount = rs.getInt("buy_amount");
+            double buyAmount = rs.getDouble("buy_amount");
             double buyPrice = rs.getDouble("buy_price");
             Date buyDate = rs.getDate("buy_date");
-            int sellAmount = rs.getInt("sell_amount");
+            double sellAmount = rs.getDouble("sell_amount");
             double sellPrice = rs.getDouble("sell_price");
             Date sellDate = rs.getDate("sell_date");
 
@@ -129,6 +128,19 @@ public class DatabaseService implements DatabaseServiceInterface {
         }
 
         return cryptos;
+    }
 
+    public void buyCrypto(int id, String name, String ticker, double buyAmount, double buyPrice) throws SQLException {
+        String query = "INSERT INTO crypto (user_id, name, ticker, buy_amount, buy_price, buy_date) VALUES (?, ?, ?, ?, ?, ?)";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1, id);
+        preparedStatement.setString(2, name);
+        preparedStatement.setString(3, ticker);
+        preparedStatement.setDouble(4, buyAmount);
+        preparedStatement.setDouble(5, buyPrice);
+        preparedStatement.setDate(6, new Date(System.currentTimeMillis()));
+
+        preparedStatement.executeUpdate();
     }
 }
