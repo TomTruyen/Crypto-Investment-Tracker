@@ -89,7 +89,7 @@ public class VerifyService {
 
         return ResponseEntity.status(status).body(
                 Map.of(
-                        "path", "/verify",
+                        "path", "/verify/resend",
                         "success", success,
                         "message", message,
                         "time", new Date()
