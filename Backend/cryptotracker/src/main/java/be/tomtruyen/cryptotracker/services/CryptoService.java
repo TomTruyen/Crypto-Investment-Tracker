@@ -1,7 +1,9 @@
 package be.tomtruyen.cryptotracker.services;
 
 import be.tomtruyen.cryptotracker.domain.Crypto;
+import be.tomtruyen.cryptotracker.domain.CryptoPrice;
 import be.tomtruyen.cryptotracker.domain.CryptoResult;
+import be.tomtruyen.cryptotracker.repositories.CryptoPriceRepository;
 import be.tomtruyen.cryptotracker.utils.Utils;
 import io.jsonwebtoken.Claims;
 import org.springframework.http.HttpStatus;
@@ -57,6 +59,36 @@ public class CryptoService {
         );
     }
 
+    public static ResponseEntity<Object> getPrices(Map<String, String> header) {
+        List<CryptoPrice> prices = new ArrayList<>();
+
+        CryptoResult result = validate(header, null);
+
+        boolean success = result.isSuccess();
+
+        if(success) {
+            if(CryptoPriceRepository.getInstance().getAll().size() <= 0) {
+                result = CryptoResult.ERR_UNKNOWN;
+            } else {
+                prices = CryptoPriceRepository.getInstance().getAll();
+            }
+        }
+
+        success = result.isSuccess();
+        String message = result.getMessage();
+        HttpStatus status = result.getStatus();
+
+        return ResponseEntity.status(status).body(
+                Map.of(
+                        "path", "/crypto/prices",
+                        "success", success,
+                        "message", message,
+                        "prices", prices,
+                        "time", new Date()
+                )
+        );
+    }
+
     public static ResponseEntity<Object> buy(Map<String, String> header, Map<String, Object> body) {
         CryptoResult result = validate(header, body);
 
@@ -76,10 +108,55 @@ public class CryptoService {
 
                 String name = (String) body.get("name");
                 String ticker = (String) body.get("ticker");
-                double buyAmount = (double) body.get("buyAmount");
-                double buyPrice = (double) body.get("buyPrice");
+                double buyAmount = (double) body.get("amount");
+                double buyPrice = (double) body.get("price");
 
                 databaseService.buyCrypto(id, name, ticker, buyAmount, buyPrice);
+
+                databaseService.closeConnection();
+            } catch (SQLException se) {
+                result = CryptoResult.ERR_UNKNOWN;
+                se.printStackTrace();
+            }
+        }
+
+        success = result.isSuccess();
+        String message = result.getMessage();
+        HttpStatus status = result.getStatus();
+
+        return ResponseEntity.status(status).body(
+                Map.of(
+                        "path", "/crypto",
+                        "success", success,
+                        "message", message,
+                        "time", new Date()
+                )
+        );
+    }
+
+    public static ResponseEntity<Object> sell(Map<String, String> header, Map<String, Object> body) {
+        CryptoResult result = validate(header, body);
+
+        boolean success = result.isSuccess();
+
+        if(success) {
+            try {
+                DatabaseService databaseService = new DatabaseService();
+
+                String token = header.getOrDefault("authorization", "");
+                Claims claims = JWTService.verifyToken(token);
+
+                assert claims != null;
+                int id = (int) claims.getOrDefault("id", -1);
+
+                if(id == -1) throw new SQLException();
+
+                String name = (String) body.get("name");
+                String ticker = (String) body.get("ticker");
+                double sellAmount = (double) body.get("amount");
+                double sellPrice = (double) body.get("price");
+
+                databaseService.sellCrypto(id, name, ticker, sellAmount, sellPrice);
 
                 databaseService.closeConnection();
             } catch (SQLException se) {
@@ -117,20 +194,20 @@ public class CryptoService {
         if (date.after(expiration)) return CryptoResult.ERR_EXPIRED_TOKEN;
 
         if(body != null) {
-            if(!body.containsKey("name") || !body.containsKey("ticker") || !body.containsKey("buyAmount") || !body.containsKey("buyPrice")) return CryptoResult.ERR_MISSING_PARAMETERS;
+            if(!body.containsKey("name") || !body.containsKey("ticker") || !body.containsKey("amount") || !body.containsKey("price")) return CryptoResult.ERR_MISSING_PARAMETERS;
 
             String name = (String) body.get("name");
             String ticker = (String) body.get("ticker");
-            double buyAmount = (double) body.get("buyAmount");
-            double buyPrice = (double) body.get("buyPrice");
+            double amount =  (double)body.get("amount");
+            double price = (double) body.get("price");
 
             if(name.isEmpty()) return CryptoResult.ERR_NAME_EMPTY;
 
             if(ticker.isEmpty()) return CryptoResult.ERR_TICKER_EMPTY;
 
-            if(buyAmount <= 0) return CryptoResult.ERR_AMOUNT_GREATER_THAN_ZERO;
+            if(amount <= 0) return CryptoResult.ERR_AMOUNT_GREATER_THAN_ZERO;
 
-            if(buyPrice <= 0) return CryptoResult.ERR_PRICE_GREATER_THAN_ZERO;
+            if(price <= 0) return CryptoResult.ERR_PRICE_GREATER_THAN_ZERO;
         }
 
         return CryptoResult.SUCCESS;

@@ -16,4 +16,5 @@ public interface DatabaseServiceInterface {
     boolean verifyUser(String email) throws SQLException;
     List<Crypto> getCryptos(int userId) throws SQLException;
     void buyCrypto(int id, String name, String ticker, double buyAmount, double buyPrice) throws SQLException;
+    void sellCrypto(int id, String name, String ticker, double sellAmount, double sellPrice) throws SQLException;
 }

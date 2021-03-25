@@ -20,13 +20,14 @@ public class CryptoPrice {
     private final double percent_change_60d;
     private final double percent_change_90d;
     private final double marketCap;
+    private final String lastUpdated;
 
-    public CryptoPrice(int id, int rank, String name, String ticker, int maxSupply, double circulatingSupply, double totalSupply, Map<String, Object> tokenProvider, double price, double volume_24h, double percent_change_1h, double percent_change_24h, double percent_change_7d, double percent_change_30d, double percent_change_60d, double percent_change_90d, double marketCap) {
-        if(id != -1) this.id = id;
-        if(rank != -1) this.rank = rank;
+    public CryptoPrice(int id, int rank, String name, String ticker, int maxSupply, double circulatingSupply, double totalSupply, Map<String, Object> tokenProvider, double price, double volume_24h, double percent_change_1h, double percent_change_24h, double percent_change_7d, double percent_change_30d, double percent_change_60d, double percent_change_90d, double marketCap, String lastUpdated) {
+        if (id != -1) this.id = id;
+        if (rank != -1) this.rank = rank;
         this.name = name;
         this.ticker = ticker;
-        if(maxSupply != -1) this.maxSupply = maxSupply;
+        if (maxSupply != -1) this.maxSupply = maxSupply;
         this.circulatingSupply = circulatingSupply;
         this.totalSupply = totalSupply;
         this.tokenProvider = tokenProvider;
@@ -39,6 +40,7 @@ public class CryptoPrice {
         this.percent_change_60d = percent_change_60d;
         this.percent_change_90d = percent_change_90d;
         this.marketCap = marketCap;
+        this.lastUpdated = lastUpdated;
     }
 
     public int getId() {
@@ -109,6 +111,10 @@ public class CryptoPrice {
         return marketCap;
     }
 
+    public String getLastUpdated() {
+        return lastUpdated;
+    }
+
     public static CryptoPrice fromJSON(Map<String, Object> json) {
         int idInteger = -1;
         var id = json.getOrDefault("id", null);
@@ -131,19 +137,20 @@ public class CryptoPrice {
         Map<String, Object> tokenProvider = (Map<String, Object>) json.getOrDefault("platform", null);
 
         Map<String, Object> prices = (Map<String, Object>)((Map<String, Object>)json.get("quote")).get("USD");
-        double price = (double)prices.getOrDefault("price", null);
-        double volume_24h = (double)prices.getOrDefault("volume_24h", null);
-        double percent_change_1h = (double)prices.getOrDefault("percent_change_1h", null);
-        double percent_change_24h = (double)prices.getOrDefault("percent_change_24h", null);
-        double percent_change_7d = (double)prices.getOrDefault("percent_change_7d", null);
-        double percent_change_30d = (double)prices.getOrDefault("percent_change_30d", null);
-        double percent_change_60d = (double)prices.getOrDefault("percent_change_60d", null);
-        double percent_change_90d = (double)prices.getOrDefault("percent_change_90d", null);
-        double market_cap = (double)prices.getOrDefault("market_cap", null);
+        double price = (double) prices.getOrDefault("price", null);
+        double volume_24h = (double) prices.getOrDefault("volume_24h", null);
+        double percent_change_1h = (double) prices.getOrDefault("percent_change_1h", null);
+        double percent_change_24h = (double) prices.getOrDefault("percent_change_24h", null);
+        double percent_change_7d = (double) prices.getOrDefault("percent_change_7d", null);
+        double percent_change_30d = (double) prices.getOrDefault("percent_change_30d", null);
+        double percent_change_60d = (double) prices.getOrDefault("percent_change_60d", null);
+        double percent_change_90d = (double) prices.getOrDefault("percent_change_90d", null);
+        double market_cap = (double) prices.getOrDefault("market_cap", null);
 
+        String lastUpdated = (String) json.getOrDefault("last_updated", null);
 
         try {
-            return new CryptoPrice(idInteger, rankInteger, name, ticker, maxSupplyInteger, circulatingSupply, totalSupply, tokenProvider, price, volume_24h, percent_change_1h, percent_change_24h, percent_change_7d, percent_change_30d, percent_change_60d, percent_change_90d, market_cap);
+            return new CryptoPrice(idInteger, rankInteger, name, ticker, maxSupplyInteger, circulatingSupply, totalSupply, tokenProvider, price, volume_24h, percent_change_1h, percent_change_24h, percent_change_7d, percent_change_30d, percent_change_60d, percent_change_90d, market_cap, lastUpdated);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

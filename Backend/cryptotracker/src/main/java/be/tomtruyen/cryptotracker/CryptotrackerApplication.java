@@ -16,6 +16,8 @@ public class CryptotrackerApplication {
 	private static Timer timer = new Timer();
 
 	public static void main(String[] args) {
+		CmcService.fetchPrices();
+
 		Calendar firstTaskTime = getFirstTime();
 		timer.schedule(new FetchPrices(), firstTaskTime.getTime(), 1000 * 60 * 15);
 		SpringApplication.run(CryptotrackerApplication.class, args);

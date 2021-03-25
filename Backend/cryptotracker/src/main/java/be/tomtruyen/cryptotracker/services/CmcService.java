@@ -42,7 +42,7 @@ public class CmcService {
             Map<String, Object> json = gson.fromJson(result, type);
 
             List<Map<String, Object>> cryptos = (List<Map<String, Object>>)json.getOrDefault("data", new ArrayList<>());
-
+            
             if(cryptos.size() > 0) {
                 CryptoPriceRepository.getInstance().clear();
                 cryptos.forEach(c -> {

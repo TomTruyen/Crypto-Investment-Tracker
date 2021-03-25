@@ -143,4 +143,39 @@ public class DatabaseService implements DatabaseServiceInterface {
 
         preparedStatement.executeUpdate();
     }
+
+    @Override
+    public void sellCrypto(int id, String name, String ticker, double sellAmount, double sellPrice) throws SQLException {
+        /*
+        *  History Table
+        *
+        *  Use cryptoname & ticker combination to get the value from the 'crypto' table ==> ORDER BY BUY_DATE ASC [IMPORTANT]
+        *  ==> INSERT Sales (userid, name, ticker, buyAmount [= sellAmount in this case], buyPrice, buyDate, sellAmount, sellPrice, sellDate, priceChange (percentage) since day of buying
+        * ==> the current price of th ecrypto should be bable to be fetched from some repository that we update every 15m in the backend
+        *
+        * If not enough of that crypto with that specific buyPrice, then still update, and after that just
+        * INSERT a new "sale" for the next crypto with that name
+        *
+        * sO IT SHOULD BE A WHILE LOOP
+        *
+        *
+        * FIRST: check if enough crypto for total sellAmount ==> THIS CHECK SHOULD BE DONE IN THE SERVICE TABLE BEFORE GOING HERE!!
+        * ==> SELECT SUM(buy_amount - sell_amount) as totalAmountLeft FROM `crypto` WHERE name="Cardano" AND ticker="ADA"
+        * if(theSelectQueryValue >= sellAmount) {
+        * while(sellAmount > 0) {
+        *   // fetchNextRow of the crypto being sold (WHERE buyAmount > sellAmount) !!
+        *   // insert the max amount possible (or the sellamount if sellamount less than the buyamount)
+        *   // update the crypto in the 'crypto' table
+        *   // update sellAmount to be: sellAmount -= amountThatCanBeSoldStill
+        * }
+        * } else{
+        *   ERROR NOT ENOUGH CRAP TO SELL
+        * }
+        *
+        *
+        * Crypto Table
+        * ==> UPDATE SellAmount (update the sellamount)
+        * */
+
+    }
 }
