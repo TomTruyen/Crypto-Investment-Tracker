@@ -16,6 +16,7 @@ public class CryptotrackerApplication {
 	private static Timer timer = new Timer();
 
 	public static void main(String[] args) {
+		CmcService.fetchCryptos();
 		CmcService.fetchPrices();
 
 		Calendar firstTaskTime = getFirstTime();

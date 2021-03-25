@@ -1,6 +1,5 @@
 package be.tomtruyen.cryptotracker.rest;
 
-import be.tomtruyen.cryptotracker.repositories.CryptoPriceRepository;
 import be.tomtruyen.cryptotracker.services.CryptoService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +18,11 @@ public class CryptoController {
     @GetMapping(path = "prices")
     public ResponseEntity<Object> getPrices(@RequestHeader Map<String, String> header) {
         return CryptoService.getPrices(header);
+    }
+
+    @GetMapping(path = "list")
+    public ResponseEntity<Object> getCryptoList(@RequestHeader Map<String, String> header) {
+        return CryptoService.getCryptoList(header);
     }
 
     @PostMapping(path = "buy")

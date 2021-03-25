@@ -2,7 +2,7 @@ package be.tomtruyen.cryptotracker.domain;
 
 import java.util.Map;
 
-public class CryptoPrice {
+public class CmcCryptoPrice {
     private int id;
     private int rank;
     private final String name;
@@ -22,7 +22,7 @@ public class CryptoPrice {
     private final double marketCap;
     private final String lastUpdated;
 
-    public CryptoPrice(int id, int rank, String name, String ticker, int maxSupply, double circulatingSupply, double totalSupply, Map<String, Object> tokenProvider, double price, double volume_24h, double percent_change_1h, double percent_change_24h, double percent_change_7d, double percent_change_30d, double percent_change_60d, double percent_change_90d, double marketCap, String lastUpdated) {
+    public CmcCryptoPrice(int id, int rank, String name, String ticker, int maxSupply, double circulatingSupply, double totalSupply, Map<String, Object> tokenProvider, double price, double volume_24h, double percent_change_1h, double percent_change_24h, double percent_change_7d, double percent_change_30d, double percent_change_60d, double percent_change_90d, double marketCap, String lastUpdated) {
         if (id != -1) this.id = id;
         if (rank != -1) this.rank = rank;
         this.name = name;
@@ -115,7 +115,7 @@ public class CryptoPrice {
         return lastUpdated;
     }
 
-    public static CryptoPrice fromJSON(Map<String, Object> json) {
+    public static CmcCryptoPrice fromJSON(Map<String, Object> json) {
         int idInteger = -1;
         var id = json.getOrDefault("id", null);
         if(id != null) idInteger = ((Double) id).intValue();
@@ -150,7 +150,7 @@ public class CryptoPrice {
         String lastUpdated = (String) json.getOrDefault("last_updated", null);
 
         try {
-            return new CryptoPrice(idInteger, rankInteger, name, ticker, maxSupplyInteger, circulatingSupply, totalSupply, tokenProvider, price, volume_24h, percent_change_1h, percent_change_24h, percent_change_7d, percent_change_30d, percent_change_60d, percent_change_90d, market_cap, lastUpdated);
+            return new CmcCryptoPrice(idInteger, rankInteger, name, ticker, maxSupplyInteger, circulatingSupply, totalSupply, tokenProvider, price, volume_24h, percent_change_1h, percent_change_24h, percent_change_7d, percent_change_30d, percent_change_60d, percent_change_90d, market_cap, lastUpdated);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

@@ -1,6 +1,6 @@
 package be.tomtruyen.cryptotracker.repositories;
 
-import be.tomtruyen.cryptotracker.domain.CryptoPrice;
+import be.tomtruyen.cryptotracker.domain.CmcCryptoPrice;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,24 +9,24 @@ import java.util.List;
 public class CryptoPriceRepository {
     private static CryptoPriceRepository instance;
     private static Object monitor = new Object();
-    private List<CryptoPrice> prices = Collections.synchronizedList(new ArrayList<>());
+    private List<CmcCryptoPrice> prices = Collections.synchronizedList(new ArrayList<>());
 
     private CryptoPriceRepository() {}
 
-    public void set(List<CryptoPrice> prices) {
+    public void set(List<CmcCryptoPrice> prices) {
         clear();
         this.prices.addAll(prices);
     }
 
-    public void add(CryptoPrice price) {
+    public void add(CmcCryptoPrice price) {
         this.prices.add(price);
     }
 
-    public void remove(CryptoPrice price) {
+    public void remove(CmcCryptoPrice price) {
         this.prices.remove(price);
     }
 
-    public List<CryptoPrice> getAll() {
+    public List<CmcCryptoPrice> getAll() {
         return prices;
     }
 
