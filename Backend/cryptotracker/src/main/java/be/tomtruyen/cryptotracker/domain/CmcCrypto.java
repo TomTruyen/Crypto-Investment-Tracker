@@ -8,6 +8,7 @@ public class CmcCrypto {
     private final String name;
     private final String ticker;
     private final Map<String, Object> tokenProvider; // Ethereum, Cardano, Tron,...
+    private String imageUri;
 
     public CmcCrypto(int id, int rank, String name, String ticker, Map<String, Object> tokenProvider) {
         if(id != -1) this.id = id;
@@ -15,6 +16,7 @@ public class CmcCrypto {
         this.name = name;
         this.ticker = ticker;
         this.tokenProvider = tokenProvider;
+        if (id != -1) this.imageUri = "https://s2.coinmarketcap.com/static/img/coins/64x64/" + id + ".png";
     }
 
     public int getId() {
@@ -35,6 +37,10 @@ public class CmcCrypto {
 
     public Map<String, Object> getTokenProvider() {
         return tokenProvider;
+    }
+
+    public String getImageUri() {
+        return imageUri;
     }
 
     public static CmcCrypto fromJSON(Map<String, Object> json, int rank) {
