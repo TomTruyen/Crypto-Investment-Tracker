@@ -16,9 +16,12 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -52,9 +55,20 @@ public class CmcService {
                         CryptoRepository.getInstance().add(crypto);
                     }
                 }
+
+                if(CryptoRepository.getInstance().getAll().size() > 0) {
+                    new Thread(() -> {
+                        FileService.writeCryptoToFile(CryptoRepository.getInstance().getAll());
+                    }).start();
+                }
             }
         } catch (URISyntaxException | IOException e) {
             e.printStackTrace();
+        }
+
+        if (CryptoRepository.getInstance().getAll().size() <= 0) {
+            List<CmcCrypto> cryptosFromFile = FileService.readCryptoFromFile();
+            CryptoRepository.getInstance().set(cryptosFromFile);
         }
     }
 
@@ -75,20 +89,31 @@ public class CmcService {
 
             Map<String, Object> json = gson.fromJson(result, type);
 
-            List<Map<String, Object>> cryptos = (List<Map<String, Object>>)json.getOrDefault("data", new ArrayList<>());
-            
-            if(cryptos.size() > 0) {
+            List<Map<String, Object>> prices = (List<Map<String, Object>>)json.getOrDefault("data", new ArrayList<>());
+
+            if(prices.size() > 0) {
                 CryptoPriceRepository.getInstance().clear();
-                cryptos.forEach(c -> {
+                prices.forEach(c -> {
                     CmcCryptoPrice cryptoPrice = CmcCryptoPrice.fromJSON(c);
 
                     if(cryptoPrice != null) {
                         CryptoPriceRepository.getInstance().add(cryptoPrice);
                     }
                 });
+
+                if(CryptoPriceRepository.getInstance().getAll().size() > 0) {
+                    new Thread(() -> {
+                        FileService.writeCryptoPricesToFile(CryptoPriceRepository.getInstance().getAll());
+                    }).start();
+                }
             }
         } catch (URISyntaxException | IOException e) {
             e.printStackTrace();
+        }
+
+        if (CryptoPriceRepository.getInstance().getAll().size() <= 0) {
+            List<CmcCryptoPrice> pricesFromFile = FileService.readCryptoPricesFromFile();
+            CryptoPriceRepository.getInstance().set(pricesFromFile);
         }
     }
 

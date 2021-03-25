@@ -1,8 +1,9 @@
 package be.tomtruyen.cryptotracker.domain;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public class CmcCrypto {
+public class CmcCrypto implements Serializable {
     private int id;
     private int rank;
     private final String name;

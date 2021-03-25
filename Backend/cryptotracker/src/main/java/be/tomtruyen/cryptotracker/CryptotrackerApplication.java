@@ -1,12 +1,14 @@
 package be.tomtruyen.cryptotracker;
 
 import be.tomtruyen.cryptotracker.services.CmcService;
+import be.tomtruyen.cryptotracker.services.FileService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.awt.*;
 import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -21,6 +23,7 @@ public class CryptotrackerApplication {
 
 		Calendar firstTaskTime = getFirstTime();
 		timer.schedule(new FetchPrices(), firstTaskTime.getTime(), 1000 * 60 * 15);
+
 		SpringApplication.run(CryptotrackerApplication.class, args);
 	}
 
