@@ -26,6 +26,10 @@ public class CryptoPriceRepository {
         this.prices.remove(price);
     }
 
+    public List<CryptoPrice> getAll() {
+        return prices;
+    }
+
     public void clear() {
         prices.clear();
     }
