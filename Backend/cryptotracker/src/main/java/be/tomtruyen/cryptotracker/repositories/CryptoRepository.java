@@ -6,6 +6,7 @@ import be.tomtruyen.cryptotracker.domain.CmcCryptoPrice;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CryptoRepository {
     private static CryptoRepository instance;
@@ -25,6 +26,10 @@ public class CryptoRepository {
 
     public List<CmcCrypto> getAll() {
         return cryptos;
+    }
+
+    public List<CmcCrypto> get(int limit) {
+        return cryptos.stream().limit(limit).collect(Collectors.toList());
     }
 
     public void clear() {

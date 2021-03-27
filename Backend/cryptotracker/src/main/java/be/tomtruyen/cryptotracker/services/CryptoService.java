@@ -52,7 +52,7 @@ public class CryptoService {
 
         return ResponseEntity.status(status).body(
                 Map.of(
-                        "path", "/crypto",
+                        "path", "/cryptocurrencies",
                         "success", success,
                         "message", message,
                         "crypto", cryptos,
@@ -82,7 +82,7 @@ public class CryptoService {
 
         return ResponseEntity.status(status).body(
                 Map.of(
-                        "path", "/crypto/prices",
+                        "path", "/cryptocurrencies/prices",
                         "success", success,
                         "message", message,
                         "prices", prices,
@@ -92,7 +92,7 @@ public class CryptoService {
     }
 
     public static ResponseEntity<Object> getCryptoList(Map<String, String> header) {
-        List<CmcCrypto> prices = new ArrayList<>();
+        List<CmcCrypto> cyptos = new ArrayList<>();
 
         CryptoResult result = validate(header, null);
 
@@ -102,7 +102,7 @@ public class CryptoService {
             if(CryptoRepository.getInstance().getAll().size() <= 0) {
                 result = CryptoResult.ERR_UNKNOWN;
             } else {
-                prices = CryptoRepository.getInstance().getAll();
+                cyptos = CryptoRepository.getInstance().get(150);
             }
         }
 
@@ -112,10 +112,10 @@ public class CryptoService {
 
         return ResponseEntity.status(status).body(
                 Map.of(
-                        "path", "/crypto/list",
+                        "path", "/cryptocurrencies/list",
                         "success", success,
                         "message", message,
-                        "prices", prices,
+                        "crypto", cyptos,
                         "time", new Date()
                 )
         );
@@ -158,7 +158,7 @@ public class CryptoService {
 
         return ResponseEntity.status(status).body(
                 Map.of(
-                        "path", "/crypto",
+                        "path", "/cryptocurrencies/buy",
                         "success", success,
                         "message", message,
                         "time", new Date()
@@ -203,7 +203,7 @@ public class CryptoService {
 
         return ResponseEntity.status(status).body(
                 Map.of(
-                        "path", "/crypto",
+                        "path", "/cryptocurrencies/sell",
                         "success", success,
                         "message", message,
                         "time", new Date()
