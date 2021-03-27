@@ -1,4 +1,5 @@
 import axios from 'axios';
+import CmcCrypto from '../models/CmcCrypto';
 import LoginResult from '../models/LoginResult';
 import RegisterResult from '../models/RegisterResult';
 import VerifyResult from '../models/VerifyResult';
@@ -9,7 +10,7 @@ export default class API {
             method: 'POST',
             baseURL: 'http://localhost:8888/',
             url: '/login',
-            header: {
+            headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
                 "Access-Control-Allow-Origin": "*"
@@ -39,7 +40,7 @@ export default class API {
             method: 'POST',
             baseURL: 'http://localhost:8888/',
             url: '/register',
-            header: {
+            headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
                 "Access-Control-Allow-Origin": "*"
@@ -69,7 +70,7 @@ export default class API {
             method: 'POST',
             baseURL: 'http://localhost:8888/',
             url: '/verify',
-            header: {
+            headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
                 "Access-Control-Allow-Origin": "*"
@@ -98,7 +99,7 @@ export default class API {
             method: 'POST',
             baseURL: 'http://localhost:8888/',
             url: '/verify/resend',
-            header: {
+            headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
                 "Access-Control-Allow-Origin": "*"
@@ -120,5 +121,43 @@ export default class API {
         console.clear();
 
         return result;
+    }
+
+    static async getCryptoList(token) {
+        const bearer = `Bearer ${token}`;
+
+        let options = {
+            method: 'GET',
+            baseURL: 'http://localhost:8888/',
+            url: '/cryptocurrencies/list/',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Authorization': bearer
+            },
+            data: {},
+        };
+
+        let cryptos = [];
+        await axios.request(options).then((res) => {
+            console.log(res);
+
+            if (res.data != null && res.data.success) {
+                const _cryptos = res.data.crypto;
+
+                console.log(_cryptos);
+
+                for (let i = 0; i < _cryptos.length; i++) {
+                    cryptos.push(CmcCrypto.fromJSON(_cryptos[i]));
+                }
+            }
+        }).catch((err) => { console.log(err.response.data) });
+
+        // console.clear();
+
+        console.log(cryptos);
+
+        return cryptos;
     }
 }

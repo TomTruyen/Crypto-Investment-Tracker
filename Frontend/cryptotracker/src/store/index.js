@@ -12,6 +12,7 @@ export default new Vuex.Store({
         registerResult: null,
         verifyResult: null,
         resendVerificationResult: null,
+        cmcCryptos: []
     },
     getters: {
         isLoggedIn(state) {
@@ -28,6 +29,18 @@ export default new Vuex.Store({
         },
         getResendVerificationResult(state) {
             return state.resendVerificationResult;
+        },
+        getCmcCryptos(state) {
+            return state.cmcCryptos;
+        },
+        getCmcCryptosAsOptions(state) {
+            let cryptos = [];
+
+            for (let i = 0; i < state.cmcCryptos.length; i++) {
+                cryptos.push(state.cmcCryptos[i].toOption());
+            }
+
+            return cryptos;
         }
     },
     mutations: {
@@ -46,6 +59,9 @@ export default new Vuex.Store({
         },
         resendVerification(state, verifyResult) {
             state.resendVerificationResult = verifyResult;
+        },
+        setCmcCryptos(state, cryptos) {
+            state.cmcCryptos = cryptos;
         }
     },
     actions: {
@@ -67,6 +83,11 @@ export default new Vuex.Store({
         resendVerification(context, email) {
             API.resendVerification(email).then((verifyResult) => {
                 context.commit('resendVerification', verifyResult);
+            });
+        },
+        setCmcCryptos(context, token) {
+            API.getCryptoList(token).then((cryptos) => {
+                context.commit('setCmcCryptos', cryptos);
             });
         }
     }

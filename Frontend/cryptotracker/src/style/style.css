@@ -44,6 +44,10 @@
     text-align: center;
 }
 
+.bi-icon {
+    fill: #fff;
+}
+
 @media only screen and (max-width: 768px) {
     .login>form,
     .register>form,
