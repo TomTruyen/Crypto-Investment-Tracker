@@ -224,4 +224,39 @@ export default class API {
 
         return cryptos;
     }
+
+    static async buyCrypto(payload) {
+        const bearer = `Bearer ${payload.token}`;
+
+        let success = false;
+
+        console.log(bearer);
+
+        let options = {
+            method: 'POST',
+            baseURL: 'http://localhost:8888/',
+            url: '/cryptocurrencies/buy/',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Authorization': bearer
+            },
+            data: {
+                'ticker': payload.crypto,
+                'amount': payload.amount,
+                'price': payload.price,
+            },
+        };
+
+        console.log(payload);
+
+        await axios.request(options).then((res) => {
+            if (res.data != null && res.data.success) success = true;
+        }).catch((err) => { console.log(err.response.data) });
+
+        // console.clear();
+
+        return success;
+    }
 }

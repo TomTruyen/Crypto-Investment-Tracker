@@ -4,7 +4,8 @@ import org.springframework.http.HttpStatus;
 
 public enum CryptoResult {
     SUCCESS(true, "", HttpStatus.OK),
-    ERR_MISSING_PARAMETERS(false, "Missing authorization.", HttpStatus.BAD_REQUEST),
+    ERR_MISSING_TOKEN(false, "Missing authorization.", HttpStatus.BAD_REQUEST),
+    ERR_MISSING_PARAMETERS(false, "Missing parameters.", HttpStatus.BAD_REQUEST),
     ERR_INVALID_AUTH(false, "Invalid authorization.", HttpStatus.BAD_REQUEST),
     ERR_EXPIRED_TOKEN(false, "Token expired.", HttpStatus.BAD_REQUEST),
     ERR_NAME_EMPTY(false, "Name can't be empty.", HttpStatus.BAD_REQUEST),

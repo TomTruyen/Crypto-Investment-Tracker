@@ -24,6 +24,10 @@ public class CryptoRepository {
         this.cryptos.add(crypto);
     }
 
+    public CmcCrypto find(String ticker) {
+        return cryptos.stream().filter(c -> c.getTicker().equalsIgnoreCase(ticker)).collect(Collectors.toList()).get(0);
+    }
+
     public List<CmcCrypto> getAll() {
         return cryptos;
     }

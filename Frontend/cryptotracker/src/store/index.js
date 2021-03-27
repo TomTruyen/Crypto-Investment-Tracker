@@ -57,9 +57,6 @@ export default new Vuex.Store({
                 cryptos.push(state.portfolio[i].toOption(crypto.price, crypto.percent_change_24h));
             }
 
-            console.log("RETURNING OPTIONS");
-            console.log(cryptos);
-
             return cryptos;
         }
     },
@@ -88,6 +85,9 @@ export default new Vuex.Store({
         },
         setPortfolio(state, cryptos) {
             state.portfolio = cryptos;
+        },
+        buyCrypto(state, crypto) {
+            state.portfolio.push(crypto);
         }
     },
     actions: {
@@ -123,10 +123,16 @@ export default new Vuex.Store({
         },
         setPortfolio(context, token) {
             API.getCryptos(token).then((cryptos) => {
-                console.log("SETTING PORTFOLIO");
-                console.log(cryptos);
-
                 context.commit('setPortfolio', cryptos);
+            });
+        },
+        buyCrypto(context, payload) {
+            API.buyCrypto(payload).then((isSuccess) => {
+                if (isSuccess) {
+                    API.getCryptos(payload.token).then((cryptos) => {
+                        context.commit('setPortfolio', cryptos);
+                    });
+                }
             });
         }
     }

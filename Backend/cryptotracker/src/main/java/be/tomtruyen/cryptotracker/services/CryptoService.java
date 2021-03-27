@@ -138,12 +138,17 @@ public class CryptoService {
 
                 if(id == -1) throw new SQLException();
 
-                String name = (String) body.get("name");
-                String ticker = (String) body.get("ticker");
-                double buyAmount = (double) body.get("amount");
-                double buyPrice = (double) body.get("price");
 
-                databaseService.buyCrypto(id, name, ticker, buyAmount, buyPrice);
+                try {
+                    String ticker = (String) body.get("ticker");
+                    String name = CryptoRepository.getInstance().find(ticker).getName();
+                    double buyAmount = Double.parseDouble((String)body.getOrDefault("amount", "0"));
+                    double buyPrice = Double.parseDouble((String) body.getOrDefault("price", "0"));
+
+                    databaseService.buyCrypto(id, name, ticker, buyAmount, buyPrice);
+                } catch (Exception e) {
+                    result = CryptoResult.ERR_UNKNOWN;
+                }
 
                 databaseService.closeConnection();
             } catch (SQLException se) {
@@ -212,7 +217,7 @@ public class CryptoService {
     }
 
     private static CryptoResult validate(Map<String, String> header, Map<String, Object> body) {
-        if (!header.containsKey("authorization")) return CryptoResult.ERR_MISSING_PARAMETERS;
+        if (!header.containsKey("authorization")) return CryptoResult.ERR_MISSING_TOKEN;
 
         String token = header.getOrDefault("authorization", "");
 
@@ -226,14 +231,12 @@ public class CryptoService {
         if (date.after(expiration)) return CryptoResult.ERR_EXPIRED_TOKEN;
 
         if(body != null) {
-            if(!body.containsKey("name") || !body.containsKey("ticker") || !body.containsKey("amount") || !body.containsKey("price")) return CryptoResult.ERR_MISSING_PARAMETERS;
+            if(!body.containsKey("ticker") || !body.containsKey("amount") || !body.containsKey("price")) return CryptoResult.ERR_MISSING_PARAMETERS;
 
-            String name = (String) body.get("name");
             String ticker = (String) body.get("ticker");
-            double amount =  (double)body.get("amount");
-            double price = (double) body.get("price");
+            double amount = Double.parseDouble((String)body.getOrDefault("amount", "0"));
+            double price = Double.parseDouble((String)body.getOrDefault("price", "0"));
 
-            if(name.isEmpty()) return CryptoResult.ERR_NAME_EMPTY;
 
             if(ticker.isEmpty()) return CryptoResult.ERR_TICKER_EMPTY;
 

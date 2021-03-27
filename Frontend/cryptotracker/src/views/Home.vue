@@ -4,17 +4,25 @@
         <li v-for="name in submitted">{{ name }}</li>
       </ul>
 
-      <b-button variant="primary" v-b-modal.buy>Buy</b-button>
-      <b-modal id="buy" ref="modal" title="Buy crypto" @show="resetModal" @hidden="resetModal" @ok="handleOk">
-        <form ref="form" @submit.stop.prevent="handleSubmit">
-          <b-form-group label="Crypto's" label-for="crypto-select" :state="cryptoState">
-            <b-form-select id="crypto-select" :options="getCmcCryptoOptions" v-model="crypto" :state="cryptoState"></b-form-select>
-          </b-form-group>
-        </form>
-      </b-modal>
+      
 
     <h1>Home page</h1>
     <p>Main Tracker comes here</p>
+
+    <b-button variant="primary" v-b-modal.buy>Buy</b-button>
+      <b-modal id="buy" ref="modal" title="Buy crypto" @show="resetModal" @hidden="resetModal" @ok="handleOk">
+        <form ref="form" @submit.stop.prevent="handleSubmit">
+          <b-form-group label="Asset" label-for="crypto-select" :state="cryptoState">
+            <b-form-select id="crypto-select" :options="getCmcCryptoOptions" v-model="crypto" :state="cryptoState"></b-form-select>
+          </b-form-group>
+          <b-form-group label="Amount" label-for="crypto-amount" :state="cryptoState">
+            <b-form-input id="crypto-amount" type="number" v-model="amount" placeholder="0"></b-form-input>
+          </b-form-group>
+          <b-form-group label="Price" label-for="crypto-price" :state="cryptoState">
+            <b-form-input id="crypto-price" type="number" v-model="price" placeholder="0"></b-form-input>
+          </b-form-group>
+        </form>
+      </b-modal>
 
     <b-table striped hover :items="getPortfolioOptions"></b-table>
   </div>
@@ -30,6 +38,8 @@
     data() {
       return {
         crypto: '',
+        amount: 0,
+        price: 0,
         cryptoState: null,
         submitted: [],
       }
@@ -45,6 +55,8 @@
     methods: {
       resetModal() {
         this.crypto = "";
+        this.amount = 0;
+        this.price = 0;
         this.cryptoState = null;
       },
       handleOk(e) {
@@ -52,15 +64,22 @@
         this.handleSubmit();
       },
       handleSubmit() {
-        this.submitted.push(this.crypto);
+        if(this.crypto != "" && this.amount != 0 && this.price != 0) {
+          this.$store.dispatch('buyCrypto', {
+            'token': this.$cookie.get('access_token'),
+            'crypto': this.crypto,
+            'amount': this.amount,
+            'price': this.price,
+          });
 
-        this.$nextTick(() => {
-          this.$bvModal.hide('buy')
-        });
+          this.$nextTick(() => {
+            this.$bvModal.hide('buy')
+          });
+        }
       },
       setCmcPrices() {
          const token = this.$cookie.get('access_token');
-          this.$store.dispatch('setCmcPrices', token);
+         this.$store.dispatch('setCmcPrices', token);
       },
       setCmcCryptos() {
         const token = this.$cookie.get('access_token');
