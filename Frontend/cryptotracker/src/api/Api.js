@@ -1,5 +1,7 @@
 import axios from 'axios';
 import CmcCrypto from '../models/CmcCrypto';
+import CmcPrices from '../models/CmcPrices';
+import Crypto from '../models/Crypto';
 import LoginResult from '../models/LoginResult';
 import RegisterResult from '../models/RegisterResult';
 import VerifyResult from '../models/VerifyResult';
@@ -123,6 +125,72 @@ export default class API {
         return result;
     }
 
+    static async getCryptos(token) {
+        const bearer = `Bearer ${token}`;
+
+        let options = {
+            method: 'GET',
+            baseURL: 'http://localhost:8888/',
+            url: '/cryptocurrencies/portfolio',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Authorization': bearer
+            },
+            data: {},
+        };
+
+        let cryptos = [];
+        await axios.request(options).then((res) => {
+            if (res.data != null && res.data.success) {
+                const _cryptos = res.data.crypto;
+
+                console.log(res.data.crypto);
+
+                for (let i = 0; i < _cryptos.length; i++) {
+                    cryptos.push(Crypto.fromJSON(_cryptos[i]));
+                }
+            }
+        }).catch((err) => { console.log(err.response.data) });
+
+        // console.clear();
+
+        return cryptos;
+    }
+
+    static async getCryptoPrices(token) {
+        const bearer = `Bearer ${token}`;
+
+        let options = {
+            method: 'GET',
+            baseURL: 'http://localhost:8888/',
+            url: '/cryptocurrencies/prices/',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Authorization': bearer
+            },
+            data: {},
+        };
+
+        let prices = [];
+        await axios.request(options).then((res) => {
+            if (res.data != null && res.data.success) {
+                const _prices = res.data.prices;
+
+                for (let i = 0; i < _prices.length; i++) {
+                    prices.push(CmcPrices.fromJSON(_prices[i]));
+                }
+            }
+        }).catch((err) => { console.log(err.response.data) });
+
+        // console.clear();
+
+        return prices;
+    }
+
     static async getCryptoList(token) {
         const bearer = `Bearer ${token}`;
 
@@ -146,8 +214,6 @@ export default class API {
             if (res.data != null && res.data.success) {
                 const _cryptos = res.data.crypto;
 
-                console.log(_cryptos);
-
                 for (let i = 0; i < _cryptos.length; i++) {
                     cryptos.push(CmcCrypto.fromJSON(_cryptos[i]));
                 }
@@ -155,8 +221,6 @@ export default class API {
         }).catch((err) => { console.log(err.response.data) });
 
         // console.clear();
-
-        console.log(cryptos);
 
         return cryptos;
     }

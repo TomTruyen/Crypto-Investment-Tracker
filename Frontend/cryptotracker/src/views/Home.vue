@@ -15,13 +15,17 @@
 
     <h1>Home page</h1>
     <p>Main Tracker comes here</p>
+
+    <b-table striped hover :items="getPortfolioOptions"></b-table>
   </div>
 </template>
 
 <script>
   export default {
     mounted() {
+      this.setCmcPrices();
       this.setCmcCryptos();
+      this.setPortfolio();
     },
     data() {
       return {
@@ -34,6 +38,9 @@
       getCmcCryptoOptions() {
         return this.$store.getters.getCmcCryptosAsOptions;
       },
+      getPortfolioOptions() {
+        return this.$store.getters.getPortfolioOptions;
+      }
     },
     methods: {
       resetModal() {
@@ -51,11 +58,18 @@
           this.$bvModal.hide('buy')
         });
       },
+      setCmcPrices() {
+         const token = this.$cookie.get('access_token');
+          this.$store.dispatch('setCmcPrices', token);
+      },
       setCmcCryptos() {
-        console.log("GETTING CRYPTOS");
         const token = this.$cookie.get('access_token');
         this.$store.dispatch('setCmcCryptos', token);
       },
+      setPortfolio() {
+        const token = this.$cookie.get('access_token');
+        this.$store.dispatch('setPortfolio', token);
+      }
     }
   }
 </script>

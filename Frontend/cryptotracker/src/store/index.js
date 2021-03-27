@@ -12,7 +12,9 @@ export default new Vuex.Store({
         registerResult: null,
         verifyResult: null,
         resendVerificationResult: null,
-        cmcCryptos: []
+        cmcPrices: [],
+        cmcCryptos: [],
+        portfolio: [],
     },
     getters: {
         isLoggedIn(state) {
@@ -41,6 +43,24 @@ export default new Vuex.Store({
             }
 
             return cryptos;
+        },
+        getPortfolio(state) {
+            return state.portfolio;
+        },
+        getPortfolioOptions(state) {
+            let cryptos = [];
+
+            for (let i = 0; i < state.portfolio.length; i++) {
+                let ticker = state.portfolio[i].ticker;
+                const crypto = state.cmcPrices.find(c => c.ticker == ticker);
+
+                cryptos.push(state.portfolio[i].toOption(crypto.price, crypto.percent_change_24h));
+            }
+
+            console.log("RETURNING OPTIONS");
+            console.log(cryptos);
+
+            return cryptos;
         }
     },
     mutations: {
@@ -60,8 +80,14 @@ export default new Vuex.Store({
         resendVerification(state, verifyResult) {
             state.resendVerificationResult = verifyResult;
         },
+        setCmcPrices(state, prices) {
+            state.cmcPrices = prices;
+        },
         setCmcCryptos(state, cryptos) {
             state.cmcCryptos = cryptos;
+        },
+        setPortfolio(state, cryptos) {
+            state.portfolio = cryptos;
         }
     },
     actions: {
@@ -85,9 +111,22 @@ export default new Vuex.Store({
                 context.commit('resendVerification', verifyResult);
             });
         },
+        setCmcPrices(context, token) {
+            API.getCryptoPrices(token).then((prices) => {
+                context.commit('setCmcPrices', prices);
+            });
+        },
         setCmcCryptos(context, token) {
             API.getCryptoList(token).then((cryptos) => {
                 context.commit('setCmcCryptos', cryptos);
+            });
+        },
+        setPortfolio(context, token) {
+            API.getCryptos(token).then((cryptos) => {
+                console.log("SETTING PORTFOLIO");
+                console.log(cryptos);
+
+                context.commit('setPortfolio', cryptos);
             });
         }
     }
