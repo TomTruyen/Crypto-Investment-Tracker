@@ -22,7 +22,8 @@ export default class CmcCrypto {
     toOption() {
         return {
             "value": this.ticker,
-            "text": `${this.name} (${this.ticker})`
+            "label": `${this.name} (${this.ticker})`,
+            "img": this.imageUri
         };
     }
 }

@@ -13,7 +13,13 @@
       <b-modal id="buy" ref="modal" title="Buy crypto" @show="resetModal" @hidden="resetModal" @ok="handleOk">
         <form ref="form" @submit.stop.prevent="handleSubmit">
           <b-form-group label="Asset" label-for="crypto-select" :state="cryptoState">
-            <b-form-select id="crypto-select" :options="getCmcCryptoOptions" v-model="crypto" :state="cryptoState"></b-form-select>
+            <v-select id="crypto-select" :options="getCmcCryptoOptions" :reduce="option => option.value" v-model="crypto">
+                <template slot="option" slot-scope="option">
+                    <img width="32" height="32" :src="option.img" />
+                    <div class="spacer"></div>
+                    {{ option.label }}
+                </template>
+            </v-select>
           </b-form-group>
           <b-form-group label="Amount" label-for="crypto-amount" :state="cryptoState">
             <b-form-input id="crypto-amount" type="number" v-model="amount" placeholder="0"></b-form-input>

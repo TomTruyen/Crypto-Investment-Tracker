@@ -154,7 +154,7 @@ export default class API {
             }
         }).catch((err) => { console.log(err.response.data) });
 
-        // console.clear();
+        console.clear();
 
         return cryptos;
     }
@@ -186,7 +186,7 @@ export default class API {
             }
         }).catch((err) => { console.log(err.response.data) });
 
-        // console.clear();
+        console.clear();
 
         return prices;
     }
@@ -220,7 +220,7 @@ export default class API {
             }
         }).catch((err) => { console.log(err.response.data) });
 
-        // console.clear();
+        console.clear();
 
         return cryptos;
     }
@@ -255,7 +255,7 @@ export default class API {
             if (res.data != null && res.data.success) success = true;
         }).catch((err) => { console.log(err.response.data) });
 
-        // console.clear();
+        console.clear();
 
         return success;
     }

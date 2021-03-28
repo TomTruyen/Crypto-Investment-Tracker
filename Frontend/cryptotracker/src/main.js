@@ -4,8 +4,10 @@ import router from './router'
 import store from './store'
 
 import VueCookie from 'vue-cookie';
+import VueSelect from 'vue-select';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 
+import 'vue-select/dist/vue-select.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 
@@ -14,6 +16,7 @@ Vue.config.productionTip = false
 Vue.use(VueCookie);
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
+Vue.component('v-select', VueSelect);
 
 router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
