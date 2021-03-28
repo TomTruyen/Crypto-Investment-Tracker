@@ -12,10 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class CryptoService {
     public static ResponseEntity<Object> get(Map<String, String> header) {
@@ -37,7 +35,7 @@ public class CryptoService {
 
                 if(id == -1) throw new SQLException();
 
-                cryptos = databaseService.getCryptos(id);
+                cryptos = databaseService.getCryptos(id).stream().sorted(Comparator.comparing(Crypto::getBuyDate)).sorted(Comparator.comparing(Crypto::getName)).collect(Collectors.toList());
 
                 databaseService.closeConnection();
             } catch (SQLException se) {
