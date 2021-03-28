@@ -1,27 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-class Login extends StatefulWidget {
+class Register extends StatefulWidget {
   final Function updatePage;
 
-  Login({this.updatePage});
+  Register({this.updatePage});
 
   @override
-  _LoginState createState() => _LoginState();
+  _RegisterState createState() => _RegisterState();
 }
 
-class _LoginState extends State<Login> {
-  bool isHoverForgotPassword = false;
-  bool isHoverSignUp = false;
+class _RegisterState extends State<Register> {
+  bool isHoverSignIn = false;
   bool obscurePassword = true;
 
   TextEditingController emailController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
+  TextEditingController repeatPasswordController = new TextEditingController();
 
   @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
+    repeatPasswordController.dispose();
 
     super.dispose();
   }
@@ -49,7 +50,7 @@ class _LoginState extends State<Login> {
                   width: double.infinity,
                   alignment: Alignment.center,
                   child: Text(
-                    "Welcome Back",
+                    "Welcome",
                     style: TextStyle(
                       fontSize:
                           Theme.of(context).textTheme.bodyText2.fontSize * 2.5,
@@ -125,33 +126,38 @@ class _LoginState extends State<Login> {
                   onChanged: (String value) {},
                 ),
               ),
-              SizedBox(height: 12.5),
+              SizedBox(height: 25.0),
               Flexible(
-                child: MouseRegion(
-                  cursor: SystemMouseCursors.click,
-                  child: GestureDetector(
-                    child: Text(
-                      "Forgot your password?",
-                      style: TextStyle(
-                        decoration: isHoverForgotPassword
-                            ? TextDecoration.underline
-                            : null,
+                child: TextFormField(
+                  textAlign: TextAlign.center,
+                  cursorColor: Colors.white,
+                  cursorWidth: 2.0,
+                  controller: repeatPasswordController,
+                  obscureText: obscurePassword,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(12.0),
+                    isDense: true,
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.white,
+                        width: 2.0,
                       ),
                     ),
-                    onTap: () {
-                      print("Forgot Password");
-                    },
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.white,
+                        width: 2.0,
+                      ),
+                    ),
+                    hintText: "Repeat password",
+                    hintStyle: TextStyle(
+                      color: Colors.grey[700],
+                    ),
                   ),
-                  onEnter: (PointerEvent event) {
-                    setState(() {
-                      isHoverForgotPassword = true;
-                    });
-                  },
-                  onExit: (PointerEvent event) {
-                    setState(() {
-                      isHoverForgotPassword = false;
-                    });
-                  },
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                  onChanged: (String value) {},
                 ),
               ),
               SizedBox(height: 50.0),
@@ -160,7 +166,7 @@ class _LoginState extends State<Login> {
                   width: double.infinity,
                   height: 50.0,
                   child: OutlinedButton(
-                    child: Text("Sign in"),
+                    child: Text("Sign up"),
                     style: OutlinedButton.styleFrom(
                       primary: Colors.white,
                       side: BorderSide(
@@ -172,7 +178,7 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                     onPressed: () async {
-                      print("LOGIN");
+                      print("SIGN UP");
                     },
                   ),
                 ),
@@ -187,24 +193,24 @@ class _LoginState extends State<Login> {
                     cursor: SystemMouseCursors.click,
                     child: GestureDetector(
                       child: Text(
-                        "Need an account? Sign up",
+                        "Already have an account? Sign in",
                         style: TextStyle(
                           decoration:
-                              isHoverSignUp ? TextDecoration.underline : null,
+                              isHoverSignIn ? TextDecoration.underline : null,
                         ),
                       ),
                       onTap: () {
-                        widget.updatePage(false);
+                        widget.updatePage(true);
                       },
                     ),
                     onEnter: (PointerEvent event) {
                       setState(() {
-                        isHoverSignUp = true;
+                        isHoverSignIn = true;
                       });
                     },
                     onExit: (PointerEvent event) {
                       setState(() {
-                        isHoverSignUp = false;
+                        isHoverSignIn = false;
                       });
                     },
                   ),
