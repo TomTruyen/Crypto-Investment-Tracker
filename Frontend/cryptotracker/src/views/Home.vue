@@ -7,7 +7,7 @@
       
 
     <h1>Home page</h1>
-    <p>Main Tracker comes here</p>
+    <p>Refresh in: {{formattedTime}}</p>
 
     <b-button variant="primary" v-b-modal.buy>Buy</b-button>
       <b-modal id="buy" ref="modal" title="Buy crypto" @show="resetModal" @hidden="resetModal" @ok="handleOk">
@@ -41,12 +41,17 @@
 <script>
   export default {
     mounted() {
+      this.setInitialTimer();
+      this.setTimer();
+
       this.setCmcPrices();
       this.setCmcCryptos();
       this.setPortfolio();
     },
     data() {
       return {
+        timer: 0,
+        formattedTime: '15:00',
         crypto: '',
         amount: 0,
         price: 0,
@@ -73,6 +78,68 @@
       },
     },
     methods: {
+      refresh() {
+        this.setCmcPrices();
+        this.setCmcCryptos();
+        this.setPortfolio();
+      },
+      setTimer() {
+        if(this.timer <= 0) {
+          this.refresh();
+          this.timer = 900000;
+          this.setFormattedTime();
+        }
+
+        setTimeout(() => {
+            this.timer -= 1000;
+            this.setFormattedTime();
+            this.setTimer()
+        }, 1000)
+      },
+      setFormattedTime() {
+        let minutes = Math.floor(this.timer / 60000);
+        let seconds = ((this.timer % 60000) / 1000).toFixed(0);
+
+        if(seconds == 60) {
+          minutes++;
+          seconds = 0;
+        }
+
+        if(minutes < 10) {
+          minutes = "0" + minutes;
+        }
+
+        if(seconds < 10) {
+          seconds = "0" + seconds;
+        }
+
+        this.formattedTime = `${minutes}:${seconds}`;
+      },
+      setInitialTimer() {
+        let date = new Date();
+        let minutes = date.getMinutes();
+
+        let time = 15;
+
+        if(minutes >= 45) {
+          time = 60 - minutes;
+        }
+
+        if (minutes < 45) {
+          time = minutes - 30;
+        }
+
+        if(minutes < 30) {
+          time = minutes - 15;
+        }
+
+        if(minutes < 15) {
+          time = 15 - minutes;
+        }
+
+        this.timer = time * 60 * 1000;
+        this.setFormattedTime();
+      },
       resetModal() {
         this.crypto = "";
         this.amount = 0;

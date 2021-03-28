@@ -32,7 +32,7 @@ export default class API {
             result = LoginResult.fromJSON(err.response.data);
         });
 
-        console.clear();
+        // console.clear();
 
         return result;
     }
@@ -62,7 +62,7 @@ export default class API {
             result = RegisterResult.fromJSON(err.response.data);
         });
 
-        console.clear();
+        // console.clear();
 
         return result;
     }
@@ -91,7 +91,7 @@ export default class API {
             result = VerifyResult.fromJSON(err.response.data);
         });
 
-        console.clear();
+        // console.clear();
 
         return result;
     }
@@ -120,7 +120,7 @@ export default class API {
             result = VerifyResult.fromJSON(err.response.data);
         });
 
-        console.clear();
+        // console.clear();
 
         return result;
     }
@@ -146,15 +146,13 @@ export default class API {
             if (res.data != null && res.data.success) {
                 const _cryptos = res.data.crypto;
 
-                console.log(res.data.crypto);
-
                 for (let i = 0; i < _cryptos.length; i++) {
                     cryptos.push(Crypto.fromJSON(_cryptos[i]));
                 }
             }
         }).catch((err) => { console.log(err.response.data) });
 
-        console.clear();
+        // console.clear();
 
         return cryptos;
     }
@@ -186,7 +184,7 @@ export default class API {
             }
         }).catch((err) => { console.log(err.response.data) });
 
-        console.clear();
+        // console.clear();
 
         return prices;
     }
@@ -209,8 +207,6 @@ export default class API {
 
         let cryptos = [];
         await axios.request(options).then((res) => {
-            console.log(res);
-
             if (res.data != null && res.data.success) {
                 const _cryptos = res.data.crypto;
 
@@ -220,7 +216,7 @@ export default class API {
             }
         }).catch((err) => { console.log(err.response.data) });
 
-        console.clear();
+        // console.clear();
 
         return cryptos;
     }
@@ -229,8 +225,6 @@ export default class API {
         const bearer = `Bearer ${payload.token}`;
 
         let success = false;
-
-        console.log(bearer);
 
         let options = {
             method: 'POST',
@@ -249,13 +243,11 @@ export default class API {
             },
         };
 
-        console.log(payload);
-
         await axios.request(options).then((res) => {
             if (res.data != null && res.data.success) success = true;
         }).catch((err) => { console.log(err.response.data) });
 
-        console.clear();
+        // console.clear();
 
         return success;
     }
