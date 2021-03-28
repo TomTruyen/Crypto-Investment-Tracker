@@ -58,7 +58,7 @@ export default new Vuex.Store({
             }
 
             return cryptos;
-        }
+        },
     },
     mutations: {
         setIsLoggedIn(state, value) {
@@ -88,7 +88,7 @@ export default new Vuex.Store({
         },
         buyCrypto(state, crypto) {
             state.portfolio.push(crypto);
-        }
+        },
     },
     actions: {
         login(context, data) {

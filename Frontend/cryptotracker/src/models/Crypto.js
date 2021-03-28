@@ -31,12 +31,13 @@ export default class Crypto {
 
 
         return {
-            "Asset Name": `${this.name} (${this.ticker})`,
-            "Price": `$${price}`,
-            "24H Change": `${change_24h.toFixed(2)}%`,
-            "Balance": this.buyAmount,
-            "Value": `$${value}`,
-            "Profit/Loss": `${profit}%`,
+            "id": this.id,
+            "name": `${this.name} (${this.ticker})`,
+            "price": `$${price}`,
+            "change_24h": `${change_24h.toFixed(2)}%`,
+            "balance": this.buyAmount,
+            "value": `$${value}`,
+            "profit": `${profit}%`,
         };
     }
 }
