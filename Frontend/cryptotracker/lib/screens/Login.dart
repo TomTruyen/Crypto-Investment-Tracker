@@ -11,6 +11,8 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  String error = "";
+
   bool isHoverForgotPassword = false;
   bool isHoverSignUp = false;
   bool obscurePassword = true;
@@ -154,6 +156,21 @@ class _LoginState extends State<Login> {
                   },
                 ),
               ),
+              if (error != "") SizedBox(height: 37.5),
+              if (error != "")
+                Flexible(
+                  child: Container(
+                    height: 20.0,
+                    alignment: Alignment.center,
+                    width: double.infinity,
+                    child: Text(
+                      error,
+                      style: TextStyle(
+                        color: Color(0xFFDA2C43),
+                      ),
+                    ),
+                  ),
+                ),
               SizedBox(height: 50.0),
               Flexible(
                 child: Container(

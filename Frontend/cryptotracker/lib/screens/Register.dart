@@ -11,6 +11,8 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
+  String error = "";
+
   bool isHoverSignIn = false;
   bool obscurePassword = true;
 
@@ -160,6 +162,21 @@ class _RegisterState extends State<Register> {
                   onChanged: (String value) {},
                 ),
               ),
+              if (error != "") SizedBox(height: 50.0),
+              if (error != "")
+                Flexible(
+                  child: Container(
+                    height: 20.0,
+                    alignment: Alignment.center,
+                    width: double.infinity,
+                    child: Text(
+                      error,
+                      style: TextStyle(
+                        color: Color(0xFFDA2C43),
+                      ),
+                    ),
+                  ),
+                ),
               SizedBox(height: 50.0),
               Flexible(
                 child: Container(
