@@ -1,3 +1,4 @@
+import 'package:cryptotracker/utils/Utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -16,6 +17,9 @@ class _RegisterState extends State<Register> {
   bool isHoverSignIn = false;
   bool obscurePassword = true;
 
+  bool emailError = false;
+  bool passwordError = false;
+
   TextEditingController emailController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
   TextEditingController repeatPasswordController = new TextEditingController();
@@ -27,6 +31,47 @@ class _RegisterState extends State<Register> {
     repeatPasswordController.dispose();
 
     super.dispose();
+  }
+
+  bool validate() {
+    if (!Utils.isValidEmail(emailController.text)) {
+      setState(() {
+        error = "Email is invalid";
+        emailError = true;
+        passwordError = false;
+      });
+
+      return false;
+    }
+
+    if (!Utils.isValidPassword(passwordController.text)) {
+      setState(() {
+        error =
+            "Password must be at least 8 characters long and contain uppercase, lowercase and digits";
+        emailError = false;
+        passwordError = true;
+      });
+
+      return false;
+    }
+
+    if (passwordController.text != repeatPasswordController.text) {
+      setState(() {
+        error = "Passwords don't match";
+        emailError = false;
+        passwordError = true;
+      });
+
+      return false;
+    }
+
+    setState(() {
+      error = "";
+      emailError = false;
+      passwordError = false;
+    });
+
+    return true;
   }
 
   @override
@@ -73,13 +118,13 @@ class _RegisterState extends State<Register> {
                     isDense: true,
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
-                        color: Colors.white,
+                        color: emailError ? Color(0xFFDA2C43) : Colors.white,
                         width: 2.0,
                       ),
                     ),
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
-                        color: Colors.white,
+                        color: emailError ? Color(0xFFDA2C43) : Colors.white,
                         width: 2.0,
                       ),
                     ),
@@ -107,13 +152,13 @@ class _RegisterState extends State<Register> {
                     isDense: true,
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
-                        color: Colors.white,
+                        color: passwordError ? Color(0xFFDA2C43) : Colors.white,
                         width: 2.0,
                       ),
                     ),
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
-                        color: Colors.white,
+                        color: passwordError ? Color(0xFFDA2C43) : Colors.white,
                         width: 2.0,
                       ),
                     ),
@@ -141,13 +186,13 @@ class _RegisterState extends State<Register> {
                     isDense: true,
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
-                        color: Colors.white,
+                        color: passwordError ? Color(0xFFDA2C43) : Colors.white,
                         width: 2.0,
                       ),
                     ),
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
-                        color: Colors.white,
+                        color: passwordError ? Color(0xFFDA2C43) : Colors.white,
                         width: 2.0,
                       ),
                     ),
@@ -166,11 +211,12 @@ class _RegisterState extends State<Register> {
               if (error != "")
                 Flexible(
                   child: Container(
-                    height: 20.0,
+                    height: 60.0,
                     alignment: Alignment.center,
                     width: double.infinity,
                     child: Text(
                       error,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Color(0xFFDA2C43),
                       ),
@@ -195,7 +241,9 @@ class _RegisterState extends State<Register> {
                       ),
                     ),
                     onPressed: () async {
-                      print("SIGN UP");
+                      if (validate()) {
+                        print("SIGN UP");
+                      }
                     },
                   ),
                 ),
