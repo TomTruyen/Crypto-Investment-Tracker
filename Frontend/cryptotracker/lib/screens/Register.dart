@@ -1,4 +1,5 @@
 import 'package:cryptotracker/utils/Utils.dart';
+import 'package:cryptotracker/services/ApiService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -13,6 +14,7 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   String error = "";
+  String success = "";
 
   bool isHoverSignIn = false;
   bool obscurePassword = true;
@@ -207,7 +209,7 @@ class _RegisterState extends State<Register> {
                   onChanged: (String value) {},
                 ),
               ),
-              if (error != "") SizedBox(height: 50.0),
+              if (error != "" || success != "") SizedBox(height: 50.0),
               if (error != "")
                 Flexible(
                   child: Container(
@@ -219,6 +221,21 @@ class _RegisterState extends State<Register> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Color(0xFFDA2C43),
+                      ),
+                    ),
+                  ),
+                ),
+              if(success != "" && error == "")
+                Flexible(
+                  child: Container(
+                    height: 60.0,
+                    alignment: Alignment.center,
+                    width: double.infinity,
+                    child: Text(
+                      success,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.green,
                       ),
                     ),
                   ),
@@ -242,7 +259,28 @@ class _RegisterState extends State<Register> {
                     ),
                     onPressed: () async {
                       if (validate()) {
-                        print("SIGN UP");
+                        String email = emailController.text;
+                        String password = passwordController.text;
+
+                        Map<String, dynamic> response =
+                        await ApiService.register(email, password);
+
+                        if (response['success']) {
+                          setState(() {
+                            success = response['message'];
+                          });
+                        } else {
+                          String _error =
+                              "Something went wrong. Please try again";
+
+                          if (response['message'] != null &&
+                              response['message'] != '')
+                            _error = response['message'];
+
+                          setState(() {
+                            error = _error;
+                          });
+                        }
                       }
                     },
                   ),

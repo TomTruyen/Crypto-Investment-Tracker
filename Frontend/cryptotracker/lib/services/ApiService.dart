@@ -23,4 +23,21 @@ class ApiService {
 
     return json;
   }
+
+  static Future<Map<String, dynamic>> register(String email, String password,) async {
+    Uri url = Uri.parse('http://localhost:8888/register');
+    http.Response response = await http.post(url,
+        body: jsonEncode({
+          'email': email,
+          'password': password,
+        }),
+        headers: {
+          HttpHeaders.acceptHeader: "application/json",
+          HttpHeaders.contentTypeHeader: "application/json",
+        });
+
+    Map<String, dynamic> json = jsonDecode(response.body);
+
+    return json;
+  }
 }
