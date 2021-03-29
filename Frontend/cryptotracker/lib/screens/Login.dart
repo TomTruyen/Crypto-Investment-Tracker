@@ -17,6 +17,8 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   String error = "";
 
+  bool isLoggingIn = false;
+
   bool isHoverForgotPassword = false;
   bool isHoverSignUp = false;
   bool obscurePassword = true;
@@ -216,7 +218,17 @@ class _LoginState extends State<Login> {
                   width: double.infinity,
                   height: 50.0,
                   child: OutlinedButton(
-                    child: Text("Sign in"),
+                    child: isLoggingIn
+                        ? SizedBox(
+                            height: 20.0,
+                            width: 20.0,
+                            child: CircularProgressIndicator(
+                              valueColor: new AlwaysStoppedAnimation<Color>(
+                                  Colors.white),
+                              strokeWidth: 2.0,
+                            ),
+                          )
+                        : Text("Sign in"),
                     style: OutlinedButton.styleFrom(
                       primary: Colors.white,
                       side: BorderSide(
@@ -227,35 +239,44 @@ class _LoginState extends State<Login> {
                         borderRadius: BorderRadius.circular(16.0),
                       ),
                     ),
-                    onPressed: () async {
-                      if (validate()) {
-                        String email = emailController.text;
-                        String password = passwordController.text;
+                    onPressed: isLoggingIn
+                        ? null
+                        : () async {
+                            if (validate()) {
+                              setState(() {
+                                isLoggingIn = true;
+                              });
 
-                        Map<String, dynamic> response =
-                            await ApiService.login(email, password);
+                              Future.delayed(Duration(seconds: 1), () async {
+                                String email = emailController.text;
+                                String password = passwordController.text;
 
-                        if (response['success']) {
-                          globals.repository.token = response['token'];
+                                Map<String, dynamic> response =
+                                    await ApiService.login(email, password);
 
-                          Navigator.pushReplacementNamed(
-                            context,
-                            '/',
-                          );
-                        } else {
-                          String _error =
-                              "Something went wrong. Please try again";
+                                if (response['success']) {
+                                  globals.repository.token = response['token'];
 
-                          if (response['message'] != null &&
-                              response['message'] != '')
-                            _error = response['message'];
+                                  Navigator.pushReplacementNamed(
+                                    context,
+                                    '/',
+                                  );
+                                } else {
+                                  String _error =
+                                      "Something went wrong. Please try again";
 
-                          setState(() {
-                            error = _error;
-                          });
-                        }
-                      }
-                    },
+                                  if (response['message'] != null &&
+                                      response['message'] != '')
+                                    _error = response['message'];
+
+                                  setState(() {
+                                    isLoggingIn = false;
+                                    error = _error;
+                                  });
+                                }
+                              });
+                            }
+                          },
                   ),
                 ),
               ),

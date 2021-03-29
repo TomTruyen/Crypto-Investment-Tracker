@@ -1,5 +1,5 @@
-import 'package:cryptotracker/utils/Utils.dart';
 import 'package:cryptotracker/services/ApiService.dart';
+import 'package:cryptotracker/utils/Utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -13,6 +13,8 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
+  bool isRegistering = false;
+
   String error = "";
   String success = "";
 
@@ -225,7 +227,7 @@ class _RegisterState extends State<Register> {
                     ),
                   ),
                 ),
-              if(success != "" && error == "")
+              if (success != "" && error == "")
                 Flexible(
                   child: Container(
                     height: 60.0,
@@ -246,7 +248,17 @@ class _RegisterState extends State<Register> {
                   width: double.infinity,
                   height: 50.0,
                   child: OutlinedButton(
-                    child: Text("Sign up"),
+                    child: isRegistering
+                        ? SizedBox(
+                            height: 20.0,
+                            width: 20.0,
+                            child: CircularProgressIndicator(
+                              valueColor: new AlwaysStoppedAnimation<Color>(
+                                  Colors.white),
+                              strokeWidth: 2.0,
+                            ),
+                          )
+                        : Text("Sign up"),
                     style: OutlinedButton.styleFrom(
                       primary: Colors.white,
                       side: BorderSide(
@@ -257,32 +269,41 @@ class _RegisterState extends State<Register> {
                         borderRadius: BorderRadius.circular(16.0),
                       ),
                     ),
-                    onPressed: () async {
-                      if (validate()) {
-                        String email = emailController.text;
-                        String password = passwordController.text;
+                    onPressed: isRegistering
+                        ? null
+                        : () async {
+                            if (validate()) {
+                              setState(() {
+                                isRegistering = true;
+                              });
 
-                        Map<String, dynamic> response =
-                        await ApiService.register(email, password);
+                              Future.delayed(Duration(seconds: 1), () async {
+                                String email = emailController.text;
+                                String password = passwordController.text;
 
-                        if (response['success']) {
-                          setState(() {
-                            success = response['message'];
-                          });
-                        } else {
-                          String _error =
-                              "Something went wrong. Please try again";
+                                Map<String, dynamic> response =
+                                    await ApiService.register(email, password);
 
-                          if (response['message'] != null &&
-                              response['message'] != '')
-                            _error = response['message'];
+                                if (response['success']) {
+                                  setState(() {
+                                    success = response['message'];
+                                  });
+                                } else {
+                                  String _error =
+                                      "Something went wrong. Please try again";
 
-                          setState(() {
-                            error = _error;
-                          });
-                        }
-                      }
-                    },
+                                  if (response['message'] != null &&
+                                      response['message'] != '')
+                                    _error = response['message'];
+
+                                  setState(() {
+                                    error = _error;
+                                    isRegistering = false;
+                                  });
+                                }
+                              });
+                            }
+                          },
                   ),
                 ),
               ),
