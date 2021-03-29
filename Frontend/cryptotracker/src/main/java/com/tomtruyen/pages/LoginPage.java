@@ -1,4 +1,4 @@
-package com.tomtruyen;
+package com.tomtruyen.pages;
 
 import com.tomtruyen.utils.MotionPanel;
 
