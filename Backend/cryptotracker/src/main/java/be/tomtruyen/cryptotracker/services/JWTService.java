@@ -19,7 +19,7 @@ import java.util.Map;
 public class JWTService {
     private static final String SECRET_KEY = "TOM_CRYPTO_TRACKER";
     private static final String TOKEN_PREFIX = "Bearer ";
-    private static final int EXPIRATION_IN_MILLIS = 3600000; // == 1 HOUR
+    private static final int EXPIRATION_IN_MILLIS = 86400000; // == 1 DAY
 
     public static String generateToken(int id, String email, Claims claims) {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
