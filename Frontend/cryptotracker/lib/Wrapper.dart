@@ -7,9 +7,13 @@ class Wrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (globals.repository.token != null) {
-      return App();
+      return Scaffold(
+        body: App(),
+      );
     } else {
-      return Authentication();
+      return Scaffold(
+        body: Authentication(),
+      );
     }
   }
 }

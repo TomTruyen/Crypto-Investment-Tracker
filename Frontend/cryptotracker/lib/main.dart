@@ -20,9 +20,10 @@ class MyApp extends StatelessWidget {
               displayColor: Colors.white,
             ),
       ),
-      home: Scaffold(
-        body: Wrapper(),
-      ),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => Wrapper(),
+      },
     );
   }
 }

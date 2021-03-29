@@ -1,4 +1,7 @@
+import 'package:cryptotracker/Globals.dart' as globals;
+import 'package:cryptotracker/services/ApiService.dart';
 import 'package:cryptotracker/utils/Utils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -226,7 +229,31 @@ class _LoginState extends State<Login> {
                     ),
                     onPressed: () async {
                       if (validate()) {
-                        print("VALID");
+                        String email = emailController.text;
+                        String password = passwordController.text;
+
+                        Map<String, dynamic> response =
+                            await ApiService.login(email, password);
+
+                        if (response['success']) {
+                          globals.repository.token = response['token'];
+
+                          Navigator.pushReplacementNamed(
+                            context,
+                            '/',
+                          );
+                        } else {
+                          String _error =
+                              "Something went wrong. Please try again";
+
+                          if (response['message'] != null &&
+                              response['message'] != '')
+                            _error = response['message'];
+
+                          setState(() {
+                            error = _error;
+                          });
+                        }
                       }
                     },
                   ),
