@@ -86,7 +86,7 @@ public class DatabaseService implements DatabaseServiceInterface {
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         preparedStatement.setString(1, email);
         preparedStatement.setString(2, password);
-        preparedStatement.setBoolean(3, false);
+        preparedStatement.setBoolean(3, true);
 
         preparedStatement.executeUpdate();
     }
