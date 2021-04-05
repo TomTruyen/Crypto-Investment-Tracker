@@ -144,6 +144,8 @@ public class CryptoService {
                     double buyPrice = Double.parseDouble((String) body.getOrDefault("price", "0"));
 
                     databaseService.buyCrypto(id, name, ticker, buyAmount, buyPrice);
+
+                    databaseService.closeConnection();
                 } catch (Exception e) {
                     result = CryptoResult.ERR_UNKNOWN;
                 }
@@ -186,8 +188,8 @@ public class CryptoService {
 
                 if(id == -1) throw new SQLException();
 
-                String name = (String) body.get("name");
                 String ticker = (String) body.get("ticker");
+                String name = CryptoRepository.getInstance().find(ticker).getName();
                 double sellAmount = (double) body.get("amount");
                 double sellPrice = (double) body.get("price");
 

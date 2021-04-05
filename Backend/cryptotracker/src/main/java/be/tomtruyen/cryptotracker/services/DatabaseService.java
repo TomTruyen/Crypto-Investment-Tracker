@@ -146,6 +146,11 @@ public class DatabaseService implements DatabaseServiceInterface {
 
     @Override
     public void sellCrypto(int id, String name, String ticker, double sellAmount, double sellPrice) throws SQLException {
+        System.out.println("SELLING CRYPTO");
+        System.out.println(name);
+        System.out.println(ticker);
+        System.out.println(sellAmount);
+        System.out.println(sellPrice);
         /*
         *  History Table
         *
