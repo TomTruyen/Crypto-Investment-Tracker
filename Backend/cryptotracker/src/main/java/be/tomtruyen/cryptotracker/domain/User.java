@@ -1,7 +1,5 @@
 package be.tomtruyen.cryptotracker.domain;
 
-import java.util.Map;
-
 public class User {
     private int id;
     private String email;
