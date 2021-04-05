@@ -1,15 +1,16 @@
 <template>
-  <div class="home">
-      <ul class="mb-0 pl-3">
-        <li v-for="name in submitted">{{ name }}</li>
-      </ul>
+  <div class="home">  
+    
 
-      
+    <div class="row margin-0">
+      <div class="col my-auto">
+        Refresh in: {{formattedTime}}
+      </div>
+      <div class="col margin-vertical-1em">
+        <b-button variant="primary" class="float-right width-200px" v-b-modal.buy>BUY</b-button>
+      </div>
+    </div>
 
-    <h1>Home page</h1>
-    <p>Refresh in: {{formattedTime}}</p>
-
-    <b-button variant="primary" v-b-modal.buy>Buy</b-button>
       <b-modal id="buy" ref="modal" title="Buy crypto" @show="resetModal" @hidden="resetModal" @ok="handleOk">
         <form ref="form" @submit.stop.prevent="handleSubmit">
           <b-form-group label="Asset" label-for="crypto-select" :state="cryptoState">
@@ -56,7 +57,6 @@
         amount: 0,
         price: 0,
         cryptoState: null,
-        submitted: [],
         // used for table displaying
         fields: [
           {key: 'name', label: 'Asset Name', sortable: true},
