@@ -38,6 +38,7 @@ export default class Crypto {
             "balance": this.buyAmount,
             "value": `$${value}`,
             "profit": `${profit}%`,
+            "ticker": this.ticker,
         };
     }
 }

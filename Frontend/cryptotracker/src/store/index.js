@@ -134,6 +134,15 @@ export default new Vuex.Store({
                     });
                 }
             });
+        },
+        sellCrypto(context, payload) {
+            API.sellCrypto(payload).then((isSuccess) => {
+                if (isSuccess) {
+                    API.getCryptos(payload.token).then((cryptos) => {
+                        context.commit('setPortfolio', cryptos);
+                    });
+                }
+            });
         }
     }
 })

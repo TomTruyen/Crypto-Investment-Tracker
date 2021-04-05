@@ -1,7 +1,5 @@
 <template>
   <div class="home">  
-    
-
     <div class="row margin-0">
       <div class="col my-auto">
         Refresh in: {{formattedTime}}
@@ -11,29 +9,53 @@
       </div>
     </div>
 
-      <b-modal id="buy" ref="modal" title="Buy crypto" @show="resetModal" @hidden="resetModal" @ok="handleOk">
-        <form ref="form" @submit.stop.prevent="handleSubmit">
-          <b-form-group label="Asset" label-for="crypto-select" :state="cryptoState">
-            <v-select id="crypto-select" :options="getCmcCryptoOptions" :reduce="option => option.value" v-model="crypto">
-                <template slot="option" slot-scope="option">
-                    <img width="32" height="32" :src="option.img" />
-                    <div class="spacer"></div>
-                    {{ option.label }}
-                </template>
-            </v-select>
-          </b-form-group>
-          <b-form-group label="Amount" label-for="crypto-amount" :state="cryptoState">
-            <b-form-input id="crypto-amount" type="number" v-model="amount" placeholder="0"></b-form-input>
-          </b-form-group>
-          <b-form-group label="Price" label-for="crypto-price" :state="cryptoState">
-            <b-form-input id="crypto-price" type="number" v-model="price" placeholder="0"></b-form-input>
-          </b-form-group>
-        </form>
-      </b-modal>
+    <b-modal id="buy" ref="modal" title="Buy crypto" @show="resetModal" @hidden="resetModal" @ok="handleBuy">
+      <form ref="form" @submit.stop.prevent="handleBuySubmit">
+        <b-form-group label="Asset" label-for="crypto-select">
+          <v-select id="crypto-select" :options="getCmcCryptoOptions" :reduce="option => option.value" v-model="crypto">
+              <template slot="option" slot-scope="option">
+                  <img width="32" height="32" :src="option.img" />
+                  <div class="spacer"></div>
+                  {{ option.label }}
+              </template>
+          </v-select>
+        </b-form-group>
+        <b-form-group label="Amount" label-for="crypto-amount">
+          <b-form-input id="crypto-amount" type="number" v-model="amount" placeholder="0"></b-form-input>
+        </b-form-group>
+        <b-form-group label="Price" label-for="crypto-price">
+          <b-form-input id="crypto-price" type="number" v-model="price" placeholder="0"></b-form-input>
+        </b-form-group>
+
+        <b-alert show variant="danger" v-if="errorMessage != null">{{errorMessage}}</b-alert>
+      </form>
+    </b-modal>
+
+    <b-modal id="sell" ref="modal" title="Sell crypto" @hidden="resetModal" @ok="handleSell">
+      <form ref="form" @submit.stop.prevent="handleSellSubmit">
+        <b-form-group label="Asset" label-for="crypto-select">
+          <v-select id="crypto-select" :options="getCmcCryptoOptions" :reduce="option => option.value" v-model="sellCrypto" disabled>
+              <template slot="option" slot-scope="option">
+                  <img width="32" height="32" :src="option.img" />
+                  <div class="spacer"></div>
+                  {{ option.label }}
+              </template>
+          </v-select>
+        </b-form-group>
+        <b-form-group label="Amount" label-for="crypto-amount">
+          <b-form-input id="crypto-amount" type="number" v-model="sellAmount" placeholder="0"></b-form-input>
+        </b-form-group>
+        <b-form-group label="Price" label-for="crypto-price">
+          <b-form-input id="crypto-price" type="number" v-model="sellPrice" placeholder="0"></b-form-input>
+        </b-form-group>
+
+        <b-alert show variant="danger" v-if="errorMessage != null">{{errorMessage}}</b-alert>
+      </form>
+    </b-modal>
 
     <b-table striped hover :items="getPortfolioOptions" :fields="fields">
       <template #cell(actions)="row">
-        <b-button size="sm" @click="sell(row.item, row.index, $event.target)" class="mr-1" variant="danger">SELL</b-button>
+        <b-button size="sm" @click="sell(row.item, row.index, $event.target)" class="mr-1" variant="danger" v-b-modal.sell>SELL</b-button>
       </template>
     </b-table>
   </div>
@@ -56,7 +78,11 @@
         crypto: '',
         amount: 0,
         price: 0,
-        cryptoState: null,
+        sellCrypto: '',
+        sellAmount: 0,
+        sellMaxAmount: 0,
+        sellPrice: 0,
+        errorMessage: null,
         // used for table displaying
         fields: [
           {key: 'name', label: 'Asset Name', sortable: true},
@@ -71,7 +97,13 @@
     }, 
     computed: {
       getCmcCryptoOptions() {
-        return this.$store.getters.getCmcCryptosAsOptions;
+        const cmcCryptos = this.$store.getters.getCmcCryptosAsOptions;
+
+        const found = cmcCryptos.find(crypto => crypto.value.toUpperCase() == this.$data.sellCrypto.toUpperCase());
+
+        if(found != undefined) return [found];
+
+        return cmcCryptos;
       },
       getPortfolioOptions() {
         return this.$store.getters.getPortfolioOptions;
@@ -144,13 +176,23 @@
         this.crypto = "";
         this.amount = 0;
         this.price = 0;
-        this.cryptoState = null;
+
+        this.sellCrypto = "";
+        this.sellAmount = 0;
+        this.sellPrice = 0;
+
+        this.errorMessage = null;
       },
-      handleOk(e) {
+      handleBuy(e) {
         e.preventDefault();
-        this.handleSubmit();
+        this.handleBuySubmit();
       },
-      handleSubmit() {
+      handleBuySubmit() {
+        if(this.sellCrypto == "") this.errorMessage = "Crypto missing";
+        else if(this.sellAmount == 0) this.errorMessage = "Buy amount must be greater than 0";
+        else if(this.sellPrice == 0) this.errorMessage = "Buy price must be greater than 0";
+
+
         if(this.crypto != "" && this.amount != 0 && this.price != 0) {
           this.$store.dispatch('buyCrypto', {
             'token': this.$cookie.get('access_token'),
@@ -161,6 +203,29 @@
 
           this.$nextTick(() => {
             this.$bvModal.hide('buy')
+          });
+        }
+      },
+      handleSell(e) {
+        e.preventDefault();
+        this.handleSellSubmit();
+      },
+      handleSellSubmit() {
+        if(this.sellCrypto == "") this.errorMessage = "Crypto missing";
+        else if(this.sellAmount == 0) this.errorMessage = "Sell amount must be greater than 0";
+        else if (this.sellMaxAmount < this.sellAmount) this.errorMessage = "Sell amount can't be more than " + this.sellMaxAmount;
+        else if(this.sellPrice == 0) this.errorMessage = "Sell price must be greater than 0";
+
+        if(this.sellCrypto != "" && this.sellAmount != 0 && this.sellPrice != 0) {
+          this.$store.dispatch('sellCrypto', {
+            'token': this.$cookie.get('access_token'),
+            'sellCrypto': this.crypto,
+            'sellAmount': this.amount,
+            'sellPrice': this.price,
+          });
+
+          this.$nextTick(() => {
+            this.$bvModal.hide('sell')
           });
         }
       },
@@ -179,11 +244,12 @@
       sell(item, index, button) {
         const id = item.id; //id with which it's stored in the Database
 
-        // Should show popup (modal)
+        const ticker = item.ticker;
         const name = item.name;
         const maxAmount = item.balance;
 
-        // There the user should have a textfield (not editable) with the 'name'
+        this.$data.sellCrypto = ticker;
+        this.$data.sellMaxAmount = maxAmount;
         // It should also make sure a user can't sell more than the 'maxAmount'
 
         // After confirming popup --> send to database
