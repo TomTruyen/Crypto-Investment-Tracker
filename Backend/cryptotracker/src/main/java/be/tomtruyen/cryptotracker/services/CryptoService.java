@@ -184,16 +184,24 @@ public class CryptoService {
                 Claims claims = JWTService.verifyToken(token);
 
                 assert claims != null;
-                int id = (int) claims.getOrDefault("id", -1);
+                int userId = (int) claims.getOrDefault("id", -1);
 
-                if(id == -1) throw new SQLException();
+                if(userId == -1) throw new SQLException();
 
+                int id = (int) body.get("id");
                 String ticker = (String) body.get("ticker");
                 String name = CryptoRepository.getInstance().find(ticker).getName();
-                double sellAmount = (double) body.get("amount");
-                double sellPrice = (double) body.get("price");
+                double sellAmount = Double.parseDouble((String)body.getOrDefault("amount", "0"));
+                double sellPrice = Double.parseDouble((String) body.getOrDefault("price", "0"));
 
-                databaseService.sellCrypto(id, name, ticker, sellAmount, sellPrice);
+                Crypto crypto = databaseService.findCryptoById(id);
+
+                if(crypto == null) throw new SQLException();
+                if(crypto.getBuyAmount() - crypto.getSellAmount() < sellAmount) {
+                    result = CryptoResult.ERR_AMOUNT_TOO_LARGE;
+                } else {
+                    databaseService.sellCrypto(userId, id, name, ticker, sellAmount, sellPrice);
+                }
 
                 databaseService.closeConnection();
             } catch (SQLException se) {

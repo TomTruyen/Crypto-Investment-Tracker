@@ -152,6 +152,8 @@ export default class API {
             }
         }).catch((err) => { console.log(err.response.data) });
 
+        console.log(cryptos);
+
         // console.clear();
 
         return cryptos;
@@ -268,6 +270,7 @@ export default class API {
                 'Authorization': bearer
             },
             data: {
+                'id': payload.id,
                 'ticker': payload.crypto,
                 'amount': payload.amount,
                 'price': payload.price,

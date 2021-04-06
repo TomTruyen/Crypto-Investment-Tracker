@@ -35,7 +35,7 @@ export default class Crypto {
             "name": `${this.name} (${this.ticker})`,
             "price": `$${price}`,
             "change_24h": `${change_24h.toFixed(2)}%`,
-            "balance": this.buyAmount,
+            "balance": this.buyAmount - this.sellAmount,
             "value": `$${value}`,
             "profit": `${profit}%`,
             "ticker": this.ticker,

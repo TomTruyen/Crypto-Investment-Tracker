@@ -79,6 +79,7 @@
         amount: 0,
         price: 0,
         sellCrypto: '',
+        sellId: 0,
         sellAmount: 0,
         sellMaxAmount: 0,
         sellPrice: 0,
@@ -219,9 +220,10 @@
         if(this.sellCrypto != "" && this.sellAmount != 0 && this.sellPrice != 0) {
           this.$store.dispatch('sellCrypto', {
             'token': this.$cookie.get('access_token'),
-            'sellCrypto': this.crypto,
-            'sellAmount': this.amount,
-            'sellPrice': this.price,
+            'id': this.sellId,
+            'crypto': this.sellCrypto,
+            'amount': this.sellAmount,
+            'price': this.sellPrice,
           });
 
           this.$nextTick(() => {
@@ -242,17 +244,13 @@
         this.$store.dispatch('setPortfolio', token);
       },
       sell(item, index, button) {
-        const id = item.id; //id with which it's stored in the Database
-
+        const id = item.id; 
         const ticker = item.ticker;
-        const name = item.name;
         const maxAmount = item.balance;
 
         this.$data.sellCrypto = ticker;
+        this.$data.sellId = id;
         this.$data.sellMaxAmount = maxAmount;
-        // It should also make sure a user can't sell more than the 'maxAmount'
-
-        // After confirming popup --> send to database
       },
     }
   }

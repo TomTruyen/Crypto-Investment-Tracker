@@ -123,8 +123,10 @@ public class DatabaseService implements DatabaseServiceInterface {
             double sellPrice = rs.getDouble("sell_price");
             Date sellDate = rs.getDate("sell_date");
 
-            Crypto crypto = new Crypto(id, name, ticker, buyAmount, buyPrice, buyDate, sellAmount, sellPrice, sellDate);
-            cryptos.add(crypto);
+            if(sellAmount < buyAmount) {
+                Crypto crypto = new Crypto(id, name, ticker, buyAmount, buyPrice, buyDate, sellAmount, sellPrice, sellDate);
+                cryptos.add(crypto);
+            }
         }
 
         return cryptos;
@@ -145,42 +147,68 @@ public class DatabaseService implements DatabaseServiceInterface {
     }
 
     @Override
-    public void sellCrypto(int id, String name, String ticker, double sellAmount, double sellPrice) throws SQLException {
-        System.out.println("SELLING CRYPTO");
-        System.out.println(name);
-        System.out.println(ticker);
-        System.out.println(sellAmount);
-        System.out.println(sellPrice);
-        /*
-        *  History Table
-        *
-        *  Use cryptoname & ticker combination to get the value from the 'crypto' table ==> ORDER BY BUY_DATE ASC [IMPORTANT]
-        *  ==> INSERT Sales (userid, name, ticker, buyAmount [= sellAmount in this case], buyPrice, buyDate, sellAmount, sellPrice, sellDate, priceChange (percentage) since day of buying
-        * ==> the current price of th ecrypto should be bable to be fetched from some repository that we update every 15m in the backend
-        *
-        * If not enough of that crypto with that specific buyPrice, then still update, and after that just
-        * INSERT a new "sale" for the next crypto with that name
-        *
-        * sO IT SHOULD BE A WHILE LOOP
-        *
-        *
-        * FIRST: check if enough crypto for total sellAmount ==> THIS CHECK SHOULD BE DONE IN THE SERVICE TABLE BEFORE GOING HERE!!
-        * ==> SELECT SUM(buy_amount - sell_amount) as totalAmountLeft FROM `crypto` WHERE name="Cardano" AND ticker="ADA"
-        * if(theSelectQueryValue >= sellAmount) {
-        * while(sellAmount > 0) {
-        *   // fetchNextRow of the crypto being sold (WHERE buyAmount > sellAmount) !!
-        *   // insert the max amount possible (or the sellamount if sellamount less than the buyamount)
-        *   // update the crypto in the 'crypto' table
-        *   // update sellAmount to be: sellAmount -= amountThatCanBeSoldStill
-        * }
-        * } else{
-        *   ERROR NOT ENOUGH CRAP TO SELL
-        * }
-        *
-        *
-        * Crypto Table
-        * ==> UPDATE SellAmount (update the sellamount)
-        * */
+    public void sellCrypto(int userId, int id, String name, String ticker, double sellAmount, double sellPrice) throws SQLException {
+        Crypto crypto = findCryptoById(id);
 
+        if(crypto == null) throw new SQLException();
+
+        // INSERT INTO HISTORY
+        String query = "INSERT INTO history (user_id, name, ticker, buy_amount, buy_price, buy_date, sell_amount, sell_price, sell_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1, userId);
+        preparedStatement.setString(2, name);
+        preparedStatement.setString(3, ticker);
+        preparedStatement.setDouble(4, crypto.getBuyAmount());
+        preparedStatement.setDouble(5, crypto.getBuyPrice());
+        preparedStatement.setDate(6, new Date(crypto.getBuyDate().getTime()));
+        preparedStatement.setDouble(7, sellAmount);
+        preparedStatement.setDouble(8, sellPrice);
+        preparedStatement.setDate(9, new Date(System.currentTimeMillis()));
+
+        preparedStatement.executeUpdate();
+
+        // UPDATE PORTFOLIO
+        if(crypto.getSellAmount() + sellAmount >= crypto.getBuyAmount()) {
+            query = "DELETE FROM crypto WHERE id = ?";
+
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, id);
+
+        } else {
+            query = "UPDATE crypto SET sell_amount = ? WHERE id = ?";
+
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setDouble(1, crypto.getSellAmount() + sellAmount);
+            preparedStatement.setInt(2, id);
+
+        }
+
+        preparedStatement.executeUpdate();
+    }
+
+    public Crypto findCryptoById(int id) throws SQLException {
+        String query = "SELECT * FROM crypto WHERE id = ? LIMIT 1";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1, id);
+
+        ResultSet rs = preparedStatement.executeQuery();
+
+        Crypto crypto = null;
+        while(rs.next()) {
+            String name = rs.getString("name");
+            String ticker = rs.getString("ticker");
+            double buyAmount = rs.getDouble("buy_amount");
+            double buyPrice = rs.getDouble("buy_price");
+            Date buyDate = rs.getDate("buy_date");
+            double sellAmount = rs.getDouble("sell_amount");
+            double sellPrice = rs.getDouble("sell_price");
+            Date sellDate = rs.getDate("sell_date");
+
+            crypto = new Crypto(id, name, ticker, buyAmount, buyPrice, buyDate, sellAmount, sellPrice, sellDate);
+        }
+
+        return crypto;
     }
 }

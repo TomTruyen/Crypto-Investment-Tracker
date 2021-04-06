@@ -12,7 +12,8 @@ public enum CryptoResult {
     ERR_TICKER_EMPTY(false, "Name can't be empty.", HttpStatus.BAD_REQUEST),
     ERR_PRICE_GREATER_THAN_ZERO(false, "Price must be greater than 0.", HttpStatus.BAD_REQUEST),
     ERR_AMOUNT_GREATER_THAN_ZERO(false, "Amount must be greater than 0.", HttpStatus.BAD_REQUEST),
-    ERR_UNKNOWN(false, "Something went wrong. Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
+    ERR_UNKNOWN(false, "Something went wrong. Please try again.", HttpStatus.INTERNAL_SERVER_ERROR),
+    ERR_AMOUNT_TOO_LARGE(false, "You can't sell more than you own.", HttpStatus.BAD_REQUEST);
 
     private final boolean success;
     private final String message;
