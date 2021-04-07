@@ -1,16 +1,13 @@
 package be.tomtruyen.cryptotracker.services;
 
-import be.tomtruyen.cryptotracker.domain.CmcCrypto;
-import be.tomtruyen.cryptotracker.domain.CmcCryptoPrice;
+import be.tomtruyen.cryptotracker.domain.CoingeckoCrypto;
 
 import java.io.*;
-import java.lang.reflect.Array;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FileService {
-    public static void writeCryptoToFile(List<CmcCrypto> list) {
+    public static void writeCryptoToFile(List<CoingeckoCrypto> list) {
         if(!list.isEmpty()) {
             FileOutputStream fileOutputStream = null;
             ObjectOutputStream objectOutputStream = null;
@@ -34,7 +31,7 @@ public class FileService {
         }
     }
 
-    public static void writeCryptoPricesToFile(List<CmcCryptoPrice> list) {
+    public static void writeCryptoPricesToFile(List<CoingeckoCrypto> list) {
         if(!list.isEmpty()) {
             FileOutputStream fileOutputStream = null;
             ObjectOutputStream objectOutputStream = null;
@@ -76,8 +73,8 @@ public class FileService {
         }
     }
 
-    public static List<CmcCrypto> readCryptoFromFile() {
-        List<CmcCrypto> cryptos = new ArrayList<CmcCrypto>();
+    public static List<CoingeckoCrypto> readCryptoFromFile() {
+        List<CoingeckoCrypto> cryptos = new ArrayList<CoingeckoCrypto>();
 
         FileInputStream fileInputStream = null;
         ObjectInputStream objectInputStream = null;
@@ -91,9 +88,9 @@ public class FileService {
 
                 boolean hasData = true;
                 while (hasData) {
-                    CmcCrypto crypto = null;
+                    CoingeckoCrypto crypto = null;
                     try {
-                        crypto = (CmcCrypto) objectInputStream.readObject();
+                        crypto = (CoingeckoCrypto) objectInputStream.readObject();
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -112,8 +109,8 @@ public class FileService {
         return cryptos;
     }
 
-    public static List<CmcCryptoPrice> readCryptoPricesFromFile() {
-        List<CmcCryptoPrice> cryptos = new ArrayList<CmcCryptoPrice>();
+    public static List<CoingeckoCrypto> readCryptoPricesFromFile() {
+        List<CoingeckoCrypto> cryptos = new ArrayList<CoingeckoCrypto>();
 
         FileInputStream fileInputStream = null;
         ObjectInputStream objectInputStream = null;
@@ -127,9 +124,9 @@ public class FileService {
 
                 boolean hasData = true;
                 while (hasData) {
-                    CmcCryptoPrice crypto = null;
+                    CoingeckoCrypto crypto = null;
                     try {
-                        crypto = (CmcCryptoPrice) objectInputStream.readObject();
+                        crypto = (CoingeckoCrypto) objectInputStream.readObject();
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
                     }

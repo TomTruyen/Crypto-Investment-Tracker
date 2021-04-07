@@ -1,39 +1,43 @@
 package be.tomtruyen.cryptotracker.repositories;
 
-import be.tomtruyen.cryptotracker.domain.CmcCrypto;
-import be.tomtruyen.cryptotracker.domain.CmcCryptoPrice;
+import be.tomtruyen.cryptotracker.domain.CoingeckoCrypto;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class CryptoRepository {
     private static CryptoRepository instance;
     private static Object monitor = new Object();
-    private List<CmcCrypto> cryptos = Collections.synchronizedList(new ArrayList<>());
+    private List<CoingeckoCrypto> cryptos = Collections.synchronizedList(new ArrayList<>());
 
     private CryptoRepository() {}
 
-    public void set(List<CmcCrypto> cryptos) {
+    public void set(List<CoingeckoCrypto> cryptos) {
         clear();
         this.cryptos.addAll(cryptos);
     }
 
-    public void add(CmcCrypto crypto) {
+    public void add(CoingeckoCrypto crypto) {
         this.cryptos.add(crypto);
     }
 
-    public CmcCrypto find(String ticker) {
-        return cryptos.stream().filter(c -> c.getTicker().equalsIgnoreCase(ticker)).collect(Collectors.toList()).get(0);
+    public CoingeckoCrypto find(String ticker) {
+        return cryptos.stream().filter(c -> c.getSymbol().equalsIgnoreCase(ticker)).collect(Collectors.toList()).get(0);
     }
 
-    public List<CmcCrypto> getAll() {
+    public List<CoingeckoCrypto> getAll() {
         return cryptos;
     }
 
-    public List<CmcCrypto> get(int limit) {
+    public List<CoingeckoCrypto> get(int limit) {
         return cryptos.stream().limit(limit).collect(Collectors.toList());
+    }
+
+    public void sortByRank() {
+        this.set(cryptos.stream().sorted(Comparator.comparing(CoingeckoCrypto::getRank)).collect(Collectors.toList()));
     }
 
     public void clear() {
@@ -51,4 +55,6 @@ public class CryptoRepository {
 
         return instance;
     }
+
+
 }

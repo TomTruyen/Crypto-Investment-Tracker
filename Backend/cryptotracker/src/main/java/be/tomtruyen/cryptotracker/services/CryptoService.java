@@ -1,10 +1,8 @@
 package be.tomtruyen.cryptotracker.services;
 
-import be.tomtruyen.cryptotracker.domain.CmcCrypto;
 import be.tomtruyen.cryptotracker.domain.Crypto;
-import be.tomtruyen.cryptotracker.domain.CmcCryptoPrice;
+import be.tomtruyen.cryptotracker.domain.CoingeckoCrypto;
 import be.tomtruyen.cryptotracker.domain.CryptoResult;
-import be.tomtruyen.cryptotracker.repositories.CryptoPriceRepository;
 import be.tomtruyen.cryptotracker.repositories.CryptoRepository;
 import be.tomtruyen.cryptotracker.utils.Utils;
 import io.jsonwebtoken.Claims;
@@ -59,38 +57,10 @@ public class CryptoService {
         );
     }
 
-    public static ResponseEntity<Object> getPrices(Map<String, String> header) {
-        List<CmcCryptoPrice> prices = new ArrayList<>();
-
-        CryptoResult result = validate(header, null);
-
-        boolean success = result.isSuccess();
-
-        if(success) {
-            if(CryptoPriceRepository.getInstance().getAll().size() <= 0) {
-                result = CryptoResult.ERR_UNKNOWN;
-            } else {
-                prices = CryptoPriceRepository.getInstance().getAll();
-            }
-        }
-
-        success = result.isSuccess();
-        String message = result.getMessage();
-        HttpStatus status = result.getStatus();
-
-        return ResponseEntity.status(status).body(
-                Map.of(
-                        "path", "/cryptocurrencies/prices",
-                        "success", success,
-                        "message", message,
-                        "prices", prices,
-                        "time", new Date()
-                )
-        );
-    }
-
     public static ResponseEntity<Object> getCryptoList(Map<String, String> header) {
-        List<CmcCrypto> cyptos = new ArrayList<>();
+        CoingeckoApiService.fetchCryptos();
+
+        List<CoingeckoCrypto> cyptos = new ArrayList<>();
 
         CryptoResult result = validate(header, null);
 

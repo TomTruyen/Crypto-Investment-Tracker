@@ -15,11 +15,6 @@ public class CryptoController {
         return CryptoService.get(header);
     }
 
-    @GetMapping(path = "prices")
-    public ResponseEntity<Object> getPrices(@RequestHeader Map<String, String> header) {
-        return CryptoService.getPrices(header);
-    }
-
     @GetMapping(path = "list")
     public ResponseEntity<Object> getCryptoList(@RequestHeader Map<String, String> header) {
         return CryptoService.getCryptoList(header);

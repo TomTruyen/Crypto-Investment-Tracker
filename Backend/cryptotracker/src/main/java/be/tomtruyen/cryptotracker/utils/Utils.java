@@ -45,4 +45,10 @@ public class Utils {
     public static String hashPassword(String password) {
         return DigestUtils.sha512Hex(password);
     }
+
+    public static Object checkNull (Object input, Object defaultValue){
+        if(input == null) return defaultValue;
+
+        return input;
+    }
 }
