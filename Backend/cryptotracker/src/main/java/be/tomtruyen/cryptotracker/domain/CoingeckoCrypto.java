@@ -187,6 +187,7 @@ public class CoingeckoCrypto implements Serializable {
     public static CoingeckoCrypto fromJSON(Map<String, Object> json) {
         String id = (String) json.getOrDefault("id", "");
         String symbol = (String) json.getOrDefault("symbol", "");
+        symbol = symbol.toUpperCase();
         String name = (String) json.getOrDefault("name", "");
         String image = (String) json.getOrDefault("image", "");
         double price = (json.getOrDefault("current_price", 0) == null ? 0 : (double) json.getOrDefault("current_price", 0));
