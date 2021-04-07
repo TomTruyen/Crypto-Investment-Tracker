@@ -110,10 +110,11 @@ export default new Vuex.Store({
             });
         },
         setCoingeckoCryptos(context, token) {
-            API.getCryptoList(token).then((cryptos) => {
+            return API.getCryptoList(token).then(async(cryptos) => {
                 context.commit('setCoingeckoCryptos', cryptos);
-                API.getCryptos(token).then((cryptos) => {
+                return await API.getCryptos(token).then((cryptos) => {
                     context.commit('setPortfolio', cryptos);
+                    return true;
                 });
             });
         },

@@ -64,9 +64,6 @@
 <script>
   export default {
     mounted() {
-      this.setInitialTimer();
-      this.setTimer();
-
       this.fetchCryptos();
     },
     data() {
@@ -109,22 +106,20 @@
       },
     },
     methods: {
-      refresh() {
-        this.setCoingeckoCryptos();
-        this.setPortfolio();
+      resetTimer() {
+        this.timer = 60000;
+        this.setFormattedTime();
       },
-      setTimer() {
+      startTimer() {
         if(this.timer <= 0) {
-          this.refresh();
-          this.timer = 900000;
-          this.setFormattedTime();
+          this.fetchCryptos();
+        } else {
+          setTimeout(() => {
+              this.timer -= 1000;
+              this.setFormattedTime();
+              this.startTimer()
+          }, 1000)
         }
-
-        setTimeout(() => {
-            this.timer -= 1000;
-            this.setFormattedTime();
-            this.setTimer()
-        }, 1000)
       },
       setFormattedTime() {
         let minutes = Math.floor(this.timer / 60000);
@@ -144,31 +139,6 @@
         }
 
         this.formattedTime = `${minutes}:${seconds}`;
-      },
-      setInitialTimer() {
-        let date = new Date();
-        let minutes = date.getMinutes();
-
-        let time = 15;
-
-        if(minutes >= 45) {
-          time = 60 - minutes;
-        }
-
-        if (minutes < 45) {
-          time = minutes - 30;
-        }
-
-        if(minutes < 30) {
-          time = minutes - 15;
-        }
-
-        if(minutes < 15) {
-          time = 15 - minutes;
-        }
-
-        this.timer = time * 60 * 1000;
-        this.setFormattedTime();
       },
       resetModal() {
         this.crypto = "";
@@ -228,9 +198,14 @@
           });
         }
       },
-      fetchCryptos() {
+      async fetchCryptos() {
         const token = this.$cookie.get('access_token');
-        this.$store.dispatch('setCoingeckoCryptos', token);
+        const isSuccess = await this.$store.dispatch('setCoingeckoCryptos', token);
+
+        if(isSuccess) {
+          this.resetTimer();
+          this.startTimer();
+        }
       },
       sell(item, index, button) {
         const id = item.id; 
