@@ -58,8 +58,6 @@ public class CryptoService {
     }
 
     public static ResponseEntity<Object> getCryptoList(Map<String, String> header) {
-        CoingeckoApiService.fetchCryptos();
-
         List<CoingeckoCrypto> cyptos = new ArrayList<>();
 
         CryptoResult result = validate(header, null);

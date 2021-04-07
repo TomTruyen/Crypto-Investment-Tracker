@@ -7,13 +7,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
 @SpringBootApplication
 public class CryptotrackerApplication {
 	public static void main(String[] args) {
+		CoingeckoApiService.fetchCryptos();
+
+		Timer timer = new Timer();
+		timer.schedule(new CryptoTask(), 60000, 60000); // Update every minute
+
 		SpringApplication.run(CryptotrackerApplication.class, args);
 	}
 
@@ -26,3 +30,8 @@ public class CryptotrackerApplication {
 	}
 }
 
+class CryptoTask extends TimerTask {
+	public void run() {
+		CoingeckoApiService.fetchCryptos();
+	}
+}
