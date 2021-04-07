@@ -12,8 +12,7 @@ export default new Vuex.Store({
         registerResult: null,
         verifyResult: null,
         resendVerificationResult: null,
-        cmcPrices: [],
-        cmcCryptos: [],
+        coingeckoCryptos: [],
         portfolio: [],
     },
     getters: {
@@ -32,14 +31,14 @@ export default new Vuex.Store({
         getResendVerificationResult(state) {
             return state.resendVerificationResult;
         },
-        getCmcCryptos(state) {
-            return state.cmcCryptos;
+        getCoingeckoCryptos(state) {
+            return state.coingeckoCryptos;
         },
-        getCmcCryptosAsOptions(state) {
+        getCoingeckoCryptosAsOptions(state) {
             let cryptos = [];
 
-            for (let i = 0; i < state.cmcCryptos.length; i++) {
-                cryptos.push(state.cmcCryptos[i].toOption());
+            for (let i = 0; i < state.coingeckoCryptos.length; i++) {
+                cryptos.push(state.coingeckoCryptos[i].toOption());
             }
 
             return cryptos;
@@ -51,10 +50,12 @@ export default new Vuex.Store({
             let cryptos = [];
 
             for (let i = 0; i < state.portfolio.length; i++) {
-                let ticker = state.portfolio[i].ticker;
-                const crypto = state.cmcPrices.find(c => c.ticker == ticker);
+                const ticker = state.portfolio[i].ticker;
 
-                cryptos.push(state.portfolio[i].toOption(crypto.price, crypto.percent_change_24h));
+                if (state.coingeckoCryptos.length > 0) {
+                    const crypto = state.coingeckoCryptos.find(c => c.ticker == ticker);
+                    cryptos.push(state.portfolio[i].toOption(crypto.price, crypto.price_percent_change_24h));
+                }
             }
 
             return cryptos;
@@ -77,11 +78,8 @@ export default new Vuex.Store({
         resendVerification(state, verifyResult) {
             state.resendVerificationResult = verifyResult;
         },
-        setCmcPrices(state, prices) {
-            state.cmcPrices = prices;
-        },
-        setCmcCryptos(state, cryptos) {
-            state.cmcCryptos = cryptos;
+        setCoingeckoCryptos(state, cryptos) {
+            state.coingeckoCryptos = cryptos;
         },
         setPortfolio(state, cryptos) {
             state.portfolio = cryptos;
@@ -111,19 +109,12 @@ export default new Vuex.Store({
                 context.commit('resendVerification', verifyResult);
             });
         },
-        setCmcPrices(context, token) {
-            API.getCryptoPrices(token).then((prices) => {
-                context.commit('setCmcPrices', prices);
-            });
-        },
-        setCmcCryptos(context, token) {
+        setCoingeckoCryptos(context, token) {
             API.getCryptoList(token).then((cryptos) => {
-                context.commit('setCmcCryptos', cryptos);
-            });
-        },
-        setPortfolio(context, token) {
-            API.getCryptos(token).then((cryptos) => {
-                context.commit('setPortfolio', cryptos);
+                context.commit('setCoingeckoCryptos', cryptos);
+                API.getCryptos(token).then((cryptos) => {
+                    context.commit('setPortfolio', cryptos);
+                });
             });
         },
         buyCrypto(context, payload) {

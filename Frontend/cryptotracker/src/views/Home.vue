@@ -12,7 +12,7 @@
     <b-modal id="buy" ref="modal" title="Buy crypto" @show="resetModal" @hidden="resetModal" @ok="handleBuy">
       <form ref="form" @submit.stop.prevent="handleBuySubmit">
         <b-form-group label="Asset" label-for="crypto-select">
-          <v-select id="crypto-select" :options="getCmcCryptoOptions" :reduce="option => option.value" v-model="crypto">
+          <v-select id="crypto-select" :options="getCoingeckoCryptoOptions" :reduce="option => option.value" v-model="crypto">
               <template slot="option" slot-scope="option">
                   <img width="32" height="32" :src="option.img" />
                   <div class="spacer"></div>
@@ -34,7 +34,7 @@
     <b-modal id="sell" ref="modal" title="Sell crypto" @hidden="resetModal" @ok="handleSell">
       <form ref="form" @submit.stop.prevent="handleSellSubmit">
         <b-form-group label="Asset" label-for="crypto-select">
-          <v-select id="crypto-select" :options="getCmcCryptoOptions" :reduce="option => option.value" v-model="sellCrypto" disabled>
+          <v-select id="crypto-select" :options="getCoingeckoCryptoOptions" :reduce="option => option.value" v-model="sellCrypto" disabled>
               <template slot="option" slot-scope="option">
                   <img width="32" height="32" :src="option.img" />
                   <div class="spacer"></div>
@@ -67,9 +67,7 @@
       this.setInitialTimer();
       this.setTimer();
 
-      this.setCmcPrices();
-      this.setCmcCryptos();
-      this.setPortfolio();
+      this.fetchCryptos();
     },
     data() {
       return {
@@ -97,14 +95,14 @@
       }
     }, 
     computed: {
-      getCmcCryptoOptions() {
-        const cmcCryptos = this.$store.getters.getCmcCryptosAsOptions;
+      getCoingeckoCryptoOptions() {
+        const coingeckoCryptos = this.$store.getters.getCoingeckoCryptosAsOptions;
 
-        const found = cmcCryptos.find(crypto => crypto.value.toUpperCase() == this.$data.sellCrypto.toUpperCase());
+        const found = coingeckoCryptos.find(crypto => crypto.value.toUpperCase() == this.$data.sellCrypto.toUpperCase());
 
         if(found != undefined) return [found];
 
-        return cmcCryptos;
+        return coingeckoCryptos;
       },
       getPortfolioOptions() {
         return this.$store.getters.getPortfolioOptions;
@@ -112,8 +110,7 @@
     },
     methods: {
       refresh() {
-        this.setCmcPrices();
-        this.setCmcCryptos();
+        this.setCoingeckoCryptos();
         this.setPortfolio();
       },
       setTimer() {
@@ -231,17 +228,9 @@
           });
         }
       },
-      setCmcPrices() {
-         const token = this.$cookie.get('access_token');
-         this.$store.dispatch('setCmcPrices', token);
-      },
-      setCmcCryptos() {
+      fetchCryptos() {
         const token = this.$cookie.get('access_token');
-        this.$store.dispatch('setCmcCryptos', token);
-      },
-      setPortfolio() {
-        const token = this.$cookie.get('access_token');
-        this.$store.dispatch('setPortfolio', token);
+        this.$store.dispatch('setCoingeckoCryptos', token);
       },
       sell(item, index, button) {
         const id = item.id; 
