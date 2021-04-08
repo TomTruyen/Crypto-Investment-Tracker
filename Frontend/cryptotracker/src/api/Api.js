@@ -156,6 +156,38 @@ export default class API {
         return cryptos;
     }
 
+    static async getPortfolioHistory(token) {
+        const bearer = `Bearer ${token}`;
+
+        let options = {
+            method: 'GET',
+            baseURL: 'http://localhost:8888/',
+            url: '/cryptocurrencies/portfolio/history',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Authorization': bearer
+            },
+            data: {},
+        };
+
+        let cryptos = [];
+        await axios.request(options).then((res) => {
+            if (res.data != null && res.data.success) {
+                const _cryptos = res.data.crypto;
+
+                for (let i = 0; i < _cryptos.length; i++) {
+                    cryptos.push(Crypto.fromJSON(_cryptos[i]));
+                }
+            }
+        }).catch((err) => { console.log(err.response.data) });
+
+        // console.clear();
+
+        return cryptos;
+    }
+
     static async getCryptoList(token) {
         const bearer = `Bearer ${token}`;
 

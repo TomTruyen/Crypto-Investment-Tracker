@@ -14,6 +14,7 @@ export default new Vuex.Store({
         resendVerificationResult: null,
         coingeckoCryptos: [],
         portfolio: [],
+        portfolioHistory: [],
     },
     getters: {
         isLoggedIn(state) {
@@ -60,6 +61,28 @@ export default new Vuex.Store({
 
             return cryptos;
         },
+        getPortfolioHistoryOptions(state) {
+            let cryptos = [];
+
+            for (let i = 0; i < state.portfolioHistory.length; i++) {
+                cryptos.push(state.portfolioHistory[i].toHistoryOption());
+            }
+
+            return cryptos;
+        },
+        getPortfolioHistoryProfit(state) {
+            let totalProfit = 0;
+
+            for (let i = 0; i < state.portfolioHistory.length; i++) {
+                const buyPrice = state.portfolioHistory[i].buyPrice;
+                const sellPrice = state.portfolioHistory[i].sellPrice;
+                const amount = state.portfolioHistory[i].sellAmount;
+
+                totalProfit += state.portfolioHistory[i].calculateProfitUSD(amount, buyPrice, sellPrice);
+            }
+
+            return totalProfit;
+        }
     },
     mutations: {
         setIsLoggedIn(state, value) {
@@ -83,6 +106,9 @@ export default new Vuex.Store({
         },
         setPortfolio(state, cryptos) {
             state.portfolio = cryptos;
+        },
+        setPortfolioHistory(state, cryptos) {
+            state.portfolioHistory = cryptos;
         },
         buyCrypto(state, crypto) {
             state.portfolio.push(crypto);
@@ -117,6 +143,11 @@ export default new Vuex.Store({
                     return true;
                 });
             });
+        },
+        setPortfolioHistory(context, token) {
+            API.getPortfolioHistory(token).then((cryptos) => {
+                context.commit('setPortfolioHistory', cryptos);
+            })
         },
         buyCrypto(context, payload) {
             API.buyCrypto(payload).then((isSuccess) => {
