@@ -25,13 +25,13 @@
 import {eventBus} from '@/events/event.js';
 
 export default {
-  mounted: function () {
+  mounted() {
     this.cookie = this.getAccessToken();
   },
   created() {
     eventBus.$on('accessTokenSet', (token) => this.cookie = token);
   },
-  data: function() {
+  data() {
     return {
       cookie: ''
     };

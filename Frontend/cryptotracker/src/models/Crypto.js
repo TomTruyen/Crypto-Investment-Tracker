@@ -36,18 +36,29 @@ export default class Crypto {
         return Number(((amount * buyPrice) - (amount * sellPrice)).toFixed(2));
     }
 
-    toOption(currentPrice, change_24h) {
-        let value = (this.buyAmount * currentPrice);
-        let profit = this.calculateProfit(currentPrice);
-        let price = currentPrice > 1 ? currentPrice.toFixed(2) : currentPrice.toFixed(6);
+    getBalance() {
+        if (isNaN(this.sellAmount)) return this.buyAmount;
 
+        return this.buyAmount - this.sellAmount;
+    }
+
+    getValue(currentPrice) {
+        return Number(this.getBalance() * currentPrice);
+    }
+
+    toOption(currentPrice, change_24h) {
+
+        let price = currentPrice > 1 ? currentPrice.toFixed(2) : currentPrice.toFixed(6);
+        const balance = this.getBalance();
+        let value = this.getValue(currentPrice);
+        let profit = this.calculateProfit(currentPrice);
 
         return {
             "id": this.id,
             "name": `${this.name} (${this.ticker})`,
             "price": `$${price}`,
             "change_24h": `${change_24h.toFixed(2)}%`,
-            "balance": this.buyAmount - this.sellAmount,
+            "balance": balance,
             "value": `$${value.toFixed(2)}`,
             "profit": `${profit.toFixed(2)}%`,
             "ticker": this.ticker,

@@ -43,7 +43,7 @@
     watch: {
       loginResult(newResult) {
         if(newResult.success && newResult.token != "") {
-          this.$cookie.set('access_token', newResult.token, {expires: 7});
+          this.$cookie.set('access_token', newResult.token);
 
           eventBus.$emit('accessTokenSet', newResult.token);
 

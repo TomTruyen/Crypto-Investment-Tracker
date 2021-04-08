@@ -2,6 +2,11 @@
   <div class="home">  
     <div class="row margin-0">
       <div class="col my-auto">
+        <h1>Portfolio Value: {{'$' + getPortfolioValue}}</h1>
+      </div>
+    </div>
+    <div class="row margin-0">
+      <div class="col my-auto">
         Refresh in: {{formattedTime}}
       </div>
       <div class="col margin-vertical-1em">
@@ -104,6 +109,9 @@
       getPortfolioOptions() {
         return this.$store.getters.getPortfolioOptions;
       },
+      getPortfolioValue() {
+        return this.$store.getters.getPortfolioValue;
+      }
     },
     methods: {
       resetTimer() {

@@ -55,7 +55,15 @@ export default new Vuex.Store({
 
                 if (state.coingeckoCryptos.length > 0) {
                     const crypto = state.coingeckoCryptos.find(c => c.ticker == ticker);
-                    cryptos.push(state.portfolio[i].toOption(crypto.price, crypto.price_percent_change_24h));
+
+                    let price = 0;
+                    let price_percent_change_24h = 0;
+                    if (typeof crypto !== 'undefined' && crypto !== null) {
+                        price = crypto.price;
+                        price_percent_change_24h = crypto.price_percent_change_24h;
+                    }
+
+                    cryptos.push(state.portfolio[i].toOption(price, price_percent_change_24h));
                 }
             }
 
@@ -82,6 +90,26 @@ export default new Vuex.Store({
             }
 
             return totalProfit;
+        },
+        getPortfolioValue(state) {
+            let totalValue = 0;
+
+            for (let i = 0; i < state.portfolio.length; i++) {
+                const ticker = state.portfolio[i].ticker;
+
+                if (state.coingeckoCryptos.length > 0) {
+                    const crypto = state.coingeckoCryptos.find(c => c.ticker == ticker);
+
+                    let price = 0;
+                    if (typeof crypto !== 'undefined' && crypto !== null) {
+                        price = crypto.price;
+                    }
+
+                    totalValue += state.portfolio[i].getValue(price);
+                }
+            }
+
+            return totalValue.toFixed(2);
         }
     },
     mutations: {
