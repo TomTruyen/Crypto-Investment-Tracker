@@ -21,6 +21,11 @@
     color: lightseagreen;
 }
 
+.nav-link:hover,
+.router-link-exact-active {
+    color: lightseagreen !important;
+}
+
 .login,
 .register,
 .verify,
