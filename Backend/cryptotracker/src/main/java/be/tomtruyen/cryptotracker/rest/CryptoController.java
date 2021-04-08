@@ -11,8 +11,13 @@ import java.util.Map;
 @RequestMapping(path="cryptocurrencies", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 public class CryptoController {
     @GetMapping(path = "portfolio")
-    public ResponseEntity<Object> getCryptos(@RequestHeader Map<String, String> header) {
-        return CryptoService.get(header);
+    public ResponseEntity<Object> getPortfolio(@RequestHeader Map<String, String> header) {
+        return CryptoService.getPortfolio(header);
+    }
+
+    @GetMapping(path="portfolio/history")
+    public ResponseEntity<Object> getPortfolioHistory(@RequestHeader Map<String, String> header) {
+        return CryptoService.getPortfolioHistory(header);
     }
 
     @GetMapping(path = "list")

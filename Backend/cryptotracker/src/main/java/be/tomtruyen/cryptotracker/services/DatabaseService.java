@@ -103,7 +103,7 @@ public class DatabaseService implements DatabaseServiceInterface {
         return preparedStatement.getUpdateCount() <= 0;
     }
 
-    public List<Crypto> getCryptos(int userId) throws SQLException {
+    public List<Crypto> getPortfolio(int userId) throws SQLException {
         List<Crypto> cryptos = new ArrayList<>();
 
         String query = "SELECT * FROM crypto WHERE user_id = ?";
@@ -127,6 +127,34 @@ public class DatabaseService implements DatabaseServiceInterface {
                 Crypto crypto = new Crypto(id, name, ticker, buyAmount, buyPrice, buyDate, sellAmount, sellPrice, sellDate);
                 cryptos.add(crypto);
             }
+        }
+
+        return cryptos;
+    }
+
+    public List<Crypto> getPortfolioHistory(int userId) throws SQLException {
+        List<Crypto> cryptos = new ArrayList<>();
+
+        String query = "SELECT * FROM history WHERE user_id = ? ORDER BY sell_date ASC";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1, userId);
+
+        ResultSet rs = preparedStatement.executeQuery();
+
+        while(rs.next()) {
+            int id = rs.getInt("id");
+            String name = rs.getString("name");
+            String ticker = rs.getString("ticker");
+            double buyAmount = rs.getDouble("buy_amount");
+            double buyPrice = rs.getDouble("buy_price");
+            Date buyDate = rs.getDate("buy_date");
+            double sellAmount = rs.getDouble("sell_amount");
+            double sellPrice = rs.getDouble("sell_price");
+            Date sellDate = rs.getDate("sell_date");
+
+            Crypto crypto = new Crypto(id, name, ticker, buyAmount, buyPrice, buyDate, sellAmount, sellPrice, sellDate);
+            cryptos.add(crypto);
         }
 
         return cryptos;

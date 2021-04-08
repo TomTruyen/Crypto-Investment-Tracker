@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class CryptoService {
-    public static ResponseEntity<Object> get(Map<String, String> header) {
+    public static ResponseEntity<Object> getPortfolio(Map<String, String> header) {
         List<Crypto> cryptos = new ArrayList<>();
 
         CryptoResult result = validate(header, null);
@@ -33,7 +33,7 @@ public class CryptoService {
 
                 if(id == -1) throw new SQLException();
 
-                cryptos = databaseService.getCryptos(id).stream().sorted(Comparator.comparing(Crypto::getBuyDate)).sorted(Comparator.comparing(Crypto::getName)).collect(Collectors.toList());
+                cryptos = databaseService.getPortfolio(id).stream().sorted(Comparator.comparing(Crypto::getBuyDate)).sorted(Comparator.comparing(Crypto::getName)).collect(Collectors.toList());
 
                 databaseService.closeConnection();
             } catch (SQLException se) {
@@ -48,7 +48,50 @@ public class CryptoService {
 
         return ResponseEntity.status(status).body(
                 Map.of(
-                        "path", "/cryptocurrencies",
+                        "path", "/cryptocurrencies/portfolio",
+                        "success", success,
+                        "message", message,
+                        "crypto", cryptos,
+                        "time", new Date()
+                )
+        );
+    }
+
+    public static ResponseEntity<Object> getPortfolioHistory(Map<String, String> header) {
+        List<Crypto> cryptos = new ArrayList<>();
+
+        CryptoResult result = validate(header, null);
+
+        boolean success = result.isSuccess();
+
+        if(success) {
+            try {
+                DatabaseService databaseService = new DatabaseService();
+
+                String token = header.getOrDefault("authorization", "");
+                Claims claims = JWTService.verifyToken(token);
+
+                assert claims != null;
+                int id = (int) claims.getOrDefault("id", -1);
+
+                if(id == -1) throw new SQLException();
+
+                cryptos = databaseService.getPortfolioHistory(id);
+
+                databaseService.closeConnection();
+            } catch (SQLException se) {
+                result = CryptoResult.ERR_UNKNOWN;
+                se.printStackTrace();
+            }
+        }
+
+        success = result.isSuccess();
+        String message = result.getMessage();
+        HttpStatus status = result.getStatus();
+
+        return ResponseEntity.status(status).body(
+                Map.of(
+                        "path", "/cryptocurrencies/portfolio/history",
                         "success", success,
                         "message", message,
                         "crypto", cryptos,
@@ -223,4 +266,5 @@ public class CryptoService {
 
         return CryptoResult.SUCCESS;
     }
+
 }
