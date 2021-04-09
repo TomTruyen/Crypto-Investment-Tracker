@@ -52,6 +52,7 @@ export default class Crypto {
         const balance = this.getBalance();
         let value = this.getValue(currentPrice);
         let profit = this.calculateProfit(currentPrice);
+        const profitUSD = this.calculateProfitUSD(balance, currentPrice, this.buyPrice);
 
         return {
             "id": this.id,
@@ -60,7 +61,7 @@ export default class Crypto {
             "change_24h": `${change_24h.toFixed(2)}%`,
             "balance": balance,
             "value": `$${value.toFixed(2)}`,
-            "profit": `${profit.toFixed(2)}%`,
+            "profit": `${profit.toFixed(2)}% ($${profitUSD.toFixed(2)})`,
             "ticker": this.ticker,
         };
     }
