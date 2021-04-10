@@ -43,7 +43,7 @@
     watch: {
       loginResult(newResult) {
         if(newResult.success && newResult.token != "") {
-          this.$cookie.set('access_token', newResult.token);
+          this.$session.set('access_token', newResult.token);
 
           eventBus.$emit('accessTokenSet', newResult.token);
 
@@ -91,12 +91,12 @@
         }
       },
       checkLoggedIn() {
-        let cookie = this.$cookie.get('access_token');
-        if (cookie == null) cookie = '';
+        let accessToken = this.$session.get('access_token');
+        if (accessToken == null) accessToken = '';
 
         this.$store.commit('setIsLoggedIn', true);
 
-        if(cookie != "") this.$router.push('/');
+        if(accessToken != "") this.$router.push('/');
       },
       resetFields() {
         this.$data.email = "";

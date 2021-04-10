@@ -39,7 +39,7 @@
     },
     methods: {
       fetchHistory() {
-        const token = this.$cookie.get('access_token');
+        const token = this.$session.get('access_token');
         this.$store.dispatch('setPortfolioHistory', token);
       }
     }

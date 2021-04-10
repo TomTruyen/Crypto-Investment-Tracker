@@ -6,12 +6,12 @@
   <div>
   <!-- Logged out view -->
     <div v-if="!['Verify', 'Not Found'].includes($route.name)">
-      <b-nav align="right" v-if="cookie == ''">
+      <b-nav align="right" v-if="token == ''">
         <b-nav-item to="/login">Login</b-nav-item>
         <b-nav-item to="/register">Register</b-nav-item>
       </b-nav>
     <!-- Logged in view -->
-      <b-nav align="right" v-if="cookie != ''">
+      <b-nav align="right" v-if="token != ''">
         <b-nav-item to="/">Home</b-nav-item>
         <b-nav-item to="/history">History</b-nav-item>
         <b-nav-item v-on:click="logout">Logout</b-nav-item>
@@ -26,10 +26,10 @@ import {eventBus} from '@/events/event.js';
 
 export default {
   mounted() {
-    this.cookie = this.getAccessToken();
+    this.token = this.getAccessToken();
   },
   created() {
-    eventBus.$on('accessTokenSet', (token) => this.cookie = token);
+    eventBus.$on('accessTokenSet', (token) => this.token = token);
   },
   data() {
     return {
@@ -38,14 +38,14 @@ export default {
   },
   methods: {
     getAccessToken() {
-        let cookie = this.$cookie.get('access_token');
-        if (cookie == null) cookie = '';
+        let accessToken = this.$session.get('access_token');
+        if (accessToken == null) accessToken = '';
 
-        return cookie;
+        return accessToken;
     },
     logout() {
-      this.$cookie.delete('access_token');
-      this.cookie = '';
+      this.$session.remove('access_token');
+      this.token = '';
 
       this.$router.push('/login');
     }

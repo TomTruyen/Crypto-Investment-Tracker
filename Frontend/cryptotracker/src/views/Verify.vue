@@ -42,12 +42,12 @@
             this.$store.dispatch('verify', this.$data.email);
         },
         checkLoggedIn() {
-            let cookie = this.$cookie.get('access_token');
-            if (cookie == null) cookie = '';
+            let accessToken = this.$session.get('access_token');
+            if (accessToken == null) accessToken = '';
 
             this.$store.commit('setIsLoggedIn', true);
 
-            if(cookie != "") this.$router.push('/');
+            if(accessToken != "") this.$router.push('/');
         },
         decodeBase64: function (string) {
             return atob(string);

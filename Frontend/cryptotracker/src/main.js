@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 
 import VueCookie from 'vue-cookie';
+import VueSession from 'vue-session';
 import VueSelect from 'vue-select';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 
@@ -14,6 +15,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css';
 Vue.config.productionTip = false
 
 Vue.use(VueCookie);
+Vue.use(VueSession);
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.component('v-select', VueSelect);

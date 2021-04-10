@@ -171,7 +171,7 @@
 
         if(this.crypto != "" && this.amount != 0 && this.price != 0) {
           this.$store.dispatch('buyCrypto', {
-            'token': this.$cookie.get('access_token'),
+            'token': this.$session.get('access_token'),
             'crypto': this.crypto,
             'amount': this.amount,
             'price': this.price,
@@ -194,7 +194,7 @@
 
         if(this.sellCrypto != "" && this.sellAmount != 0 && this.sellPrice != 0) {
           this.$store.dispatch('sellCrypto', {
-            'token': this.$cookie.get('access_token'),
+            'token': this.$session.get('access_token'),
             'id': this.sellId,
             'crypto': this.sellCrypto,
             'amount': this.sellAmount,
@@ -207,7 +207,7 @@
         }
       },
       async fetchCryptos() {
-        const token = this.$cookie.get('access_token');
+        const token = this.$session.get('access_token');
         const isSuccess = await this.$store.dispatch('setCoingeckoCryptos', token);
 
         if(isSuccess) {
