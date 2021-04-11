@@ -52,16 +52,8 @@ export default class Crypto {
 
 
     toOption(crypto) {
-        let rank = crypto.rank;
-        let marketCap = crypto.marketCap;
         let currentPrice = crypto.price;
         let change_24h = crypto.price_percent_change_24h;
-        let change_7d = crypto.price_percent_change_7d;
-        let change_30d = crypto.price_percent_change_30d;
-        let change_1y = crypto.price_percent_change_1y;
-        let ath = crypto.allTimeHigh;
-        let atl = crypto.allTimeLow;
-
 
         const balance = this.getBalance();
         let value = this.getValue(currentPrice);
@@ -70,23 +62,14 @@ export default class Crypto {
 
         return {
             "id": this.id,
-            "name": `${this.name} (${this.ticker})`,
+            "name": this.name,
             "price": `$${Utils.numberWithCommas(currentPrice, currentPrice > 1 ? 2 : 6)}`,
             "change_24h": `${Utils.numberWithCommas(change_24h)}%`,
             "balance": Utils.numberWithCommas(balance),
             "value": `$${Utils.numberWithCommas(value)}`,
             "profit": `${Utils.numberWithCommas(profit)}% ($${Utils.numberWithCommas(profitUSD)})`,
             "ticker": this.ticker,
-            "details": {
-                "rank": `#${rank}`,
-                "marketCap": `$${Utils.numberWithCommas(marketCap)}`,
-                "change_24h": `${Utils.numberWithCommas(change_24h)}%`,
-                "change_7d": `${Utils.numberWithCommas(change_7d)}%`,
-                "change_30d": `${Utils.numberWithCommas(change_30d)}%`,
-                "change_1y": `${Utils.numberWithCommas(change_1y)}%`,
-                "ATH": `$${Utils.numberWithCommas(ath)}`,
-                "ATL": `$${Utils.numberWithCommas(atl)}`,
-            },
+            "details": crypto
         };
     }
 
