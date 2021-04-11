@@ -58,9 +58,15 @@
       </form>
     </b-modal>
 
-    <b-table striped hover :items="getPortfolioOptions" :fields="fields">
-      <template #cell(actions)="row">
+    <b-table striped :items="getPortfolioOptions" :fields="fields">
+      <template #cell(sellAction)="row">
         <b-button size="sm" @click="sell(row.item, row.index, $event.target)" class="mr-1" variant="danger" v-b-modal.sell>SELL</b-button>
+      </template>
+      <template #cell(expandAction)="row">
+        <b-button size="sm" class="mr-1" @click="row.toggleDetails">{{!row.detailsShowing ? 'MORE' : 'LESS'}}</b-button>
+      </template>
+      <template slot="row-details" slot-scope="row">
+        <b-table :items="[row.item.details]"></b-table>
       </template>
     </b-table>
   </div>
@@ -92,7 +98,8 @@
           {key: 'balance', label: 'Balance', sortable: true},
           {key: 'value', label: 'Value', sortable: true},
           {key: 'profit', label: 'Profit/Loss', sortable: true},
-          {key: 'actions', label: 'Sell Crypto'},
+          {key: 'sellAction', label: 'Sell Crypto'},
+          {key: 'expandAction', label: ''},
         ]
       }
     }, 
@@ -164,9 +171,9 @@
         this.handleBuySubmit();
       },
       handleBuySubmit() {
-        if(this.sellCrypto == "") this.errorMessage = "Crypto missing";
-        else if(this.sellAmount == 0) this.errorMessage = "Buy amount must be greater than 0";
-        else if(this.sellPrice == 0) this.errorMessage = "Buy price must be greater than 0";
+        if(this.crypto == "") this.errorMessage = "Crypto missing";
+        else if(this.amount == 0) this.errorMessage = "Buy amount must be greater than 0";
+        else if(this.price == 0) this.errorMessage = "Buy price must be greater than 0";
 
 
         if(this.crypto != "" && this.amount != 0 && this.price != 0) {
@@ -224,6 +231,9 @@
         this.$data.sellId = id;
         this.$data.sellMaxAmount = maxAmount;
       },
+      expand(item, index, target) {
+        console.log("pressed span");
+      }
     }
   }
 </script>
