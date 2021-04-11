@@ -1,11 +1,8 @@
 package be.tomtruyen.cryptotracker.domain;
 
-import be.tomtruyen.cryptotracker.utils.Utils;
-
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 
@@ -29,9 +26,9 @@ public class CoingeckoCrypto implements Serializable {
     private final double allTimeLow;
     private final double allTimeLowPercentage;
     private final LocalDate allTimeLowDate;
-    private final int circulatingSupply;
-    private final int totalSupply;
-    private final int maxSupply;
+    private final long circulatingSupply;
+    private final long totalSupply;
+    private final long maxSupply;
     private final double market_cap_change_24h;
     private final double market_cap_percent_change_24h;
     private final double price_change_24h;
@@ -41,7 +38,7 @@ public class CoingeckoCrypto implements Serializable {
     private final double price_percent_change_1y;
     private final LocalDate lastUpdated;
 
-    public CoingeckoCrypto(String id, String symbol, String name, String image, double price, double marketCap, int rank, double fullyDilutedValuation, double volume_24h, double high_24h, double low_24h, double allTimeHigh, double allTimeHighPercentage, LocalDate allTimeHighDate, double allTimeLow, double allTimeLowPercentage, LocalDate allTimeLowDate, int circulatingSupply, int totalSupply, int maxSupply, double market_cap_change_24h, double market_cap_percent_change_24h, double price_change_24h, double price_percent_change_24h, double price_percent_change_7d, double price_percent_change_30d, double price_percent_change_1y, LocalDate lastUpdated) {
+    public CoingeckoCrypto(String id, String symbol, String name, String image, double price, double marketCap, int rank, double fullyDilutedValuation, double volume_24h, double high_24h, double low_24h, double allTimeHigh, double allTimeHighPercentage, LocalDate allTimeHighDate, double allTimeLow, double allTimeLowPercentage, LocalDate allTimeLowDate, long circulatingSupply, long totalSupply, long maxSupply, double market_cap_change_24h, double market_cap_percent_change_24h, double price_change_24h, double price_percent_change_24h, double price_percent_change_7d, double price_percent_change_30d, double price_percent_change_1y, LocalDate lastUpdated) {
         this.id = id;
         this.symbol = symbol;
         this.name = name;
@@ -140,15 +137,15 @@ public class CoingeckoCrypto implements Serializable {
         return allTimeLowDate;
     }
 
-    public int getCirculatingSupply() {
+    public long getCirculatingSupply() {
         return circulatingSupply;
     }
 
-    public int getTotalSupply() {
+    public long getTotalSupply() {
         return totalSupply;
     }
 
-    public int getMaxSupply() {
+    public long getMaxSupply() {
         return maxSupply;
     }
 
@@ -185,7 +182,14 @@ public class CoingeckoCrypto implements Serializable {
     }
 
     public static CoingeckoCrypto fromJSON(Map<String, Object> json) {
+
+
         String id = (String) json.getOrDefault("id", "");
+
+        if(id.equalsIgnoreCase("cardano")) {
+            System.out.println(json);
+        }
+
         String symbol = (String) json.getOrDefault("symbol", "");
         symbol = symbol.toUpperCase();
         String name = (String) json.getOrDefault("name", "");
@@ -203,9 +207,9 @@ public class CoingeckoCrypto implements Serializable {
         double allTimeLow = (json.getOrDefault("atl", 0) == null ? 0 : (double) json.getOrDefault("atl", 0));
         double allTimeLowPercentage = (json.getOrDefault("atl_change_percentage", 0) == null ? 0 : (double) json.getOrDefault("atl_change_percentage", 0));
         LocalDate allTimeLowDate = LocalDate.parse((String)json.getOrDefault("atl_date", "1970-01-01T00:00:00.000Z"), dateFormatter);
-        int circulatingSupply = (int) Math.round((json.getOrDefault("circulating_supply", 0) == null ? 0 : (double) json.getOrDefault("circulating_supply", 0)));
-        int totalSupply = (int) Math.round((json.getOrDefault("total_supply", 0) == null ? 0 : (double) json.getOrDefault("total_supply", 0)));
-        int maxSupply = (int) Math.round((json.getOrDefault("max_supply", 0) == null ? 0 : (double) json.getOrDefault("max_supply", 0)));
+        long circulatingSupply = (long) (json.getOrDefault("circulating_supply", 0) == null ? 0 : (double) json.getOrDefault("circulating_supply", 0));
+        long totalSupply = (long) (json.getOrDefault("total_supply", 0) == null ? 0 : (double) json.getOrDefault("total_supply", 0));
+        long maxSupply = (long) (json.getOrDefault("max_supply", 0) == null ? 0 : (double) json.getOrDefault("max_supply", 0));
         double market_cap_change_24h = (json.getOrDefault("market_cap_change_24h", (double) 0) == null ? 0 : (double) json.getOrDefault("market_cap_change_24h", 0));
         double market_cap_percent_change_24h = (json.getOrDefault("market_cap_change_percentage_24h", (double) 0) == null ? 0 : (double) json.getOrDefault("market_cap_change_percentage_24h", 0));
         double price_change_24h = (json.getOrDefault("price_change_24h", (double) 0) == null ? 0 : (double) json.getOrDefault("price_change_24h", 0));
