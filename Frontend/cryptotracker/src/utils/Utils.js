@@ -20,4 +20,10 @@ export default class Utils {
 
         return true;
     }
+
+    static numberWithCommas(x, decimals = 2) {
+        x = Number(x.toFixed(decimals));
+
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
 }
