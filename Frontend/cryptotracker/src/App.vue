@@ -18,6 +18,9 @@
       </b-nav>
     </div>
     <router-view />
+    <div class="footer">
+      <span class="credits">Real-time data powered by <a href="https://www.coingecko.com/" target="_blank">Coingecko</a></span>
+    </div>
   </div>
 </template>
 
