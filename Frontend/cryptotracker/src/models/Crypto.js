@@ -68,6 +68,7 @@ export default class Crypto {
             "balance": Utils.numberWithCommas(balance),
             "value": `$${Utils.numberWithCommas(value)}`,
             "profit": `${Utils.numberWithCommas(profit)}% ($${Utils.numberWithCommas(profitUSD)})`,
+            "profitGreaterThanZero": profit >= 0,
             "ticker": this.ticker,
             "details": crypto
         };
