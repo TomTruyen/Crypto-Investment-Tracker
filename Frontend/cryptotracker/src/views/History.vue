@@ -52,7 +52,7 @@
       return {
         fields: [
           {key: 'date', label: 'Date', sortable: true},
-          {key: 'name', label: 'Asset Name', sortable: true},
+          {key: 'name', label: 'Name', sortable: true},
           {key: 'buy_price', label: 'Buy Price', sortable: true},
           {key: 'sell_amount', label: 'Sell Amount', sortable: true},
           {key: 'sell_price', label: 'Sell Price', sortable: true},

@@ -274,14 +274,14 @@
         },
         // used for table displaying
         fields: [
-          {key: 'name', label: 'Asset Name', sortable: true},
+          {key: 'name', label: 'Name', sortable: true},
           {key: 'price', label: 'Price', sortable: true},
-          {key: 'change_24h', label: '24H Change', sortable: true},
+          {key: 'change_24h', label: '24h %', sortable: true},
           {key: 'balance', label: 'Balance', sortable: true},
           {key: 'value', label: 'Value', sortable: true},
           {key: 'profit', label: 'Profit/Loss', sortable: true},
-          {key: 'sellAction', label: 'Sell Crypto'},
-          {key: 'expandAction', label: ''},
+          {key: 'sellAction', label: 'Sell'},
+          {key: 'expandAction', label: 'Info'},
         ]
       }
     }, 

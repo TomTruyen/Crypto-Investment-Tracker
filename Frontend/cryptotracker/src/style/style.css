@@ -13,12 +13,28 @@
     overflow-y: auto;
 }
 
-table td {
+.table td {
     vertical-align: middle !important;
+    border-bottom: 1px solid #eff2f5;
+    border-top: 0 !important;
+}
+
+.table thead th {
+    border-top: 1px solid #eff2f5;
+    border-bottom: 1px solid #eff2f5 !important;
+}
+
+table th:focus {
+    outline: none;
+    box-shadow: none;
 }
 
 .table-hover tr:hover {
     background-color: #f8fafd !important;
+}
+
+.table-hover thead tr:hover {
+    background-color: #fff !important;
 }
 
 .btn-custom {
