@@ -17,6 +17,37 @@ table td {
     vertical-align: middle !important;
 }
 
+.table-hover tr:hover {
+    background-color: #f8fafd !important;
+}
+
+.btn-custom {
+    background-color: rgb(239, 242, 245) !important;
+    border: 0 !important;
+    border-radius: 8px !important;
+    color: rgb(0, 0, 0) !important;
+    justify-content: center !important;
+    outline: 0px !important;
+    font-weight: 600 !important;
+    width: auto !important;
+    min-width: 100px !important;
+    height: 32px !important;
+    font-size: 12px !important;
+    line-height: 18px !important;
+}
+
+.btn-custom:hover:not(:disabled) {
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.02)), rgb(239, 242, 245) !important;
+    color: rgb(0, 0, 0) !important;
+    text-decoration: none !important;
+}
+
+.btn-custom:focus {
+    background-color: rgb(239, 242, 245) !important;
+    box-shadow: rgb(207 214 228) 0px 0px 0px 3px !important;
+    color: #000;
+}
+
 
 /* Scrollbar */
 
@@ -122,7 +153,7 @@ table td {
 }
 
 .width-200px {
-    width: 200px;
+    width: 200px !important;
 }
 
 #info .modal-header {
@@ -189,6 +220,13 @@ table td {
 
 .down {
     color: #ea3943 !important;
+}
+
+@media only screen and (max-width: 1000px) {
+    .home,
+    .history {
+        width: 100%;
+    }
 }
 
 @media only screen and (max-width: 768px) {

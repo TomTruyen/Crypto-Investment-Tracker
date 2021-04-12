@@ -10,7 +10,7 @@
         Refresh in: {{formattedTime}}
       </div>
       <div class="col margin-vertical-1em">
-        <b-button variant="primary" class="float-right width-200px" v-b-modal.buy>BUY</b-button>
+        <b-button class="btn-custom float-right width-200px" v-b-modal.buy>Buy</b-button>
       </div>
     </div>
 
@@ -237,11 +237,11 @@
       </template>
 
       <template #cell(sellAction)="row">
-        <b-button size="sm" @click="sell(row.item, row.index, $event.target)" class="mr-1" variant="danger" v-b-modal.sell>SELL</b-button>
+        <b-button size="sm" @click="sell(row.item, row.index, $event.target)" class="mr-1 btn-custom" v-b-modal.sell>Sell</b-button>
       </template>
       <template #cell(expandAction)="row">
         <!-- <b-button size="sm" class="mr-1" @click="row.toggleDetails">{{!row.detailsShowing ? 'MORE' : 'LESS'}}</b-button> -->
-        <b-button size="sm" class="mr-1" variant="primary" @click="setInfo(row.item, row.index, $event.target)" v-b-modal.info>MORE INFO</b-button>
+        <b-button size="sm" class="mr-1 btn-custom" @click="setInfo(row.item, row.index, $event.target)" v-b-modal.info>Info</b-button>
       </template>
       <!--<template slot="row-details" slot-scope="row">
          <b-table :items="[row.item.details]"></b-table>
