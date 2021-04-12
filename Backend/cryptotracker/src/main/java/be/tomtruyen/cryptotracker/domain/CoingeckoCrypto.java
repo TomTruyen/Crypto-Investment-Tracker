@@ -185,11 +185,6 @@ public class CoingeckoCrypto implements Serializable {
 
 
         String id = (String) json.getOrDefault("id", "");
-
-        if(id.equalsIgnoreCase("cardano")) {
-            System.out.println(json);
-        }
-
         String symbol = (String) json.getOrDefault("symbol", "");
         symbol = symbol.toUpperCase();
         String name = (String) json.getOrDefault("name", "");

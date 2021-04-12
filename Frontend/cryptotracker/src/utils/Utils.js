@@ -24,6 +24,8 @@ export default class Utils {
     static numberWithCommas(x, decimals = 2) {
         x = Number(x.toFixed(decimals));
 
+        if (x < 1) return x;
+
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 }
