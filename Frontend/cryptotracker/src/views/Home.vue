@@ -205,9 +205,13 @@
       </b-row>
     </b-modal>
 
-    <b-table striped :items="getPortfolioOptions" :fields="fields">
+    <b-table :items="getPortfolioOptions" :fields="fields">
       <template #cell(name)="row">
-        <span class="info-value my-auto">{{`${row.item.name} (${row.item.ticker})`}}</span>
+        <img width="20" height="20" :src="row.item.details.image" />
+        <div class="spacer"></div>
+        <span class="info-value my-auto">{{row.item.name}}</span>
+        <div class="spacer-5"></div>
+        <span class="info-title-ticker my-auto">{{`${row.item.ticker}`}}</span>
       </template>
 
       <template #cell(price)="row">
@@ -254,7 +258,7 @@
     data() {
       return {
         timer: 0,
-        formattedTime: '15:00',
+        formattedTime: '01:00',
         crypto: '',
         amount: 0,
         price: 0,
