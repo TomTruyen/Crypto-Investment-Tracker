@@ -207,8 +207,31 @@
 
     <b-table striped :items="getPortfolioOptions" :fields="fields">
       <template #cell(name)="row">
-        {{`${row.item.name} (${row.item.ticker})`}}
+        <span class="info-value my-auto">{{`${row.item.name} (${row.item.ticker})`}}</span>
       </template>
+
+      <template #cell(price)="row">
+        <span class="info-value my-auto">{{row.item.price}}</span>
+      </template>
+
+      <template #cell(change_24h)="row">
+        <span :class="row.item.details['price_percent_change_24h'] >= 0 ? 'info-value my-auto up' : 'info-value my-auto down'">
+          {{row.item.details['price_percent_change_24h'] >= 0 ? '&#9650;' : '&#9660;'}} {{row.item.details.getPriceChangePercentage()}}
+        </span>
+      </template>
+
+      <template #cell(balance)="row">
+        <span class="info-value my-auto">{{row.item.balance}}</span>
+      </template>
+
+      <template #cell(value)="row">
+        <span class="info-value my-auto">{{row.item.value}}</span>
+      </template>
+
+      <template #cell(profit)="row">
+        <span :class="row.item.profitGreaterThanZero ? 'info-value my-auto up' : 'info-value my-auto down'">{{row.item.profitGreaterThanZero >= 0 ? '&#9650;' : '&#9660;'}} {{row.item.profit}}</span>
+      </template>
+
       <template #cell(sellAction)="row">
         <b-button size="sm" @click="sell(row.item, row.index, $event.target)" class="mr-1" variant="danger" v-b-modal.sell>SELL</b-button>
       </template>
