@@ -63,11 +63,11 @@ export default class Crypto {
         return {
             "id": this.id,
             "name": this.name,
-            "price": `$${Utils.numberWithCommas(currentPrice, currentPrice > 1 ? 2 : 6)}`,
-            "change_24h": `${Utils.numberWithCommas(change_24h)}%`,
+            "price": `$${Utils.numberWithCommas(currentPrice, currentPrice > 1 ? 2 : 6, true)}`,
+            "change_24h": `${Utils.numberWithCommas(change_24h, 2, true)}%`,
             "balance": Utils.numberWithCommas(balance),
-            "value": `$${Utils.numberWithCommas(value)}`,
-            "profit": `${Utils.numberWithCommas(profit)}% ($${Utils.numberWithCommas(profitUSD)})`,
+            "value": `$${Utils.numberWithCommas(value, 2, true)}`,
+            "profit": `${Utils.numberWithCommas(profit, 2, true)}% ($${Utils.numberWithCommas(profitUSD, 2, true)})`,
             "profitGreaterThanZero": profit >= 0,
             "ticker": this.ticker,
             "details": crypto

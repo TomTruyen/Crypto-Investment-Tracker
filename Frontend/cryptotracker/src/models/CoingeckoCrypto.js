@@ -70,7 +70,7 @@ export default class CoingeckoCrypto {
     toDollar(number, decimals = 2) {
         if (number < 1) return `$${number.toFixed(6)}`;
 
-        return `$${Number(Number.parseFloat(number).toFixed(decimals)).toLocaleString('en-US')}`;
+        return `$${Number(Number.parseFloat(number).toFixed(decimals)).toLocaleString('en-US', {minimumFractionDigits: 2})}`;
     }
 
     toFormat(number) {
