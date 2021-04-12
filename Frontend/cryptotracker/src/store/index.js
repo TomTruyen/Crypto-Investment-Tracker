@@ -66,7 +66,14 @@ export default new Vuex.Store({
             let cryptos = [];
 
             for (let i = 0; i < state.portfolioHistory.length; i++) {
-                cryptos.push(state.portfolioHistory[i].toHistoryOption());
+                const ticker = state.portfolio[i].ticker;
+
+                let crypto = null;
+                if (state.coingeckoCryptos.length > 0) {
+                    crypto = state.coingeckoCryptos.find(c => c.ticker == ticker);
+                }
+
+                cryptos.push(state.portfolioHistory[i].toHistoryOption(crypto));
             }
 
             return cryptos;

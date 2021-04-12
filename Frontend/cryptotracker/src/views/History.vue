@@ -7,7 +7,39 @@
     </div>
 
 
-    <b-table striped hover :items="getPortfolioHistoryOptions" :fields="fields"></b-table>
+    <b-table hover :items="getPortfolioHistoryOptions" :fields="fields">
+      <template #cell(date)="row">
+        <span class="info-value my-auto">{{row.item.date}}</span>
+      </template>
+
+      <template #cell(name)="row">
+        <img width="20" height="20" :src="row.item.details.image" />
+        <div class="spacer"></div>
+        <span class="info-value my-auto">{{row.item.details.name}}</span>
+        <div class="spacer-5"></div>
+        <span class="info-title-ticker my-auto">{{`${row.item.details.ticker}`}}</span>
+      </template>
+
+      <template #cell(buy_price)="row">
+        <span class="info-value my-auto">{{row.item.buy_price}}</span>
+      </template>
+
+      <template #cell(sell_amount)="row">
+        <span class="info-value my-auto">{{row.item.sell_amount}}</span>
+      </template>
+    
+      <template #cell(sell_price)="row">
+        <span class="info-value my-auto">{{row.item.sell_price}}</span>
+      </template>
+
+      <template #cell(profit)="row">
+        <span :class="row.item.profitGreaterThanZero ? 'info-value my-auto up' : 'info-value my-auto down'">{{row.item.profitGreaterThanZero ? '&#9650;' : '&#9660;'}} {{row.item.profit}}</span>
+      </template>
+
+      <template #cell(profit_usd)="row">
+        <span :class="row.item.profitGreaterThanZero ? 'info-value my-auto up' : 'info-value my-auto down'">{{row.item.profitGreaterThanZero ? '&#9650;' : '&#9660;'}} {{row.item.profit_usd}}</span>      </template>
+
+    </b-table>
   </div>
 </template>
 

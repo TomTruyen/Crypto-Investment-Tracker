@@ -74,7 +74,7 @@ export default class Crypto {
         };
     }
 
-    toHistoryOption() {
+    toHistoryOption(crypto) {
         let profit = this.calculateProfit(this.sellPrice);
         let profitUSD = this.calculateProfitUSD(this.sellAmount, this.buyPrice, this.sellPrice);
 
@@ -86,6 +86,8 @@ export default class Crypto {
             'sell_price': `$${this.sellPrice.toFixed(2)}`,
             'profit': `${profit.toFixed(2)}%`,
             'profit_usd': `$${profitUSD.toFixed(2)}`,
+            'profitGreaterThanZero': profit >= 0,
+            'details': crypto
         };
     }
 }

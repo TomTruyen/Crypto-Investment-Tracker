@@ -205,7 +205,7 @@
       </b-row>
     </b-modal>
 
-    <b-table :items="getPortfolioOptions" :fields="fields">
+    <b-table hover :items="getPortfolioOptions" :fields="fields">
       <template #cell(name)="row">
         <img width="20" height="20" :src="row.item.details.image" />
         <div class="spacer"></div>
@@ -233,7 +233,7 @@
       </template>
 
       <template #cell(profit)="row">
-        <span :class="row.item.profitGreaterThanZero ? 'info-value my-auto up' : 'info-value my-auto down'">{{row.item.profitGreaterThanZero >= 0 ? '&#9650;' : '&#9660;'}} {{row.item.profit}}</span>
+        <span :class="row.item.profitGreaterThanZero ? 'info-value my-auto up' : 'info-value my-auto down'">{{row.item.profitGreaterThanZero ? '&#9650;' : '&#9660;'}} {{row.item.profit}}</span>
       </template>
 
       <template #cell(sellAction)="row">
@@ -243,9 +243,9 @@
         <!-- <b-button size="sm" class="mr-1" @click="row.toggleDetails">{{!row.detailsShowing ? 'MORE' : 'LESS'}}</b-button> -->
         <b-button size="sm" class="mr-1" variant="primary" @click="setInfo(row.item, row.index, $event.target)" v-b-modal.info>MORE INFO</b-button>
       </template>
-      <template slot="row-details" slot-scope="row">
-        <b-table :items="[row.item.details]"></b-table>
-      </template>
+      <!--<template slot="row-details" slot-scope="row">
+         <b-table :items="[row.item.details]"></b-table>
+       </template>-->
     </b-table>
   </div>
 </template>
