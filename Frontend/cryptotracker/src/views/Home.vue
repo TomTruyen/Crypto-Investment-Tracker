@@ -14,7 +14,7 @@
       </div>
     </div>
 
-    <b-modal id="buy" ref="modal" title="Buy crypto" @show="resetModal" @hidden="resetModal" @ok="handleBuy">
+    <b-modal id="buy" ref="modal" title="Buy crypto" @show="resetModal" @hidden="resetModal">
       <form ref="form" @submit.stop.prevent="handleBuySubmit">
         <b-form-group label="Asset" label-for="crypto-select">
           <v-select id="crypto-select" :options="getCoingeckoCryptoOptions" :reduce="option => option.value" v-model="crypto">
@@ -34,9 +34,13 @@
 
         <b-alert show variant="danger" v-if="errorMessage != null">{{errorMessage}}</b-alert>
       </form>
+
+      <template slot="modal-footer">
+        <button class="btn btn-custom" @click="handleBuy">Buy</button>
+      </template>
     </b-modal>
 
-    <b-modal id="sell" ref="modal" title="Sell crypto" @hidden="resetModal" @ok="handleSell">
+    <b-modal id="sell" ref="modal" title="Sell crypto" @hidden="resetModal">
       <form ref="form" @submit.stop.prevent="handleSellSubmit">
         <b-form-group label="Asset" label-for="crypto-select">
           <v-select id="crypto-select" :options="getCoingeckoCryptoOptions" :reduce="option => option.value" v-model="sellCrypto" disabled>
@@ -56,6 +60,10 @@
 
         <b-alert show variant="danger" v-if="errorMessage != null">{{errorMessage}}</b-alert>
       </form>
+
+      <template slot="modal-footer">
+        <button class="btn btn-custom" @click="handleSell">Sell</button>
+      </template>
     </b-modal>
 
     <b-modal id="info" ref="modal" :title="info.title" v-if="info.item != null" :hide-footer="true">
