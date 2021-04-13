@@ -15,7 +15,7 @@
       <b-form-group label="Repeat password:" label-for="repeat-password">
         <b-form-input id="repeat-password" type="password" placeholder="Repeat password" v-model="repeatPassword"></b-form-input>
       </b-form-group>
-      <b-button type="submit" variant="primary">Register</b-button>
+      <b-button type="submit" class="btn-custom">Register</b-button>
     </b-form>
   </div>
 </template>

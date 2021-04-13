@@ -6,7 +6,7 @@
       <b-alert variant="success" show v-if="verifyResult != null && verifyResult.success">{{ verifyResult.message }} You will be redirected in {{ countDown }}s</b-alert>
       <b-alert variant="danger" show v-if="verifyResult != null && !verifyResult.success && verifyResult.message != ''">{{ verifyResult.message }}</b-alert>
       <p>By clicking the button below you verify that your email is: <b>{{decodeBase64(email)}}</b></p>
-      <b-button type="button" variant="primary" v-on:click="verify">Verify</b-button>
+      <b-button type="button" class="btn-custom" v-on:click="verify">Verify</b-button>
     </b-form>
   </div>
 </template>
