@@ -245,11 +245,15 @@
       </template>
 
       <template #cell(sellAction)="row">
-        <b-button size="sm" @click="sell(row.item, row.index, $event.target)" class="mr-1 btn-custom" v-b-modal.sell>Sell</b-button>
+        <div class="text-center">
+          <b-button size="sm" @click="sell(row.item, row.index, $event.target)" class="mr-1 btn-custom" v-b-modal.sell>Sell</b-button>
+        </div>
       </template>
       <template #cell(expandAction)="row">
         <!-- <b-button size="sm" class="mr-1" @click="row.toggleDetails">{{!row.detailsShowing ? 'MORE' : 'LESS'}}</b-button> -->
-        <b-button size="sm" class="mr-1 btn-custom" @click="setInfo(row.item, row.index, $event.target)" v-b-modal.info>Info</b-button>
+        <div class="text-center">
+          <b-button size="sm" class="mr-1 btn-custom" @click="setInfo(row.item, row.index, $event.target)" v-b-modal.info>Info</b-button>
+        </div>
       </template>
       <!--<template slot="row-details" slot-scope="row">
          <b-table :items="[row.item.details]"></b-table>
