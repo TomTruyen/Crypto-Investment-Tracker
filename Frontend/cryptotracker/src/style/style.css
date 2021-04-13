@@ -5,6 +5,10 @@
     color: #2c3e50;
 }
 
+body {
+    background: linear-gradient(rgb(248, 250, 253) 0%, rgba(248, 250, 253, 0) 413px)
+}
+
 .home,
 .history {
     height: calc(100vh - 56px - 56px);
@@ -39,6 +43,20 @@ table th:focus {
 
 .table-hover thead tr:hover {
     background-color: #fff !important;
+}
+
+input:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: #cec4da !important;
+}
+
+div[role="combobox"] {
+    border-color: #ced4da;
+}
+
+div[role="combobox"] input:focus {
+    border-color: transparent !important;
 }
 
 .btn-custom {
@@ -92,23 +110,25 @@ table th:focus {
 
 .nav {
     height: 56px;
-    background-color: #1c1c1c;
+    background-color: #fff;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1)
 }
 
 .nav>li>a {
     line-height: 38px;
     height: 100%;
-    color: #fff;
+    color: #000;
+    font-weight: 600;
     transition: color .2s ease-in-out;
 }
 
 .nav>li>a:hover {
-    color: lightseagreen;
+    color: rgb(56, 97, 251);
 }
 
 .nav-link:hover,
 .router-link-exact-active {
-    color: lightseagreen !important;
+    color: rgb(56, 97, 251) !important;
 }
 
 .footer {
@@ -176,8 +196,15 @@ table th:focus {
     width: 200px !important;
 }
 
-#info .modal-header {
+#info .modal-header,
+#sell .modal-header,
+#buy .modal-header {
     border-bottom: none;
+}
+
+#sell .modal-footer,
+#buy .modal-footer {
+    border-top: none;
 }
 
 #info .modal-body {

@@ -288,8 +288,8 @@
           {key: 'balance', label: 'Balance', sortable: true},
           {key: 'value', label: 'Value', sortable: true},
           {key: 'profit', label: 'Profit/Loss', sortable: true},
-          {key: 'sellAction', label: 'Sell'},
-          {key: 'expandAction', label: 'Info'},
+          {key: 'sellAction', label: ''},
+          {key: 'expandAction', label: ''},
         ]
       }
     }, 
