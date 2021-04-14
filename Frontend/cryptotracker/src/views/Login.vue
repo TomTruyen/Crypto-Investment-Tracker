@@ -2,7 +2,7 @@
   <div class="login">
     <b-form v-on:submit.prevent="login">
       <h3>Login</h3>
-      <hr />
+      <br />
       <b-alert variant="danger" show v-if="loginResult != null && loginResult.message != ''">{{ loginResult.message }}</b-alert>
       <b-alert variant="danger" show v-if="verifyResult != null && !verifyResult.success && verifyResult.message != ''">{{ verifyResult.message }}</b-alert>
       <b-alert variant="success" show v-if="verifyResult != null && verifyResult.success && verifyResult.message != ''">{{ verifyResult.message }}</b-alert>
@@ -11,13 +11,13 @@
       <br/><br />
       </b-link>
       <b-alert variant="danger" show v-if="loginResult == null && getErrorMessage != null">{{ getErrorMessage }}</b-alert>
-      <b-form-group label="Email address:" label-for="email">
-        <b-form-input id="email" type="text" placeholder="Email" v-model="email"></b-form-input>
+      <b-form-group label="Email address:" class="info-value" label-for="email">
+        <b-form-input id="email" class="info-title" type="text" placeholder="Email" v-model="email"></b-form-input>
       </b-form-group>
-      <b-form-group label="Password:" label-for="password">
-        <b-form-input id="password" type="password" placeholder="Password" v-model="password"></b-form-input>
+      <b-form-group label="Password:" class="info-value" label-for="password">
+        <b-form-input id="password" class="info-title" type="password" placeholder="Password" v-model="password"></b-form-input>
       </b-form-group>
-      <b-button type="submit" class="btn-custom">Login</b-button>
+      <b-button type="submit" class="btn-custom primary width-150px">Login</b-button>
     </b-form>
   </div>
 </template>

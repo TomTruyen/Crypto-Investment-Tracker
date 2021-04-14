@@ -5,10 +5,6 @@
     color: #2c3e50;
 }
 
-body {
-    background: #d1d1d1;
-}
-
 .home,
 .history {
     height: calc(100vh - 56px - 56px);
@@ -46,18 +42,49 @@ table th:focus {
     background-color: #fff !important;
 }
 
-input:focus {
-    outline: none !important;
-    box-shadow: none !important;
-    border-color: #cec4da !important;
+.v-select {
+    background-color: rgb(239, 242, 245);
+    border: none;
+    border-radius: 8px;
+    height: 36px;
+}
+
+.vs__actions {
+    padding: 6px 10px 0 3px;
+}
+
+.form-control {
+    background-color: rgb(239, 242, 245);
+    border: none;
+    border-radius: 8px;
+    padding: 8px;
+}
+
+.form-control:focus {
+    background-color: rgb(239, 242, 245);
+    outline: none;
+    box-shadow: none;
+    border-color: #cec4da;
 }
 
 div[role="combobox"] {
-    border-color: #ced4da;
+    border: none;
+    border-radius: 8px;
 }
 
-div[role="combobox"] input:focus {
-    border-color: transparent !important;
+.vs__dropdown-option:hover,
+.vs__dropdown-option:focus,
+.vs__dropdown-option--highlight {
+    background-color: #f8fafd !important;
+    color: #000 !important;
+}
+
+.vs--disabled .vs__clear,
+.vs--disabled .vs__dropdown-toggle,
+.vs--disabled .vs__open-indicator,
+.vs--disabled .vs__search,
+.vs--disabled .vs__selected {
+    background-color: rgb(239, 242, 245) !important;
 }
 
 .btn-custom {
@@ -85,6 +112,22 @@ div[role="combobox"] input:focus {
     background-color: rgb(239, 242, 245) !important;
     box-shadow: rgb(207 214 228) 0px 0px 0px 3px !important;
     color: #000;
+}
+
+.btn-custom.primary {
+    background-color: rgb(56, 97, 251) !important;
+    color: #fff !important;
+    height: 36px !important;
+}
+
+.btn-custom.primary:hover:not(:disabled) {
+    background-color: rgb(39, 85, 255) !important;
+    color: #fff !important;
+}
+
+.btn-custom.primary:focus {
+    background-color: rgb(56, 97, 251) !important;
+    color: #fff !important;
 }
 
 
@@ -154,7 +197,7 @@ div[role="combobox"] input:focus {
 .verify,
 .not-found {
     display: flex;
-    height: calc(100vh - 40px);
+    height: calc(100vh - 56px - 56px);
     justify-content: center;
     align-items: center;
     width: 100%;
@@ -193,6 +236,10 @@ div[role="combobox"] input:focus {
 .margin-vertical-1em {
     margin-top: 1em !important;
     margin-bottom: 1em !important;
+}
+
+.width-150px {
+    width: 150px !important;
 }
 
 .width-200px {
@@ -242,10 +289,15 @@ div[role="combobox"] input:focus {
     font-size: 12px;
 }
 
-.info-value {
+.info-value,
+.modal-body .form-group label {
     color: #000;
     font-weight: 600;
     font-size: 14px;
+}
+
+.modal-body .form-group label {
+    margin-bottom: 0.1rem;
 }
 
 .info-sub-value-up {

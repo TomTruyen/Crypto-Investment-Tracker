@@ -1,7 +1,3 @@
-<style>
-@import './style/style.css';
-</style>
-
 <template>
   <div>
   <!-- Logged out view -->

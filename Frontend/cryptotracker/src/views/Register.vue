@@ -2,20 +2,20 @@
   <div class="register">
     <b-form v-on:submit.prevent="register">
       <h3>Register</h3>
-      <hr />
+      <br />
       <b-alert variant="success" show v-if="registerResult != null && registerResult.success">{{ registerResult.message }}</b-alert>
       <b-alert variant="danger" show v-if="registerResult != null && !registerResult.success && registerResult.message != ''">{{ registerResult.message }}</b-alert>
       <b-alert variant="danger" show v-if="registerResult == null && getErrorMessage != null">{{ getErrorMessage }}</b-alert>
-      <b-form-group label="Email address:" label-for="email">
-        <b-form-input id="email" type="text" placeholder="Email" v-model="email"></b-form-input>
+      <b-form-group label="Email address:" class="info-value" label-for="email">
+        <b-form-input id="email" class="info-title" type="text" placeholder="Email" v-model="email"></b-form-input>
       </b-form-group>
-      <b-form-group label="Password:" label-for="password">
-        <b-form-input id="password" type="password" placeholder="Password" v-model="password"></b-form-input>
+      <b-form-group label="Password:" class="info-value" label-for="password">
+        <b-form-input id="password" class="info-title" type="password" placeholder="Password" v-model="password"></b-form-input>
       </b-form-group>
-      <b-form-group label="Repeat password:" label-for="repeat-password">
-        <b-form-input id="repeat-password" type="password" placeholder="Repeat password" v-model="repeatPassword"></b-form-input>
+      <b-form-group label="Repeat password:" class="info-value" label-for="repeat-password">
+        <b-form-input id="repeat-password" class="info-title" type="password" placeholder="Repeat password" v-model="repeatPassword"></b-form-input>
       </b-form-group>
-      <b-button type="submit" class="btn-custom">Register</b-button>
+      <b-button type="submit" class="btn-custom primary width-150px">Register</b-button>
     </b-form>
   </div>
 </template>

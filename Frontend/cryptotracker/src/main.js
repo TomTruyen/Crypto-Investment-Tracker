@@ -12,6 +12,8 @@ import 'vue-select/dist/vue-select.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 
+import './style/style.css';
+
 Vue.config.productionTip = false
 
 Vue.use(VueCookie);
