@@ -1,8 +1,9 @@
 <template>
   <div class="home">  
     <div class="row margin-0">
-      <div class="col my-auto">
-        <h1>Portfolio Value: {{'$' + getPortfolioValue}}</h1>
+      <div class="col position-relative my-5">
+        <DoughnutChart ref="portfolio_chart" :chart-data="getPortfolioChartData" :options="options" v-if="getPortfolioChartData.labels.length > 0"></DoughnutChart>
+        <h2 class="absolute-center">{{'$' + getPortfolioValue}}</h2>
       </div>
     </div>
     <div class="row margin-0">
@@ -263,10 +264,13 @@
 </template>
 
 <script>
+  import DoughnutChart from '@/components/DoughnutChart.vue';
+
   export default {
     mounted() {
       this.fetchCryptos();
     },
+    components: { DoughnutChart },
     data() {
       return {
         timer: 0,
@@ -294,7 +298,15 @@
           {key: 'profit', label: 'Profit/Loss', sortable: true},
           {key: 'sellAction', label: ''},
           {key: 'expandAction', label: ''},
-        ]
+        ],
+        options: {
+          legend: {
+              display: false,
+          },
+          responsive: true,
+          maintainAspectRatio: false,
+          cutoutPercentage: 95,
+        },
       }
     }, 
     computed: {
@@ -312,6 +324,9 @@
       },
       getPortfolioValue() {
         return this.$store.getters.getPortfolioValue;
+      },
+      getPortfolioChartData() {
+        return this.$store.getters.getPortfolioChartData
       }
     },
     methods: {
@@ -428,7 +443,7 @@
       setInfo(item, index, button) {
         this.$data.info.title = `${item.name} (${item.ticker}) Statistics`;
         this.$data.info.item = item;
-      }
+      },
     }
   }
 </script>

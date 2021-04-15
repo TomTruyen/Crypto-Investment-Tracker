@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import randomColor from 'randomcolor';
+import Utils from './../utils/Utils.js';
+
 import API from './../api/Api.js';
 
 Vue.use(Vuex)
@@ -66,7 +69,7 @@ export default new Vuex.Store({
             let cryptos = [];
 
             for (let i = 0; i < state.portfolioHistory.length; i++) {
-                const ticker = state.portfolio[i].ticker;
+                const ticker = state.portfolioHistory[i].ticker;
 
                 let crypto = null;
                 if (state.coingeckoCryptos.length > 0) {
@@ -109,7 +112,48 @@ export default new Vuex.Store({
                 }
             }
 
-            return totalValue.toFixed(2);
+            return totalValue.toLocaleString('en-US', { minimumFractionDigits: 2 });
+        },
+        getPortfolioChartData(state) {
+            let labels = [];
+            const borderWidth = 1;
+            let borderColor = [];
+            let backgroundColor = [];
+            let data = [];
+
+            for (let i = 0; i < state.portfolio.length; i++) {
+                const ticker = state.portfolio[i].ticker;
+
+                if (state.coingeckoCryptos.length > 0) {
+                    const crypto = state.coingeckoCryptos.find(c => c.ticker == ticker);
+
+                    const value = state.portfolio[i].getValue(crypto.price);
+
+                    labels.push(`${crypto.name} (${crypto.ticker})`);
+
+                    const color = randomColor();
+
+                    borderColor.push(Utils.hexToRGBA(color, 1));
+                    backgroundColor.push(Utils.hexToRGBA(color, 0.6));
+
+                    data.push(Number(value.toFixed(2)));
+                }
+            }
+
+            console.log("COLORS");
+            console.log(backgroundColor);
+
+            const chartData = {
+                labels: labels,
+                datasets: [{
+                    borderWidth: borderWidth,
+                    borderColor: borderColor,
+                    backgroundColor: backgroundColor,
+                    data: data
+                }]
+            };
+
+            return chartData;
         }
     },
     mutations: {
