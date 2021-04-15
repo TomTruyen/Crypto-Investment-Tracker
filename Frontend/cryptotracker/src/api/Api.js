@@ -9,7 +9,7 @@ export default class API {
     static async login(email, password) {
         let options = {
             method: 'POST',
-            baseURL: 'http://localhost:8888/',
+            baseURL: 'http://192.168.0.150:8888/',
             url: '/login',
             headers: {
                 'Accept': 'application/json',
@@ -39,7 +39,7 @@ export default class API {
     static async register(email, password) {
         let options = {
             method: 'POST',
-            baseURL: 'http://localhost:8888/',
+            baseURL: 'http://192.168.0.150:8888/',
             url: '/register',
             headers: {
                 'Accept': 'application/json',
@@ -69,7 +69,7 @@ export default class API {
     static async verify(email) {
         let options = {
             method: 'POST',
-            baseURL: 'http://localhost:8888/',
+            baseURL: 'http://192.168.0.150:8888/',
             url: '/verify',
             headers: {
                 'Accept': 'application/json',
@@ -98,7 +98,7 @@ export default class API {
     static async resendVerification(email) {
         let options = {
             method: 'POST',
-            baseURL: 'http://localhost:8888/',
+            baseURL: 'http://192.168.0.150:8888/',
             url: '/verify/resend',
             headers: {
                 'Accept': 'application/json',
@@ -129,7 +129,7 @@ export default class API {
 
         let options = {
             method: 'GET',
-            baseURL: 'http://localhost:8888/',
+            baseURL: 'http://192.168.0.150:8888/',
             url: '/cryptocurrencies/portfolio',
             headers: {
                 'Accept': 'application/json',
@@ -161,7 +161,7 @@ export default class API {
 
         let options = {
             method: 'GET',
-            baseURL: 'http://localhost:8888/',
+            baseURL: 'http://192.168.0.150:8888/',
             url: '/cryptocurrencies/portfolio/history',
             headers: {
                 'Accept': 'application/json',
@@ -193,7 +193,7 @@ export default class API {
 
         let options = {
             method: 'GET',
-            baseURL: 'http://localhost:8888/',
+            baseURL: 'http://192.168.0.150:8888/',
             url: '/cryptocurrencies/list/',
             headers: {
                 'Accept': 'application/json',
@@ -227,7 +227,7 @@ export default class API {
 
         let options = {
             method: 'POST',
-            baseURL: 'http://localhost:8888/',
+            baseURL: 'http://192.168.0.150:8888/',
             url: '/cryptocurrencies/buy/',
             headers: {
                 'Accept': 'application/json',
@@ -258,7 +258,7 @@ export default class API {
 
         let options = {
             method: 'POST',
-            baseURL: 'http://localhost:8888/',
+            baseURL: 'http://192.168.0.150:8888/',
             url: '/cryptocurrencies/sell/',
             headers: {
                 'Accept': 'application/json',
