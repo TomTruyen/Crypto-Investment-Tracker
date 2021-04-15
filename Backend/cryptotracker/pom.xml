@@ -12,10 +12,13 @@
 	<artifactId>cryptotracker</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>cryptotracker</name>
-	<description>Crypto Tracker Backend API</description>
+	<description>CryptoTracker Backend API</description>
+	<packaging>jar</packaging>
+
 	<properties>
 		<java.version>11</java.version>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

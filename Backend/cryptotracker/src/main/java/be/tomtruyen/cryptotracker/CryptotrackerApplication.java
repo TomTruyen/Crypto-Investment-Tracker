@@ -13,6 +13,8 @@ import java.util.TimerTask;
 @SpringBootApplication
 public class CryptotrackerApplication {
 	public static void main(String[] args) {
+		System.out.println("DETECTED OS: " + System.getProperty("os.name"));
+
 		CoingeckoApiService.fetchCryptos();
 
 		Timer timer = new Timer();

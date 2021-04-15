@@ -14,30 +14,10 @@ public class FileService {
 
             try {
                 File file = new File("src/main/resources/cryptos.data");
-
-                file.createNewFile();
-
-                fileOutputStream = new FileOutputStream(file);
-                objectOutputStream = new ObjectOutputStream(fileOutputStream);
-
-                for (Object item : list) {
-                    objectOutputStream.writeObject(item);
+                if(System.getProperty("os.name").equalsIgnoreCase("linux")) {
+                    file = new File("/home/pi/Desktop/cryptos.data");
                 }
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            } finally {
-                closeFileStreams(fileOutputStream, objectOutputStream);
-            }
-        }
-    }
 
-    public static void writeCryptoPricesToFile(List<CoingeckoCrypto> list) {
-        if(!list.isEmpty()) {
-            FileOutputStream fileOutputStream = null;
-            ObjectOutputStream objectOutputStream = null;
-
-            try {
-                File file = new File("src/main/resources/cryptoPrices.data");
 
                 file.createNewFile();
 
@@ -81,42 +61,9 @@ public class FileService {
 
         try {
             File file = new File("src/main/resources/cryptos.data");
-
-            if(file.exists()) {
-                fileInputStream = new FileInputStream(file);
-                objectInputStream = new ObjectInputStream(fileInputStream);
-
-                boolean hasData = true;
-                while (hasData) {
-                    CoingeckoCrypto crypto = null;
-                    try {
-                        crypto = (CoingeckoCrypto) objectInputStream.readObject();
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
-
-                    if (crypto != null) {
-                        cryptos.add(crypto);
-                    } else {
-                        hasData = false;
-                    }
-                }
+            if(System.getProperty("os.name").equalsIgnoreCase("linux")) {
+                file = new File("/home/pi/Desktop/cryptos.data");
             }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
-        return cryptos;
-    }
-
-    public static List<CoingeckoCrypto> readCryptoPricesFromFile() {
-        List<CoingeckoCrypto> cryptos = new ArrayList<CoingeckoCrypto>();
-
-        FileInputStream fileInputStream = null;
-        ObjectInputStream objectInputStream = null;
-
-        try {
-            File file = new File("src/main/resources/cryptoPrices.data");
 
             if(file.exists()) {
                 fileInputStream = new FileInputStream(file);
