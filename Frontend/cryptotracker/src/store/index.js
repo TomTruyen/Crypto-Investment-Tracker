@@ -89,7 +89,7 @@ export default new Vuex.Store({
                 totalProfit += state.portfolioHistory[i].calculateProfitUSD(amount, buyPrice, sellPrice);
             }
 
-            return totalProfit;
+            return totalProfit.toLocaleString('en-US', { minimumFractionDigits: 2 });
         },
         getPortfolioValue(state) {
             let totalValue = 0;

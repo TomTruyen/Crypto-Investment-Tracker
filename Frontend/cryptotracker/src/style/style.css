@@ -316,6 +316,13 @@ div[role="combobox"] {
     height: 40px;
 }
 
+.history-total-profit {
+    text-align: center;
+    font-weight: 600;
+    font-size: 2rem;
+    padding: 2rem 0rem;
+}
+
 .up {
     color: #16c784 !important;
 }

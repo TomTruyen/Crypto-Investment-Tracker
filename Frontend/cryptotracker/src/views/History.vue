@@ -1,8 +1,8 @@
 <template>
   <div class="history">
     <div class="row margin-0">
-      <div class="col my-auto">
-        Total Profit (USD): {{'$' + getTotalProfit}}
+      <div class="col my-auto history-total-profit">
+        <span :class="getTotalProfit >= 0 ? 'up' : 'down'">{{getTotalProfit >= 0 ? '&#9650;' : '&#9660;'}} ${{getTotalProfit}}</span>
       </div>
     </div>
 
