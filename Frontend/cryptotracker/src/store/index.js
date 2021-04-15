@@ -127,21 +127,26 @@ export default new Vuex.Store({
                 if (state.coingeckoCryptos.length > 0) {
                     const crypto = state.coingeckoCryptos.find(c => c.ticker == ticker);
 
-                    const value = state.portfolio[i].getValue(crypto.price);
+                    const value = Number(state.portfolio[i].getValue(crypto.price).toFixed(2));
 
-                    labels.push(`${crypto.name} (${crypto.ticker})`);
+                    const label = `${crypto.name} (${crypto.ticker})`;
 
-                    const color = randomColor();
+                    if (labels.indexOf(label) > -1) {
+                        const index = labels.indexOf(label);
 
-                    borderColor.push(Utils.hexToRGBA(color, 1));
-                    backgroundColor.push(Utils.hexToRGBA(color, 0.6));
+                        data[index] += value;
+                    } else {
+                        labels.push(label);
 
-                    data.push(Number(value.toFixed(2)));
+                        const color = randomColor();
+
+                        borderColor.push(Utils.hexToRGBA(color, 1));
+                        backgroundColor.push(Utils.hexToRGBA(color, 0.6));
+
+                        data.push(value);
+                    }
                 }
             }
-
-            console.log("COLORS");
-            console.log(backgroundColor);
 
             const chartData = {
                 labels: labels,
