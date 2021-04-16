@@ -18,6 +18,11 @@
     margin: 0 auto;
 }
 
+.home table,
+.history table {
+    margin-bottom: 2rem;
+}
+
 .overflow-x-auto {
     overflow-x: auto;
 }
