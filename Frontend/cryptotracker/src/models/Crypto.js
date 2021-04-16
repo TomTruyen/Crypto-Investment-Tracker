@@ -48,9 +48,6 @@ export default class Crypto {
         return Number(this.getBalance() * currentPrice);
     }
 
-
-
-
     toOption(crypto) {
         let currentPrice = crypto.price;
         let change_24h = crypto.price_percent_change_24h;
@@ -65,7 +62,7 @@ export default class Crypto {
             "name": this.name,
             "price": `$${Utils.numberWithCommas(currentPrice, currentPrice > 1 ? 2 : 6, true)}`,
             "change_24h": `${Utils.numberWithCommas(change_24h, 2, true)}%`,
-            "balance": Utils.numberWithCommas(balance),
+            "balance": Utils.numberWithCommas(balance, 6),
             "value": `$${Utils.numberWithCommas(value, 2, true)}`,
             "profit": `${Utils.numberWithCommas(profit, 2, true)}% ($${Utils.numberWithCommas(profitUSD, 2, true)})`,
             "profitGreaterThanZero": profit >= 0,

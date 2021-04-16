@@ -28,9 +28,14 @@ export default class Utils {
 
         if (withFranctionDigits) {
             x = x.toLocaleString('en-US', { minimumFractionDigits: 2 });
+            return x;
         }
 
-        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        const nonDecimals = x.toString().split('.')[0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+        if (x.toString().split('.')[1] == undefined) return nonDecimals;
+
+        return `${nonDecimals}.${x.toString().split('.')[1]}`;
     }
 
     static hexToRgb(hex) {
