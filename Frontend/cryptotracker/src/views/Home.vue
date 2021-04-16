@@ -3,7 +3,11 @@
     <div class="row">
       <div class="col position-relative my-5">
         <DoughnutChart ref="portfolio_chart" :chart-data="getPortfolioChartData" :options="options" v-if="getPortfolioChartData.labels.length > 0"></DoughnutChart>
-        <h2 class="absolute-center">{{'$' + getPortfolioValue}}</h2>
+        <h2 class="absolute-center text-center">
+          <span class="info-value font-weight-normal font-size-2-half-rem">{{'$' + getPortfolioValue}}</span>
+          <br />
+          <span class="info-sub-title font-size-1-quarter-rem">{{getPortfolioAssets + ' Assets'}}</span>
+        </h2>
       </div>
     </div>
     <div class="row ">
@@ -352,6 +356,9 @@
       },
       getPortfolioValue() {
         return this.$store.getters.getPortfolioValue;
+      },
+      getPortfolioAssets() {
+        return this.$store.getters.getPortfolioAssets;
       },
       getPortfolioChartData() {
         return this.$store.getters.getPortfolioChartData

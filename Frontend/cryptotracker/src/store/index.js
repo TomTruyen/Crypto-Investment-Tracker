@@ -114,6 +114,11 @@ export default new Vuex.Store({
 
             return Number(totalValue.toFixed(2)).toLocaleString('en-US', { minimumFractionDigits: 2 });
         },
+        getPortfolioAssets(state) {
+            if (state.portfolio == null) return 0;
+
+            return state.portfolio.length;
+        },
         getPortfolioChartData(state) {
             let labels = [];
             const borderWidth = 1;
