@@ -21,6 +21,7 @@ public class CryptotrackerApplication {
 		timer.schedule(new CryptoTask(), 60000, 60000); // Update every minute
 
 		SpringApplication.run(CryptotrackerApplication.class, args);
+
 	}
 
 	@Configuration

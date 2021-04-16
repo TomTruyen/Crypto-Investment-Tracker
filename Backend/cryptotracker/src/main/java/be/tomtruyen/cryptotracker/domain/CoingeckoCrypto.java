@@ -1,5 +1,6 @@
 package be.tomtruyen.cryptotracker.domain;
 
+import java.awt.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -37,6 +38,7 @@ public class CoingeckoCrypto implements Serializable {
     private final double price_percent_change_30d;
     private final double price_percent_change_1y;
     private final LocalDate lastUpdated;
+    private Color color;
 
     public CoingeckoCrypto(String id, String symbol, String name, String image, double price, double marketCap, int rank, double fullyDilutedValuation, double volume_24h, double high_24h, double low_24h, double allTimeHigh, double allTimeHighPercentage, LocalDate allTimeHighDate, double allTimeLow, double allTimeLowPercentage, LocalDate allTimeLowDate, long circulatingSupply, long totalSupply, long maxSupply, double market_cap_change_24h, double market_cap_percent_change_24h, double price_change_24h, double price_percent_change_24h, double price_percent_change_7d, double price_percent_change_30d, double price_percent_change_1y, LocalDate lastUpdated) {
         this.id = id;
@@ -179,6 +181,14 @@ public class CoingeckoCrypto implements Serializable {
 
     public LocalDate getLastUpdated() {
         return lastUpdated;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     public static CoingeckoCrypto fromJSON(Map<String, Object> json) {

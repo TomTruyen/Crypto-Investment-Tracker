@@ -1,5 +1,5 @@
 export default class CoingeckoCrypto {
-    constructor(id, ticker, name, image, price, marketCap, rank, fullyDilutedValuation, volume_24h, high_24h, low_24h, allTimeHigh, allTimeHighPercentage, allTimeHighDate, allTimeLow, allTimeLowPercentage, allTimeLowDate, circulatingSupply, totalSupply, maxSupply, market_cap_change_24h, market_cap_percent_change_24h, price_change_24h, price_percent_change_24h, price_percent_change_7d, price_percent_change_30d, price_percent_change_1y, lastUpdated) {
+    constructor(id, ticker, name, image, price, marketCap, rank, fullyDilutedValuation, volume_24h, high_24h, low_24h, allTimeHigh, allTimeHighPercentage, allTimeHighDate, allTimeLow, allTimeLowPercentage, allTimeLowDate, circulatingSupply, totalSupply, maxSupply, market_cap_change_24h, market_cap_percent_change_24h, price_change_24h, price_percent_change_24h, price_percent_change_7d, price_percent_change_30d, price_percent_change_1y, lastUpdated, color) {
         this.id = id;
         this.ticker = ticker;
         this.name = name;
@@ -28,6 +28,7 @@ export default class CoingeckoCrypto {
         this.price_percent_change_30d = price_percent_change_30d;
         this.price_percent_change_1y = price_percent_change_1y;
         this.lastUpdated = lastUpdated;
+        this.color = color;
     }
 
     static fromJSON(json) {
@@ -59,7 +60,8 @@ export default class CoingeckoCrypto {
             json['price_percent_change_7d'],
             json['price_percent_change_30d'],
             json['price_percent_change_1y'],
-            json['lastUpdated']
+            json['lastUpdated'],
+            json['color']
         );
     }
 
@@ -131,6 +133,14 @@ export default class CoingeckoCrypto {
         }
 
         return `${dateFormatted} ${timeAgo}`;
+    }
+
+    getRgbColor(alpha = 1) {
+        const r = this.color.red;
+        const g = this.color.green;
+        const b = this.color.blue;
+
+        return `rgba(${r},${g},${b},${alpha})`;
     }
 
     getPriceDollar() {

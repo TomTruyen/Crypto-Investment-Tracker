@@ -143,10 +143,8 @@ export default new Vuex.Store({
                     } else {
                         labels.push(label);
 
-                        const color = randomColor();
-
-                        borderColor.push(Utils.hexToRGBA(color, 1));
-                        backgroundColor.push(Utils.hexToRGBA(color, 0.6));
+                        borderColor.push(crypto.getRgbColor(1));
+                        backgroundColor.push(crypto.getRgbColor(0.5));
 
                         data.push(value);
                     }

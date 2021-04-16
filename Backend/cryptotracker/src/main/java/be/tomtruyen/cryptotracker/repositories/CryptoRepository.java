@@ -12,8 +12,17 @@ public class CryptoRepository {
     private static CryptoRepository instance;
     private static Object monitor = new Object();
     private List<CoingeckoCrypto> cryptos = Collections.synchronizedList(new ArrayList<>());
+    private int count = 1;
 
     private CryptoRepository() {}
+
+    public int getCount() {
+        return count;
+    }
+
+    public void incrementCount() {
+        this.count++;
+    }
 
     public void set(List<CoingeckoCrypto> cryptos) {
         clear();
@@ -25,7 +34,7 @@ public class CryptoRepository {
     }
 
     public CoingeckoCrypto find(String ticker) {
-        return cryptos.stream().filter(c -> c.getSymbol().equalsIgnoreCase(ticker)).collect(Collectors.toList()).get(0);
+        return cryptos.stream().filter(c -> c.getSymbol().equalsIgnoreCase(ticker)).findFirst().orElse(null);
     }
 
     public List<CoingeckoCrypto> getAll() {
