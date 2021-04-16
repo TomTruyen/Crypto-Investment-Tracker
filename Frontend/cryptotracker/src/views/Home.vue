@@ -1,12 +1,12 @@
 <template>
   <div class="home">  
-    <div class="row margin-0">
+    <div class="row">
       <div class="col position-relative my-5">
         <DoughnutChart ref="portfolio_chart" :chart-data="getPortfolioChartData" :options="options" v-if="getPortfolioChartData.labels.length > 0"></DoughnutChart>
         <h2 class="absolute-center">{{'$' + getPortfolioValue}}</h2>
       </div>
     </div>
-    <div class="row margin-0">
+    <div class="row ">
       <div class="col my-auto">
         Refresh in: {{formattedTime}}
       </div>
