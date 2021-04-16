@@ -218,52 +218,57 @@
       </b-row>
     </b-modal>
 
-    <b-table hover :items="getPortfolioOptions" :fields="fields">
-      <template #cell(name)="row">
-        <img width="20" height="20" :src="row.item.details.image" />
-        <div class="spacer"></div>
-        <span class="info-value my-auto">{{row.item.name}}</span>
-        <div class="spacer-5"></div>
-        <span class="info-title-ticker my-auto">{{`${row.item.ticker}`}}</span>
-      </template>
+    <b-row>
+      <b-col class="overflow-x-auto">
+        <b-table hover :items="getPortfolioOptions" :fields="fields">
+          <template #cell(name)="row">
+            <img width="20" height="20" :src="row.item.details.image" />
+            <div class="spacer"></div>
+            <span class="info-value my-auto">{{row.item.name}}</span>
+            <div class="spacer-5"></div>
+            <span class="info-title-ticker my-auto">{{`${row.item.ticker}`}}</span>
+          </template>
 
-      <template #cell(price)="row">
-        <span class="info-value my-auto">{{row.item.price}}</span>
-      </template>
+          <template #cell(price)="row">
+            <span class="info-value my-auto">{{row.item.price}}</span>
+          </template>
 
-      <template #cell(change_24h)="row">
-        <span :class="row.item.details['price_percent_change_24h'] >= 0 ? 'info-value my-auto up' : 'info-value my-auto down'">
-          {{row.item.details['price_percent_change_24h'] >= 0 ? '&#9650;' : '&#9660;'}} {{row.item.details.getPriceChangePercentage()}}
-        </span>
-      </template>
+          <template #cell(change_24h)="row">
+            <span :class="row.item.details['price_percent_change_24h'] >= 0 ? 'info-value my-auto up' : 'info-value my-auto down'">
+              {{row.item.details['price_percent_change_24h'] >= 0 ? '&#9650;' : '&#9660;'}} {{row.item.details.getPriceChangePercentage()}}
+            </span>
+          </template>
 
-      <template #cell(balance)="row">
-        <span class="info-value my-auto">{{row.item.balance}}</span>
-      </template>
+          <template #cell(balance)="row">
+            <span class="info-value my-auto">{{row.item.balance}}</span>
+          </template>
 
-      <template #cell(value)="row">
-        <span class="info-value my-auto">{{row.item.value}}</span>
-      </template>
+          <template #cell(value)="row">
+            <span class="info-value my-auto">{{row.item.value}}</span>
+          </template>
 
-      <template #cell(profit)="row">
-        <span :class="row.item.profitGreaterThanZero ? 'info-value my-auto up' : 'info-value my-auto down'">{{row.item.profitGreaterThanZero ? '&#9650;' : '&#9660;'}} {{row.item.profit}}</span>
-      </template>
+          <template #cell(profit)="row">
+            <span :class="row.item.profitGreaterThanZero ? 'info-value my-auto up' : 'info-value my-auto down'">{{row.item.profitGreaterThanZero ? '&#9650;' : '&#9660;'}} {{row.item.profit}}</span>
+          </template>
 
-      <template #cell(sellAction)="row">
-        <div class="text-center">
-          <b-button size="sm" @click="sell(row.item, row.index, $event.target)" class="mr-1 btn-custom" v-b-modal.sell>Sell</b-button>
-        </div>
-      </template>
-      <template #cell(expandAction)="row">
-        <!-- <b-button size="sm" class="mr-1" @click="row.toggleDetails">{{!row.detailsShowing ? 'MORE' : 'LESS'}}</b-button> -->
-        <div class="text-center">
-          <b-button size="sm" class="mr-1 btn-custom" @click="setInfo(row.item, row.index, $event.target)" v-b-modal.info>Info</b-button>
-        </div>
-      </template>
-      <!--<template slot="row-details" slot-scope="row">
-         <b-table :items="[row.item.details]"></b-table>
-       </template>-->
-    </b-table>
+          <template #cell(sellAction)="row">
+            <div class="text-center">
+              <b-button size="sm" @click="sell(row.item, row.index, $event.target)" class="mr-1 btn-custom" v-b-modal.sell>Sell</b-button>
+            </div>
+          </template>
+          <template #cell(expandAction)="row">
+            <!-- <b-button size="sm" class="mr-1" @click="row.toggleDetails">{{!row.detailsShowing ? 'MORE' : 'LESS'}}</b-button> -->
+            <div class="text-center">
+              <b-button size="sm" class="mr-1 btn-custom" @click="setInfo(row.item, row.index, $event.target)" v-b-modal.info>Info</b-button>
+            </div>
+          </template>
+          <!--<template slot="row-details" slot-scope="row">
+            <b-table :items="[row.item.details]"></b-table>
+          </template>-->
+        </b-table>
+      </b-col>
+    </b-row>
+    
   </div>
 </template>
 

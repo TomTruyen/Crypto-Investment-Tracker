@@ -3,6 +3,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
+    overflow: hidden;
 }
 
 .home,
@@ -12,11 +13,13 @@
 }
 
 .home .row,
-.history .row,
-.home table,
-.history table {
+.history .row {
     width: 80%;
     margin: 0 auto;
+}
+
+.overflow-x-auto {
+    overflow-x: auto;
 }
 
 .table td {
@@ -354,9 +357,7 @@ div[role="combobox"] {
 
 @media only screen and (max-width: 1000px) {
     .home .row,
-    .history .row,
-    .home table,
-    .history table {
+    .history .row {
         width: 100%;
     }
 }
