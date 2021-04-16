@@ -27,8 +27,7 @@ export default class Utils {
         if (x < 1) return x;
 
         if (withFranctionDigits) {
-            x = x.toLocaleString('en-US', { minimumFractionDigits: 2 });
-            return x;
+            return x.toLocaleString('en-US', { minimumFractionDigits: 2 });
         }
 
         const nonDecimals = x.toString().split('.')[0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
