@@ -182,6 +182,20 @@ export default new Vuex.Store({
             state.coingeckoCryptos = cryptos;
         },
         setPortfolio(state, cryptos) {
+            // Sort by Value;
+            cryptos = cryptos.sort((a, b) => {
+                const aPrice = state.coingeckoCryptos.find(c => c.ticker == a.ticker).price;
+                const bPrice = state.coingeckoCryptos.find(c => c.ticker == b.ticker).price;
+
+                const aValue = a.getValue(aPrice);
+                const bValue = b.getValue(bPrice);
+
+                if (aValue < bValue) return -1;
+                if (aValue > bValue) return 1;
+
+                return 0;
+            }).reverse();
+
             state.portfolio = cryptos;
         },
         setPortfolioHistory(state, cryptos) {
