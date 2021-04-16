@@ -3,7 +3,6 @@
     <b-form v-on:submit.prevent="register">
       <h3>Register</h3>
       <br />
-      <b-alert variant="success" show v-if="registerResult != null && registerResult.success">{{ registerResult.message }}</b-alert>
       <b-alert variant="danger" show v-if="registerResult != null && !registerResult.success && registerResult.message != ''">{{ registerResult.message }}</b-alert>
       <b-alert variant="danger" show v-if="registerResult == null && getErrorMessage != null">{{ getErrorMessage }}</b-alert>
       <b-form-group label="Email address:" class="info-value" label-for="email">
@@ -66,6 +65,8 @@ export default {
         this.$store.dispatch('register', {
           'email': this.$data.email,
           'password': this.$data.password
+        }).then((result) => {
+          if(result.success) this.$router.push('/login');
         });
       }
     },

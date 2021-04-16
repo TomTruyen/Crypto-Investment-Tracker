@@ -3,7 +3,7 @@ package be.tomtruyen.cryptotracker.domain;
 import org.springframework.http.HttpStatus;
 
 public enum RegisterResult {
-    SUCCESS(true, "Verification email sent.", HttpStatus.OK),
+    SUCCESS(true, "", HttpStatus.OK),
     ERR_MISSING_PARAMETERS(false, "Missing parameters.", HttpStatus.BAD_REQUEST),
     ERR_INVALID_EMAIL(false, "Invalid email.", HttpStatus.BAD_REQUEST),
     ERR_INVALID_PASSWORD(false, "Password is too weak.", HttpStatus.BAD_REQUEST),

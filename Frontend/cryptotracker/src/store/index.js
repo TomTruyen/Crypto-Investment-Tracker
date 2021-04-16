@@ -217,8 +217,10 @@ export default new Vuex.Store({
             });
         },
         register(context, data) {
-            API.register(data['email'], data['password']).then((registerResult) => {
+            return API.register(data['email'], data['password']).then((registerResult) => {
                 context.commit('register', registerResult);
+
+                return registerResult;
             });
         },
         verify(context, email) {
