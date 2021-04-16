@@ -65,7 +65,7 @@ export default class Crypto {
             "balance": Utils.numberWithCommas(balance, 6),
             "value": `$${Utils.numberWithCommas(value, 2, true)}`,
             "profit": `${Utils.numberWithCommas(profit, 2, true)}% ($${Utils.numberWithCommas(profitUSD, 2, true)})`,
-            "profitGreaterThanZero": profit >= 0,
+            "profitGreaterThanZero": profitUSD >= 0,
             "ticker": this.ticker,
             "details": crypto
         };
@@ -82,8 +82,8 @@ export default class Crypto {
             'sell_amount': this.sellAmount,
             'sell_price': `$${this.sellPrice.toFixed(2)}`,
             'profit': `${profit.toFixed(2)}%`,
-            'profit_usd': `$${profitUSD.toFixed(2)}`,
-            'profitGreaterThanZero': profit >= 0,
+            'profit_usd': `$${Number(profitUSD.toFixed(2)).toLocaleString('en-US', {minimumFractionDigits: 2})}`,
+            'profitGreaterThanZero': profitUSD >= 0,
             'details': crypto
         };
     }
