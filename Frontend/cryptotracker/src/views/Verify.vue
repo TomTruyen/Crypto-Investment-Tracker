@@ -14,7 +14,7 @@
     mounted() {
      this.checkLoggedIn();
 
-     let email = this.$route.query.e;
+     let email = this.$route.params.email;
      if(email != undefined) this.$data.email = email;
     },
     data() {

@@ -40,7 +40,7 @@ public class EmailService {
 //                message.setSubject("[CryptoTracker] - Verify email");
 //
 //                String base64Email = Base64.getEncoder().encodeToString(toMail.getBytes());
-//                String verificationURL = "http://localhost:8889/verify?e=" + base64Email;
+//                String verificationURL = "http://localhost:8889/verify/" + base64Email;
 //
 //                StringBuilder stringBuilder = new StringBuilder();
 //                stringBuilder.append("Please verify your email by clicking the link below:");

@@ -45,7 +45,7 @@ const routes = [{
         component: Register
     },
     {
-        path: '/verify',
+        path: '/verify/:email',
         name: 'Verify',
         meta: {
             title: 'Verify | CryptoTracker'
