@@ -208,10 +208,12 @@ public class CoingeckoCrypto implements Serializable {
         double low_24h = (json.getOrDefault("low_24h", 0) == null ? 0 : (double) json.getOrDefault("low_24h", 0));
         double allTimeHigh = (json.getOrDefault("ath", 0) == null ? 0 : (double) json.getOrDefault("ath", 0));
         double allTimeHighPercentage = (json.getOrDefault("ath_change_percentage", 0) == null ? 0 : (double) json.getOrDefault("ath_change_percentage", 0));
-        LocalDate allTimeHighDate = LocalDate.parse((String)json.getOrDefault("ath_date", "1970-01-01T00:00:00.000Z"), dateFormatter);
+        LocalDate allTimeHighDate = null;
+        if(json.get("ath_date") != null) allTimeHighDate = LocalDate.parse((String)json.getOrDefault("ath_date", "1970-01-01T00:00:00.000Z"), dateFormatter);
         double allTimeLow = (json.getOrDefault("atl", 0) == null ? 0 : (double) json.getOrDefault("atl", 0));
         double allTimeLowPercentage = (json.getOrDefault("atl_change_percentage", 0) == null ? 0 : (double) json.getOrDefault("atl_change_percentage", 0));
-        LocalDate allTimeLowDate = LocalDate.parse((String)json.getOrDefault("atl_date", "1970-01-01T00:00:00.000Z"), dateFormatter);
+        LocalDate allTimeLowDate = null;
+        if(json.get("atl_date") != null) allTimeLowDate = LocalDate.parse((String)json.getOrDefault("atl_date", "1970-01-01T00:00:00.000Z"), dateFormatter);
         long circulatingSupply = (long) (json.getOrDefault("circulating_supply", 0) == null ? 0 : (double) json.getOrDefault("circulating_supply", 0));
         long totalSupply = (long) (json.getOrDefault("total_supply", 0) == null ? 0 : (double) json.getOrDefault("total_supply", 0));
         long maxSupply = (long) (json.getOrDefault("max_supply", 0) == null ? 0 : (double) json.getOrDefault("max_supply", 0));
