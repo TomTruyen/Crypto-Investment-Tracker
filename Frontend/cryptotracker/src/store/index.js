@@ -18,6 +18,7 @@ export default new Vuex.Store({
         coingeckoCryptos: [],
         portfolio: [],
         portfolioHistory: [],
+        search: '',
     },
     getters: {
         isLoggedIn(state) {
@@ -54,12 +55,15 @@ export default new Vuex.Store({
             let cryptos = [];
 
             for (let i = 0; i < state.portfolio.length; i++) {
-                const ticker = state.portfolio[i].ticker;
+                let ticker = state.portfolio[i].ticker;
+                let name = state.portfolio[i].name;
 
-                if (state.coingeckoCryptos.length > 0) {
-                    const crypto = state.coingeckoCryptos.find(c => c.ticker == ticker);
+                if (state.search == '' || name.toLowerCase().includes(state.search) || ticker.toLowerCase().includes(state.search)) {
+                    if (state.coingeckoCryptos.length > 0) {
+                        const crypto = state.coingeckoCryptos.find(c => c.ticker == ticker);
 
-                    cryptos.push(state.portfolio[i].toOption(crypto));
+                        cryptos.push(state.portfolio[i].toOption(crypto));
+                    }
                 }
             }
 
@@ -207,6 +211,9 @@ export default new Vuex.Store({
         buyCrypto(state, crypto) {
             state.portfolio.push(crypto);
         },
+        updateSearch(state, search) {
+            state.search = search.toLowerCase();
+        }
     },
     actions: {
         login(context, data) {

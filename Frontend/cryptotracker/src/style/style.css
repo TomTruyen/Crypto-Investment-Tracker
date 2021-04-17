@@ -281,6 +281,12 @@ div[role="combobox"] {
     overflow-y: auto;
 }
 
+.refresh-position {
+    bottom: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
 .info-chapter>caption {
     display: block;
     width: 100%;

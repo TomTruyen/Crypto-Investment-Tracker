@@ -8,11 +8,13 @@
           <br />
           <span class="info-sub-title font-size-1-quarter-rem">{{getPortfolioAssets + ' Assets'}}</span>
         </h2>
+        <p class="position-absolute refresh-position info-title">Refresh in: {{formattedTime}}</p>
       </div>
     </div>
     <div class="row ">
-      <div class="col my-auto">
-        Refresh in: {{formattedTime}}
+      
+      <div class="col margin-vertical-1em ">
+        <input type="text" placeholder="Search..." class="form-control width-200px info-sub-title" v-model="search" v-on:keyup="searchUpdate()" />
       </div>
       <div class="col margin-vertical-1em">
         <b-button class="btn-custom float-right width-200px" v-b-modal.buy>Buy</b-button>
@@ -282,6 +284,7 @@
     components: { DoughnutChart },
     data() {
       return {
+        search: '',
         timer: 0,
         formattedTime: '01:00',
         crypto: '',
@@ -484,6 +487,9 @@
         this.$data.info.title = `${item.name} (${item.ticker}) Statistics`;
         this.$data.info.item = item;
       },
+      searchUpdate() {
+        this.$store.commit('updateSearch', this.search);
+      }
     }
   }
 </script>
