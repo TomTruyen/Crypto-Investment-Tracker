@@ -1,9 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import randomColor from 'randomcolor';
-import Utils from './../utils/Utils.js';
-
 import API from './../api/Api.js';
 
 Vue.use(Vuex)
