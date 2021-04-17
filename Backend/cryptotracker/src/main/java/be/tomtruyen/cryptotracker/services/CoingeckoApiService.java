@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.List;
 
@@ -72,11 +74,14 @@ public class CoingeckoApiService {
     }
 
     public static void fetchCryptos() {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+
         CryptoRepository cryptoRepository = CryptoRepository.getInstance();
 
         int fetchCount = cryptoRepository.getCount();
 
-        System.out.printf("Getting cryptos... [#%d]%n", fetchCount);
+        System.out.printf("Getting cryptos... [#%d - %s]%n", fetchCount, dtf.format(now));
 
         boolean getColors = false;
         if(fetchCount == 1) {
