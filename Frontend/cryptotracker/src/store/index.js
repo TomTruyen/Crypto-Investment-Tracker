@@ -136,21 +136,23 @@ export default new Vuex.Store({
                 if (state.coingeckoCryptos.length > 0) {
                     const crypto = state.coingeckoCryptos.find(c => c.ticker == ticker);
 
-                    const value = Number(state.portfolio[i].getValue(crypto.price).toFixed(2));
+                    if (crypto != undefined) {
+                        const value = Number(state.portfolio[i].getValue(crypto.price).toFixed(2));
 
-                    const label = `${crypto.name} (${crypto.ticker})`;
+                        const label = `${crypto.name} (${crypto.ticker})`;
 
-                    if (labels.indexOf(label) > -1) {
-                        const index = labels.indexOf(label);
+                        if (labels.indexOf(label) > -1) {
+                            const index = labels.indexOf(label);
 
-                        data[index] += value;
-                    } else {
-                        labels.push(label);
+                            data[index] += value;
+                        } else {
+                            labels.push(label);
 
-                        borderColor.push(crypto.getRgbColor(1));
-                        backgroundColor.push(crypto.getRgbColor(0.5));
+                            borderColor.push(crypto.getRgbColor(1));
+                            backgroundColor.push(crypto.getRgbColor(0.5));
 
-                        data.push(value);
+                            data.push(value);
+                        }
                     }
                 }
             }
@@ -191,14 +193,19 @@ export default new Vuex.Store({
         setPortfolio(state, cryptos) {
             // Sort by Value;
             cryptos = cryptos.sort((a, b) => {
-                const aPrice = state.coingeckoCryptos.find(c => c.ticker == a.ticker).price;
-                const bPrice = state.coingeckoCryptos.find(c => c.ticker == b.ticker).price;
+                let aPrice = state.coingeckoCryptos.find(c => c.ticker == a.ticker);
+                let bPrice = state.coingeckoCryptos.find(c => c.ticker == b.ticker);
 
-                const aValue = a.getValue(aPrice);
-                const bValue = b.getValue(bPrice);
+                if (aPrice != undefined && bPrice != undefined) {
+                    aPrice = aPrice.price;
+                    bPrice = bPrice.price;
 
-                if (aValue < bValue) return -1;
-                if (aValue > bValue) return 1;
+                    const aValue = a.getValue(aPrice);
+                    const bValue = b.getValue(bPrice);
+
+                    if (aValue < bValue) return -1;
+                    if (aValue > bValue) return 1;
+                }
 
                 return 0;
             }).reverse();
@@ -225,10 +232,8 @@ export default new Vuex.Store({
             });
         },
         register(context, data) {
-            return API.register(data['email'], data['password']).then((registerResult) => {
+            API.register(data['email'], data['password']).then((registerResult) => {
                 context.commit('register', registerResult);
-
-                return registerResult;
             });
         },
         verify(context, email) {

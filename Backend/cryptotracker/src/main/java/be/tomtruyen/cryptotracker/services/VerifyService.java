@@ -1,46 +1,49 @@
 package be.tomtruyen.cryptotracker.services;
 
-import be.tomtruyen.cryptotracker.domain.RegisterResult;
+import be.tomtruyen.cryptotracker.domain.LoginResult;
+import be.tomtruyen.cryptotracker.domain.User;
+import be.tomtruyen.cryptotracker.domain.VerifyResult;
 import be.tomtruyen.cryptotracker.utils.Utils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Date;
 import java.util.Map;
 
 @Service
-public class RegisterService {
-    public static ResponseEntity<Object> register(Map<String, Object> body){
-        RegisterResult result = validate(body);
+public class VerifyService {
+    public static ResponseEntity<Object> verify(Map<String, Object> body) {
+        VerifyResult result = validate(body);
 
         boolean success = result.isSuccess();
 
+        String token = "";
+        User user;
         if(success) {
             String email = ((String) body.getOrDefault("email", "")).toLowerCase().trim();
-            String password = ((String) body.getOrDefault("password", "")).trim();
-            password = Utils.hashPassword(password);
 
             try {
                 DatabaseService databaseService = new DatabaseService();
 
                 if(databaseService.connection == null) throw new SQLException();
 
-                databaseService.addUser(email, password);
+                user = databaseService.findUserByEmail(email);
 
-                EmailService.sendVerificationEmail(email);
+                if(user == null){
+                    result = VerifyResult.ERR_NOT_FOUND;
+                } else if(user.isVerified()){
+                    result = VerifyResult.ERR_ALREADY_VERIFIED;
+                } else {
+                    databaseService.verifyUser(email);
+                }
 
                 databaseService.closeConnection();
             } catch (SQLException se) {
                 se.printStackTrace();
 
-                if(se instanceof SQLIntegrityConstraintViolationException) {
-                    result = RegisterResult.ERR_ALREADY_EXISTS;
-                } else {
-                    result = RegisterResult.ERR_UNKNOWN;
-                }
+                result = VerifyResult.ERR_UNKNOWN;
             }
         }
 
@@ -50,24 +53,20 @@ public class RegisterService {
 
         return ResponseEntity.status(status).body(
                 Map.of(
-                        "path", "/register",
+                        "path", "/login",
                         "success", success,
                         "message", message,
+                        "token", token,
                         "time", new Date()
                 )
         );
     }
 
-    private static RegisterResult validate(Map<String, Object> body) {
+    private static VerifyResult validate(Map<String, Object> body) {
         String email = (String) body.getOrDefault("email", null);
-        String password = (String) body.getOrDefault("password", null);
 
-        if(email == null || password == null) return RegisterResult.ERR_MISSING_PARAMETERS;
+        if(email == null) return VerifyResult.ERR_MISSING_PARAMETERS;
 
-        if(!Utils.isValidEmail(email)) return RegisterResult.ERR_INVALID_EMAIL;
-
-        if(!Utils.isValidPassword(password)) return RegisterResult.ERR_INVALID_PASSWORD;
-
-        return RegisterResult.SUCCESS;
+        return VerifyResult.SUCCESS;
     }
 }

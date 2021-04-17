@@ -1,9 +1,9 @@
 <template>
   <div class="verify">
     <b-form>
-      <b-alert variant="success" show v-if="verifyResult != null && verifyResult.success">{{ verifyResult.message }} You will be redirected in {{ countDown }}s</b-alert>
+      <b-alert variant="success" show v-if="verifyResult != null && verifyResult.success">{{ verifyResult.message }} Email verified. You will be redirected in {{ countDown }}s</b-alert>
       <b-alert variant="danger" show v-if="verifyResult != null && !verifyResult.success && verifyResult.message != ''">{{ verifyResult.message }}</b-alert>
-      <p class="info-value">By clicking the button below you verify that your email is: {{decodeBase64(email)}}</p>
+      <p class="info-value">By clicking the button below you verify that your email is: {{email}}</p>
       <b-button type="button" class="btn-custom primary" v-on:click="verify">Verify</b-button>
     </b-form>
   </div>
@@ -15,7 +15,8 @@
      this.checkLoggedIn();
 
      let email = this.$route.params.email;
-     if(email != undefined) this.$data.email = email;
+
+     if(email != undefined) this.$data.email = this.decodeBase64(email);
     },
     data() {
         return {
