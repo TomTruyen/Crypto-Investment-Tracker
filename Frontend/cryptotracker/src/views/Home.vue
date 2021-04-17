@@ -279,6 +279,8 @@
 
   export default {
     mounted() {
+      this.$store.commit('clearSearch');
+
       this.fetchCryptos();
     },
     components: { DoughnutChart },

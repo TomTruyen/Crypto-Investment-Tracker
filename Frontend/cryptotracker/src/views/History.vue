@@ -6,6 +6,12 @@
       </div>
     </div>
 
+    <div class="row">
+      <div class="col margin-vertical-1em ">
+        <input type="text" placeholder="Search..." class="form-control width-200px info-sub-title" v-model="search" v-on:keyup="searchUpdate()" />
+      </div>
+    </div>
+
     <b-row>
       <b-col class="overflow-x-auto">
         <b-table hover :items="getPortfolioHistoryOptions" :fields="fields">
@@ -49,10 +55,13 @@
 <script>
   export default {
     mounted() {
+      this.$store.commit('clearSearch');
+
       this.fetchHistory();
     },
     data() {
       return {
+        search: '',
         fields: [
           {key: 'date', label: 'Date', sortable: true},
           {key: 'name', label: 'Name', sortable: true},
@@ -76,6 +85,9 @@
       fetchHistory() {
         const token = this.$session.get('access_token');
         this.$store.dispatch('setPortfolioHistory', token);
+      },
+      searchUpdate() {
+        this.$store.commit('updateSearch', this.search);
       }
     }
   }

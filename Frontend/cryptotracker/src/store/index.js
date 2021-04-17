@@ -52,8 +52,8 @@ export default new Vuex.Store({
             let cryptos = [];
 
             for (let i = 0; i < state.portfolio.length; i++) {
-                let ticker = state.portfolio[i].ticker;
-                let name = state.portfolio[i].name;
+                const ticker = state.portfolio[i].ticker;
+                const name = state.portfolio[i].name;
 
                 if (state.search == '' || name.toLowerCase().includes(state.search) || ticker.toLowerCase().includes(state.search)) {
                     if (state.coingeckoCryptos.length > 0) {
@@ -71,13 +71,16 @@ export default new Vuex.Store({
 
             for (let i = 0; i < state.portfolioHistory.length; i++) {
                 const ticker = state.portfolioHistory[i].ticker;
+                const name = state.portfolioHistory[i].name;
 
-                let crypto = null;
-                if (state.coingeckoCryptos.length > 0) {
-                    crypto = state.coingeckoCryptos.find(c => c.ticker == ticker);
+                if (state.search == '' || name.toLowerCase().includes(state.search) || ticker.toLowerCase().includes(state.search)) {
+                    let crypto = null;
+                    if (state.coingeckoCryptos.length > 0) {
+                        crypto = state.coingeckoCryptos.find(c => c.ticker == ticker);
+                    }
+
+                    cryptos.push(state.portfolioHistory[i].toHistoryOption(crypto));
                 }
-
-                cryptos.push(state.portfolioHistory[i].toHistoryOption(crypto));
             }
 
             return cryptos;
@@ -210,6 +213,9 @@ export default new Vuex.Store({
         },
         updateSearch(state, search) {
             state.search = search.toLowerCase();
+        },
+        clearSearch(state) {
+            state.search = '';
         }
     },
     actions: {
