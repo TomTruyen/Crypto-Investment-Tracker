@@ -59,7 +59,9 @@ export default new Vuex.Store({
                     if (state.coingeckoCryptos.length > 0) {
                         const crypto = state.coingeckoCryptos.find(c => c.ticker == ticker);
 
-                        cryptos.push(state.portfolio[i].toOption(crypto));
+                        if (crypto != undefined) {
+                            cryptos.push(state.portfolio[i].toOption(crypto));
+                        }
                     }
                 }
             }
