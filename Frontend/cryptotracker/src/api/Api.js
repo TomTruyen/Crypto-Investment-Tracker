@@ -5,11 +5,13 @@ import LoginResult from '../models/LoginResult';
 import RegisterResult from '../models/RegisterResult';
 import VerifyResult from '../models/VerifyResult';
 
+const baseURL = "http://84.195.217.213:8888/";
+
 export default class API {
     static async login(email, password) {
         let options = {
             method: 'POST',
-            baseURL: 'http://192.168.0.150:8888/',
+            baseURL: baseURL,
             url: '/login',
             headers: {
                 'Accept': 'application/json',
@@ -39,7 +41,7 @@ export default class API {
     static async register(email, password) {
         let options = {
             method: 'POST',
-            baseURL: 'http://192.168.0.150:8888/',
+            baseURL: baseURL,
             url: '/register',
             headers: {
                 'Accept': 'application/json',
@@ -69,7 +71,7 @@ export default class API {
     static async verify(email) {
         let options = {
             method: 'POST',
-            baseURL: 'http://192.168.0.150:8888/',
+            baseURL: baseURL,
             url: '/verify',
             headers: {
                 'Accept': 'application/json',
@@ -98,7 +100,7 @@ export default class API {
     static async resendVerification(email) {
         let options = {
             method: 'POST',
-            baseURL: 'http://192.168.0.150:8888/',
+            baseURL: baseURL,
             url: '/verify/resend',
             headers: {
                 'Accept': 'application/json',
@@ -129,7 +131,7 @@ export default class API {
 
         let options = {
             method: 'GET',
-            baseURL: 'http://192.168.0.150:8888/',
+            baseURL: baseURL,
             url: '/cryptocurrencies/portfolio',
             headers: {
                 'Accept': 'application/json',
@@ -161,7 +163,7 @@ export default class API {
 
         let options = {
             method: 'GET',
-            baseURL: 'http://192.168.0.150:8888/',
+            baseURL: baseURL,
             url: '/cryptocurrencies/portfolio/history',
             headers: {
                 'Accept': 'application/json',
@@ -193,7 +195,7 @@ export default class API {
 
         let options = {
             method: 'GET',
-            baseURL: 'http://192.168.0.150:8888/',
+            baseURL: baseURL,
             url: '/cryptocurrencies/list/',
             headers: {
                 'Accept': 'application/json',
@@ -227,7 +229,7 @@ export default class API {
 
         let options = {
             method: 'POST',
-            baseURL: 'http://192.168.0.150:8888/',
+            baseURL: baseURL,
             url: '/cryptocurrencies/buy/',
             headers: {
                 'Accept': 'application/json',
@@ -258,7 +260,7 @@ export default class API {
 
         let options = {
             method: 'POST',
-            baseURL: 'http://192.168.0.150:8888/',
+            baseURL: baseURL,
             url: '/cryptocurrencies/sell/',
             headers: {
                 'Accept': 'application/json',
@@ -290,7 +292,7 @@ export default class API {
 
         let options = {
             method: 'POST',
-            baseURL: 'http://192.168.0.150:8888/',
+            baseURL: baseURL,
             url: '/resetpassword/',
             headers: {
                 'Accept': 'application/json',
@@ -316,7 +318,7 @@ export default class API {
 
         let options = {
             method: 'POST',
-            baseURL: 'http://192.168.0.150:8888/',
+            baseURL: baseURL,
             url: '/resetpassword/confirm',
             headers: {
                 'Accept': 'application/json',
