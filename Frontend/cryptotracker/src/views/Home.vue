@@ -2,7 +2,7 @@
   <div class="home">  
     <div class="row">
       <div class="col position-relative my-5">
-        <DoughnutChart ref="portfolio_chart" :chart-data="getPortfolioChartData" :options="options" v-if="getPortfolioChartData.labels.length > 0"></DoughnutChart>
+        <DoughnutChart ref="portfolio_chart" :chart-data="getPortfolioChartData" v-if="getPortfolioChartData.labels.length > 0"></DoughnutChart>
         <h2 class="absolute-center text-center">
           <span class="info-value font-weight-normal font-size-2-half-rem">{{'$' + getPortfolioValue}}</span>
           <br />
@@ -313,42 +313,6 @@
           {key: 'sellAction', label: ''},
           {key: 'expandAction', label: ''},
         ],
-        options: {
-          legend: {
-              display: false,
-          },
-          responsive: true,
-          maintainAspectRatio: false,
-          cutoutPercentage: 95,
-          tooltips: {
-            enabled: true,
-            callbacks: {
-              title: function(tooltipItem, data) {
-                return data['labels'][tooltipItem[0]['index']];
-              },
-              label: function(tooltipItem, data) {
-                const dataset = data['datasets'][0];
-
-                // Total value
-                let value = dataset['data'][tooltipItem['index']];
-
-                // Get percentage
-                let total = 0;
-
-                for(let i = 0; i < dataset.data.length; i++) {
-                  total += dataset.data[i];
-                }
-
-                const percentage = Number(((value / total) * 100).toFixed(2)).toLocaleString('en-US', {minimumFractionDigits: 2});
-
-                value = Number(value.toFixed(2)).toLocaleString('en-US', {minimumFractionDigits: 2});
-
-                return `$${value} (${percentage}%)`;
-              },
-            },
-            displayColors: false,
-          }
-        },
       }
     }, 
     computed: {

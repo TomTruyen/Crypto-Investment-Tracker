@@ -157,7 +157,7 @@ export default new Vuex.Store({
                 }
             }
 
-            const chartData = {
+            let chartData = {
                 labels: labels,
                 datasets: [{
                     borderWidth: borderWidth,
@@ -166,6 +166,18 @@ export default new Vuex.Store({
                     data: data
                 }]
             };
+
+            if (data.length <= 0) {
+                chartData = {
+                    labels: [''],
+                    datasets: [{
+                        borderWidth: 1,
+                        borderColor: 'rgba(50, 50, 50, 1)',
+                        backgroundColor: 'rgba(50, 50, 50, 0.5)',
+                        data: [-1]
+                    }]
+                }
+            }
 
             return chartData;
         }

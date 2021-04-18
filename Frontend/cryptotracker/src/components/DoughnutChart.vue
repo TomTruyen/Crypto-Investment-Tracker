@@ -4,10 +4,51 @@
 
     export default {
         extends: Doughnut,
-        props: ['options'],
+        // props: ['options'],
         mixins: [reactiveProp],
         mounted() {
-            this.renderChart(this.chartData, this.options)
+            const options =  {
+                legend: {
+                    display: false,
+                },
+                responsive: true,
+                maintainAspectRatio: false,
+                cutoutPercentage: 95,
+                tooltips: {
+                    enabled: true,
+                    callbacks: {
+                    title: function(tooltipItem, data) {
+                        return data['labels'][tooltipItem[0]['index']];
+                    },
+                    label: function(tooltipItem, data) {
+                        const dataset = data['datasets'][0];
+
+                        // Total value
+                        let value = dataset['data'][tooltipItem['index']];
+
+                        // Get percentage
+                        let total = 0;
+
+                        for(let i = 0; i < dataset.data.length; i++) {
+                        total += dataset.data[i];
+                        }
+
+                        const percentage = Number(((value / total) * 100).toFixed(2)).toLocaleString('en-US', {minimumFractionDigits: 2});
+
+                        if(value == -1 && total == value) {
+                        return '$0.00';
+                        }
+
+                        value = Number(value.toFixed(2)).toLocaleString('en-US', {minimumFractionDigits: 2});
+
+                        return `$${value} (${percentage}%)`;
+                    },
+                },
+                displayColors: false,
+                }
+            };
+
+            this.renderChart(this.chartData, options)
         }
     }
 </script>
