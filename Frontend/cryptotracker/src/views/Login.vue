@@ -17,6 +17,9 @@
       <b-form-group label="Password:" class="info-value" label-for="password">
         <b-form-input id="password" class="info-title" type="password" placeholder="Password" v-model="password"></b-form-input>
       </b-form-group>
+      <b-form-group>
+        <router-link to="/resetpassword" class="forgotpassword-link">Forgot your password?</router-link>
+      </b-form-group>
       <b-button type="submit" class="btn-custom primary width-150px">Login</b-button>
     </b-form>
   </div>

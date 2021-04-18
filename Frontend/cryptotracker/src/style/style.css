@@ -287,6 +287,11 @@ div[role="combobox"] {
     transform: translateX(-50%);
 }
 
+.forgotpassword-link {
+    font-size: 12px;
+    margin-left: 0.25em;
+}
+
 .info-chapter>caption {
     display: block;
     width: 100%;
