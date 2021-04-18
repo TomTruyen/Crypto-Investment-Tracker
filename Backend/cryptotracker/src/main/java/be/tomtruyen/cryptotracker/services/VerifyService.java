@@ -53,7 +53,7 @@ public class VerifyService {
 
         return ResponseEntity.status(status).body(
                 Map.of(
-                        "path", "/login",
+                        "path", "/verify",
                         "success", success,
                         "message", message,
                         "token", token,

@@ -239,4 +239,16 @@ public class DatabaseService implements DatabaseServiceInterface {
 
         return crypto;
     }
+
+    public boolean resetPassword(String email, String password) throws SQLException {
+        String query = "UPDATE users SET password = ? WHERE email = ?";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, password);
+        preparedStatement.setString(2, email);
+
+        preparedStatement.executeUpdate();
+
+        return preparedStatement.getUpdateCount() <= 0;
+    }
 }

@@ -2,6 +2,8 @@ package be.tomtruyen.cryptotracker.utils;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
@@ -50,5 +52,12 @@ public class Utils {
         if(input == null) return defaultValue;
 
         return input;
+    }
+
+    public static String getDateTime() {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+
+        return dtf.format(now);
     }
 }

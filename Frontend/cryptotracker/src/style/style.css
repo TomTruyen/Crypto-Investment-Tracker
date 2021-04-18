@@ -214,6 +214,7 @@ div[role="combobox"] {
 .login,
 .register,
 .verify,
+.resetpassword,
 .not-found {
     display: flex;
     height: calc(100vh - 56px - 56px);
@@ -225,6 +226,7 @@ div[role="combobox"] {
 .login>form,
 .register>form,
 .verify>form,
+.resetpassword>form,
 .not-found>div {
     width: 50%;
     padding: 2rem;
@@ -387,6 +389,7 @@ div[role="combobox"] {
     .login>form,
     .register>form,
     .verify>form,
+    .resetpassword>form,
     .not-found>div {
         width: 75%;
         padding: 2rem;
@@ -397,6 +400,7 @@ div[role="combobox"] {
     .login>form,
     .register>form,
     .verify>form,
+    .resetpassword>form,
     .not-found>div {
         width: 100%;
         padding: 2rem;

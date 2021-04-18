@@ -3,6 +3,7 @@ package be.tomtruyen.cryptotracker.services;
 import be.tomtruyen.cryptotracker.domain.CoingeckoCrypto;
 import be.tomtruyen.cryptotracker.domain.Crypto;
 import be.tomtruyen.cryptotracker.repositories.CryptoRepository;
+import be.tomtruyen.cryptotracker.utils.Utils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.apache.http.HttpEntity;
@@ -74,14 +75,11 @@ public class CoingeckoApiService {
     }
 
     public static void fetchCryptos() {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
-
         CryptoRepository cryptoRepository = CryptoRepository.getInstance();
 
         int fetchCount = cryptoRepository.getCount();
 
-        System.out.printf("Getting cryptos... [#%d - %s]%n", fetchCount, dtf.format(now));
+        System.out.printf("Getting cryptos... [#%d - %s]%n", fetchCount, Utils.getDateTime());
 
         boolean getColors = false;
         if(fetchCount == 1) {

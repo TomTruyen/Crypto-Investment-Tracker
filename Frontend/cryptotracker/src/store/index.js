@@ -289,6 +289,15 @@ export default new Vuex.Store({
                     });
                 }
             });
+        },
+        resetPassword(context, email) {
+            return API.resetPassword(email);
+        },
+        resetPasswordConfirm(context, payload) {
+            const email = payload['email'];
+            const password = payload['password'];
+
+            return API.resetPasswordConfirm(email, password);
         }
     }
 })

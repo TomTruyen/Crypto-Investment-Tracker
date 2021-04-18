@@ -1,11 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import History from '../views/History.vue';
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import Verify from '../views/Verify.vue'
+import ResetPassword from '../views/ResetPassword.vue';
 import NotFound from '../views/NotFound.vue';
-import History from '../views/History.vue';
 
 Vue.use(VueRouter)
 
@@ -51,6 +52,22 @@ const routes = [{
             title: 'Verify | CryptoTracker'
         },
         component: Verify
+    },
+    {
+        path: '/resetpassword',
+        name: 'Reset Password',
+        meta: {
+            title: 'Reset Password  | CryptoTracker',
+        },
+        component: ResetPassword
+    },
+    {
+        path: '/resetpassword/:email',
+        name: 'Reset Password Confirm',
+        meta: {
+            title: 'Reset Password  | CryptoTracker',
+        },
+        component: ResetPassword
     },
     {
         path: '*',

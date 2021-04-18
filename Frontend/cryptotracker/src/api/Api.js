@@ -282,4 +282,57 @@ export default class API {
 
         return success;
     }
+
+    static async resetPassword(email) {
+        email = email.toLowerCase().trim();
+
+        let result = null;
+
+        let options = {
+            method: 'POST',
+            baseURL: 'http://192.168.0.150:8888/',
+            url: '/resetpassword/',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+            },
+            data: {
+                'email': email,
+            },
+        };
+
+        await axios.request(options).then((res) => {
+            result = res.data;
+        }).catch((err) => { result = err.response.data; });
+
+        return result;
+    }
+
+    static async resetPasswordConfirm(email, password) {
+        email = email.toLowerCase().trim();
+
+        let result = null;
+
+        let options = {
+            method: 'POST',
+            baseURL: 'http://192.168.0.150:8888/',
+            url: '/resetpassword/confirm',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+            },
+            data: {
+                'email': email,
+                'password': password,
+            },
+        };
+
+        await axios.request(options).then((res) => {
+            result = res.data;
+        }).catch((err) => { result = err.response.data; });
+
+        return result;
+    }
 }
