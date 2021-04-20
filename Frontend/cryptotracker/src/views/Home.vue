@@ -224,11 +224,15 @@
       <b-col class="overflow-x-auto">
         <b-table hover :items="getPortfolioOptions" :fields="fields">
           <template #cell(name)="row">
-            <img width="20" height="20" :src="row.item.details.image" />
+            <img width="20" height="20" :src="row.item.image" />
             <div class="spacer"></div>
             <span class="info-value my-auto">{{row.item.name}}</span>
             <div class="spacer-5"></div>
-            <span class="info-title-ticker my-auto">{{`${row.item.ticker}`}}</span>
+            <span class="info-title-ticker my-auto">{{row.item.ticker}}</span>
+          </template>
+
+          <template #cell(avg_price)="row">
+            <span class="info-value my-auto">{{row.item['avg_price']}}</span>
           </template>
 
           <template #cell(price)="row">
@@ -253,20 +257,54 @@
             <span :class="row.item.profitGreaterThanZero ? 'info-value my-auto up' : 'info-value my-auto down'">{{row.item.profitGreaterThanZero ? '&#9650;' : '&#9660;'}} {{row.item.profit}}</span>
           </template>
 
-          <template #cell(sellAction)="row">
-            <div class="text-center">
-              <b-button size="sm" @click="sell(row.item, row.index, $event.target)" class="mr-1 btn-custom" v-b-modal.sell>Sell</b-button>
-            </div>
-          </template>
-          <template #cell(expandAction)="row">
-            <!-- <b-button size="sm" class="mr-1" @click="row.toggleDetails">{{!row.detailsShowing ? 'MORE' : 'LESS'}}</b-button> -->
+         
+          <template #cell(infoAction)="row">
             <div class="text-center">
               <b-button size="sm" class="mr-1 btn-custom" @click="setInfo(row.item, row.index, $event.target)" v-b-modal.info>Info</b-button>
             </div>
           </template>
-          <!--<template slot="row-details" slot-scope="row">
-            <b-table :items="[row.item.details]"></b-table>
-          </template>-->
+          <template #cell(expandAction)="row">
+            <div class="text-center">
+              <b-button size="sm" class="mr-1 btn-custom" @click="row.toggleDetails" :disabled="row.item.instances.length <= 0">{{!row.detailsShowing ? 'MORE' : 'LESS'}}</b-button>
+            </div>
+          </template>
+          <template slot="row-details" slot-scope="row">
+            <b-table :items="row.item.instances" :fields="detailFields">
+                <template #cell(name)="row">
+                  <img width="20" height="20" :src="row.item.image" />
+                  <div class="spacer"></div>
+                  <span class="info-value my-auto">{{row.item.name}}</span>
+                  <div class="spacer-5"></div>
+                  <span class="info-title-ticker my-auto">{{row.item.ticker}}</span>
+                </template>
+
+                <template #cell(date)="row">
+                  <span class="info-value my-auto">{{row.item.date}}</span>
+                </template>
+                
+                <template #cell(price)="row">
+                  <span class="info-value my-auto">{{row.item.price}}</span>
+                </template>
+
+                <template #cell(amount)="row">
+                  <span class="info-value my-auto">{{row.item.balance}}</span>
+                </template>
+
+                <template #cell(value)="row">
+                  <span class="info-value my-auto">{{row.item.value}}</span>
+                </template>
+
+                <template #cell(profit)="row">
+                  <span :class="row.item.profitGreaterThanZero ? 'info-value my-auto up' : 'info-value my-auto down'">{{row.item.profitGreaterThanZero ? '&#9650;' : '&#9660;'}} {{row.item.profit}}</span>
+                </template>
+
+               <template #cell(sellAction)="row">
+                <div class="text-center">
+                  <b-button size="sm" @click="sell(row.item, row.index, $event.target)" variant="danger" class="mr-1 btn-custom btn-custom-danger" v-b-modal.sell>Sell</b-button>
+                </div>
+              </template>
+            </b-table>
+          </template>
         </b-table>
       </b-col>
     </b-row>
@@ -305,23 +343,35 @@
         // used for table displaying
         fields: [
           {key: 'name', label: 'Name', sortable: true},
+          {key: 'avg_price', label: 'Avg. Price', sortable: true},
           {key: 'price', label: 'Price', sortable: true},
           {key: 'change_24h', label: '24h %', sortable: true},
           {key: 'balance', label: 'Balance', sortable: true},
           {key: 'value', label: 'Value', sortable: true},
           {key: 'profit', label: 'Profit/Loss', sortable: true},
-          {key: 'sellAction', label: ''},
+          {key: 'infoAction', label: ''},
           {key: 'expandAction', label: ''},
         ],
+        detailFields: [
+          {key: 'name', label: 'Name', sortable: true},
+          {key: 'date', label: 'Buy Date', sortable: true},
+          {key: 'price', label: 'Buy Price', sortable: true},
+          {key: 'amount', label: 'Amount', sortable: true},
+          {key: 'value', label: 'Value', sortable: true},
+          {key: 'profit', label: 'Profit/Loss', sortable: true},
+          {key: 'sellAction', label: ''},
+        ]
       }
     }, 
     computed: {
       getCoingeckoCryptoOptions() {
         const coingeckoCryptos = this.$store.getters.getCoingeckoCryptosAsOptions;
 
-        const found = coingeckoCryptos.find(crypto => crypto.value.toUpperCase() == this.$data.sellCrypto.toUpperCase());
+        if(crypto != '') {
+          const found = coingeckoCryptos.find(crypto => crypto.value.toUpperCase() == this.$data.sellCrypto.toUpperCase());
 
-        if(found != undefined) return [found];
+          if(found != undefined) return [found];
+        }
 
         return coingeckoCryptos;
       },
@@ -336,7 +386,7 @@
       },
       getPortfolioChartData() {
         return this.$store.getters.getPortfolioChartData
-      }
+      },
     },
     methods: {
       resetTimer() {

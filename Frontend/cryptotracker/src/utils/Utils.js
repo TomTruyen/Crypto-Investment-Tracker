@@ -22,6 +22,8 @@ export default class Utils {
     }
 
     static numberWithCommas(x, decimals = 2, withFranctionDigits = false) {
+        if (x < 1) decimals = 6;
+
         x = Number(x.toFixed(decimals));
 
         if (x < 1) return x;

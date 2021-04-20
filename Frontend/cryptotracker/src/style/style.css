@@ -3,7 +3,6 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
-    overflow: hidden;
 }
 
 .home,
@@ -117,16 +116,31 @@ div[role="combobox"] {
     margin: 0px 3px !important;
 }
 
+.btn-custom-danger {
+    background-color: #ff0000 !important;
+    color: #fff !important;
+}
+
 .btn-custom:hover:not(:disabled) {
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.02)), rgb(239, 242, 245) !important;
     color: rgb(0, 0, 0) !important;
     text-decoration: none !important;
 }
 
+.btn-custom-danger:hover:not(:disabled) {
+    background-color: #dd0101 !important;
+    color: #fff !important;
+}
+
 .btn-custom:focus {
     background-color: rgb(239, 242, 245) !important;
-    box-shadow: rgb(207 214 228) 0px 0px 0px 3px !important;
+    box-shadow: none !important;
     color: #000;
+}
+
+.btn-custom-danger:focus {
+    background-color: #ff0000 !important;
+    color: #fff !important;
 }
 
 .btn-custom.primary {

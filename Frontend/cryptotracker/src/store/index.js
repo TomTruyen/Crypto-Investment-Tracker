@@ -3,6 +3,8 @@ import Vuex from 'vuex'
 
 import API from './../api/Api.js';
 
+import Utils from './../utils/Utils.js';
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -51,23 +53,110 @@ export default new Vuex.Store({
         getPortfolioOptions(state) {
             let cryptos = [];
 
+            let cryptoInstances = {};
             for (let i = 0; i < state.portfolio.length; i++) {
                 const ticker = state.portfolio[i].ticker;
-                const name = state.portfolio[i].name;
 
-                if (state.search == '' || name.toLowerCase().includes(state.search) || ticker.toLowerCase().includes(state.search)) {
-                    if (state.coingeckoCryptos.length > 0) {
-                        const crypto = state.coingeckoCryptos.find(c => c.ticker == ticker);
 
-                        if (crypto != undefined) {
-                            cryptos.push(state.portfolio[i].toOption(crypto));
+                if (cryptoInstances[ticker] == undefined) {
+                    // Not found yet, add the crypto with empty array!
+                    cryptoInstances[ticker] = [];
+                }
+
+                cryptoInstances[ticker].push({
+                    'portfolioCrypto': state.portfolio[i],
+                });
+            }
+
+            for (let ticker in cryptoInstances) {
+                let totalAmount = 0;
+                let averagePrice = 0;
+
+                const crypto = cryptoInstances[ticker];
+                for (let i = 0; i < crypto.length; i++) {
+                    const portfolioCrypto = crypto[i].portfolioCrypto;
+
+                    const price = portfolioCrypto.buyPrice;
+                    const amount = portfolioCrypto.getBalance();
+
+                    averagePrice += (price * amount);
+                    totalAmount += amount;
+                }
+
+                averagePrice /= totalAmount;
+
+                if (state.coingeckoCryptos.length > 0) {
+                    const coingeckoCrypto = state.coingeckoCryptos.find(c => c.ticker == ticker);
+
+                    if (coingeckoCrypto != undefined) {
+                        const name = coingeckoCrypto.name;
+                        const ticker = coingeckoCrypto.ticker;
+                        const image = coingeckoCrypto.image;
+
+                        const avgPrice = Utils.numberWithCommas(averagePrice, 2, true);
+                        const price = Utils.numberWithCommas(coingeckoCrypto.price, 2, true);
+                        const price_percent_change_24h = coingeckoCrypto.price_percent_change_24h;
+                        const balance = Utils.numberWithCommas(totalAmount, 6);
+
+                        let value = totalAmount * coingeckoCrypto.price;
+                        value = Utils.numberWithCommas(value, 2, true);
+
+                        let profit = (coingeckoCrypto.price - averagePrice) / averagePrice * 100;
+                        profit = Utils.numberWithCommas(profit, 2, true);
+
+                        let profitUSD = (totalAmount * coingeckoCrypto.price) - (totalAmount * averagePrice);
+                        profitUSD = Utils.numberWithCommas(profitUSD, 2, true);
+
+                        let foundInstances = state.portfolio.filter(p => p.ticker == ticker);
+                        let instances = [];
+                        if (foundInstances.length > 0) {
+                            for (let i = 0; i < foundInstances.length; i++) {
+                                instances.push(foundInstances[i].toOption(coingeckoCrypto));
+                            }
                         }
+
+                        cryptos.push({
+                            'name': name,
+                            'ticker': ticker,
+                            'image': image,
+                            'avg_price': `$${avgPrice}`,
+                            'price': `$${price}`,
+                            '24h': price_percent_change_24h,
+                            'balance': balance,
+                            'value': `$${value}`,
+                            'profit': `${profit}% ($${profitUSD})`,
+                            'profitGreaterThanZero': profit >= 0,
+                            'details': coingeckoCrypto,
+                            'instances': instances,
+                        });
                     }
                 }
             }
 
+            console.log(cryptos);
+
             return cryptos;
         },
+
+        // let cryptos = [];
+
+        // for (let i = 0; i < state.portfolio.length; i++) {
+        //     const ticker = state.portfolio[i].ticker;
+        //     const name = state.portfolio[i].name;
+
+        // if (state.search == '' || name.toLowerCase().includes(state.search) || ticker.toLowerCase().includes(state.search)) {
+        // if (state.coingeckoCryptos.length > 0) {
+        //     const crypto = state.coingeckoCryptos.find(c => c.ticker == ticker);
+
+        //     if (crypto != undefined) {
+        //         cryptos.push(state.portfolio[i].toOption(crypto));
+        //     }
+        // }
+        // }
+        // }
+
+        // return cryptos;
+
         getPortfolioHistoryOptions(state) {
             let cryptos = [];
 
