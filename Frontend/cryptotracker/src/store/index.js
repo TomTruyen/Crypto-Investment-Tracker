@@ -96,8 +96,8 @@ export default new Vuex.Store({
                         if (state.search == '' || name.toLowerCase().includes(state.search) || ticker.toLowerCase().includes(state.search)) {
                             const image = coingeckoCrypto.image;
 
-                            const avgPrice = Utils.numberWithCommas(averagePrice, 2, true, true);
-                            const price = Utils.numberWithCommas(coingeckoCrypto.price, 2, true, true);
+                            const avgPrice = Utils.numberWithCommas(averagePrice, 2, true);
+                            const price = Utils.numberWithCommas(coingeckoCrypto.price, 2, true);
                             const price_percent_change_24h = coingeckoCrypto.price_percent_change_24h;
                             const balance = Utils.numberWithCommas(totalAmount, 6);
 
