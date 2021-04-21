@@ -92,52 +92,55 @@ export default new Vuex.Store({
                     if (coingeckoCrypto != undefined) {
                         const name = coingeckoCrypto.name;
                         const ticker = coingeckoCrypto.ticker;
-                        const image = coingeckoCrypto.image;
 
-                        const avgPrice = Utils.numberWithCommas(averagePrice, 2, true, true);
-                        const price = Utils.numberWithCommas(coingeckoCrypto.price, 2, true, true);
-                        const price_percent_change_24h = coingeckoCrypto.price_percent_change_24h;
-                        const balance = Utils.numberWithCommas(totalAmount, 6);
+                        if (state.search == '' || name.toLowerCase().includes(state.search) || ticker.toLowerCase().includes(state.search)) {
+                            const image = coingeckoCrypto.image;
 
-                        let value = totalAmount * coingeckoCrypto.price;
-                        value = Utils.numberWithCommas(value, 2, true, true);
+                            const avgPrice = Utils.numberWithCommas(averagePrice, 2, true, true);
+                            const price = Utils.numberWithCommas(coingeckoCrypto.price, 2, true, true);
+                            const price_percent_change_24h = coingeckoCrypto.price_percent_change_24h;
+                            const balance = Utils.numberWithCommas(totalAmount, 6);
 
-                        let profit = (coingeckoCrypto.price - averagePrice) / averagePrice * 100;
-                        profit = Utils.numberWithCommas(profit, 2, true);
+                            let value = totalAmount * coingeckoCrypto.price;
+                            value = Utils.numberWithCommas(value, 2, true, true);
 
-                        let profitUSD = (totalAmount * coingeckoCrypto.price) - (totalAmount * averagePrice);
-                        profitUSD = Utils.numberWithCommas(profitUSD, 2, true, true);
+                            let profit = (coingeckoCrypto.price - averagePrice) / averagePrice * 100;
+                            profit = Utils.numberWithCommas(profit, 2, true);
 
-                        let foundInstances = state.portfolio.filter(p => p.ticker == ticker);
-                        let instances = [];
-                        if (foundInstances.length > 0) {
-                            for (let i = 0; i < foundInstances.length; i++) {
-                                instances.push(foundInstances[i].toOption(coingeckoCrypto));
+                            let profitUSD = (totalAmount * coingeckoCrypto.price) - (totalAmount * averagePrice);
+                            profitUSD = Utils.numberWithCommas(profitUSD, 2, true, true);
+
+                            let foundInstances = state.portfolio.filter(p => p.ticker == ticker);
+                            let instances = [];
+                            if (foundInstances.length > 0) {
+                                for (let i = 0; i < foundInstances.length; i++) {
+                                    instances.push(foundInstances[i].toOption(coingeckoCrypto));
+                                }
                             }
-                        }
 
-                        // Show details logic
-                        let showDetails = false;
-                        console.log("checking details");
-                        if (state.showDetails.hasOwnProperty(ticker) && state.showDetails[ticker]) {
-                            showDetails = true;
-                        }
+                            // Show details logic
+                            let showDetails = false;
+                            console.log("checking details");
+                            if (state.showDetails.hasOwnProperty(ticker) && state.showDetails[ticker]) {
+                                showDetails = true;
+                            }
 
-                        cryptos.push({
-                            'name': name,
-                            'ticker': ticker,
-                            'image': image,
-                            'avg_price': `$${avgPrice}`,
-                            'price': `$${price}`,
-                            '24h': price_percent_change_24h,
-                            'balance': balance,
-                            'value': `$${value}`,
-                            'profit': `${profit}% ($${profitUSD})`,
-                            'profitGreaterThanZero': profit >= 0,
-                            'details': coingeckoCrypto,
-                            'instances': instances,
-                            '_showDetails': showDetails,
-                        });
+                            cryptos.push({
+                                'name': name,
+                                'ticker': ticker,
+                                'image': image,
+                                'avg_price': `$${avgPrice}`,
+                                'price': `$${price}`,
+                                '24h': price_percent_change_24h,
+                                'balance': balance,
+                                'value': `$${value}`,
+                                'profit': `${profit}% ($${profitUSD})`,
+                                'profitGreaterThanZero': profit >= 0,
+                                'details': coingeckoCrypto,
+                                'instances': instances,
+                                '_showDetails': showDetails,
+                            });
+                        }
                     }
                 }
             }
