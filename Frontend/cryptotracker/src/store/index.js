@@ -18,6 +18,7 @@ export default new Vuex.Store({
         portfolio: [],
         portfolioHistory: [],
         search: '',
+        showDetails: {}
     },
     getters: {
         isLoggedIn(state) {
@@ -115,6 +116,13 @@ export default new Vuex.Store({
                             }
                         }
 
+                        // Show details logic
+                        let showDetails = false;
+                        console.log("checking details");
+                        if (state.showDetails.hasOwnProperty(ticker) && state.showDetails[ticker]) {
+                            showDetails = true;
+                        }
+
                         cryptos.push({
                             'name': name,
                             'ticker': ticker,
@@ -128,35 +136,16 @@ export default new Vuex.Store({
                             'profitGreaterThanZero': profit >= 0,
                             'details': coingeckoCrypto,
                             'instances': instances,
+                            '_showDetails': showDetails,
                         });
                     }
                 }
             }
 
-            console.log(cryptos);
+            console.log("returning cryptos");
 
             return cryptos;
         },
-
-        // let cryptos = [];
-
-        // for (let i = 0; i < state.portfolio.length; i++) {
-        //     const ticker = state.portfolio[i].ticker;
-        //     const name = state.portfolio[i].name;
-
-        // if (state.search == '' || name.toLowerCase().includes(state.search) || ticker.toLowerCase().includes(state.search)) {
-        // if (state.coingeckoCryptos.length > 0) {
-        //     const crypto = state.coingeckoCryptos.find(c => c.ticker == ticker);
-
-        //     if (crypto != undefined) {
-        //         cryptos.push(state.portfolio[i].toOption(crypto));
-        //     }
-        // }
-        // }
-        // }
-
-        // return cryptos;
-
         getPortfolioHistoryOptions(state) {
             let cryptos = [];
 
@@ -326,6 +315,17 @@ export default new Vuex.Store({
         },
         clearSearch(state) {
             state.search = '';
+        },
+        toggleShowDetails(state, ticker) {
+            if (state.showDetails.hasOwnProperty(ticker)) {
+                state.showDetails[ticker] = !state.showDetails[ticker];
+            } else {
+                state.showDetails[ticker] = true;
+            }
+
+            const backupPortfolio = state.portfolio;
+            state.portfolio = [];
+            state.portfolio = backupPortfolio;
         }
     },
     actions: {

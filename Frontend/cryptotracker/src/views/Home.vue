@@ -266,8 +266,8 @@
           <template #cell(expandAction)="row">
             <div class="text-center">
             <!--!row.detailsShowing-->
-              <b-button size="sm" class="mr-1 btn-custom" @click="row.toggleDetails" :disabled="row.item.instances.length <= 0" v-if="!row.detailsShowing"><b-icon-chevron-down></b-icon-chevron-down></b-button>
-              <b-button size="sm" class="mr-1 btn-custom" @click="row.toggleDetails" :disabled="row.item.instances.length <= 0" v-else><b-icon-chevron-up></b-icon-chevron-up></b-button>
+              <b-button size="sm" class="mr-1 btn-custom" @click="toggleShowDetails(row.item.ticker)" :disabled="row.item.instances.length <= 0" v-if="!row.item._showDetails"><b-icon-chevron-down></b-icon-chevron-down></b-button>
+              <b-button size="sm" class="mr-1 btn-custom" @click="toggleShowDetails(row.item.ticker)" :disabled="row.item.instances.length <= 0" v-else><b-icon-chevron-up></b-icon-chevron-up></b-button>
             </div>
           </template>
           <template slot="row-details" slot-scope="row">
@@ -508,6 +508,9 @@
       },
       searchUpdate() {
         this.$store.commit('updateSearch', this.search);
+      },
+      toggleShowDetails(ticker) {
+        this.$store.commit('toggleShowDetails', ticker);
       }
     }
   }
