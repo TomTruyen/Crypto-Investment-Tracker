@@ -204,7 +204,17 @@ export default new Vuex.Store({
         getPortfolioAssets(state) {
             if (state.portfolio == null) return 0;
 
-            return state.portfolio.length;
+            let uniqueAssets = [];
+
+            for (let i = 0; i < state.portfolio.length; i++) {
+                const ticker = state.portfolio[i].ticker;
+
+                if (uniqueAssets.indexOf(ticker) === -1) {
+                    uniqueAssets.push(ticker);
+                }
+            }
+
+            return uniqueAssets.length;
         },
         getPortfolioChartData(state) {
             let labels = [];
@@ -354,7 +364,7 @@ export default new Vuex.Store({
             });
         },
         setCoingeckoCryptos(context, token) {
-            return API.getCryptoList(token).then(async(cryptos) => {
+            return API.getCryptoList(token).then(async (cryptos) => {
                 context.commit('setCoingeckoCryptos', cryptos);
                 return await API.getCryptos(token).then((cryptos) => {
                     context.commit('setPortfolio', cryptos);
