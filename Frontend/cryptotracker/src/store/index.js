@@ -323,6 +323,7 @@ export default new Vuex.Store({
                 state.showDetails[ticker] = true;
             }
 
+            // Force portfolio to update, otherwise the computed would not update the Portfolio...
             const backupPortfolio = state.portfolio;
             state.portfolio = [];
             state.portfolio = backupPortfolio;
