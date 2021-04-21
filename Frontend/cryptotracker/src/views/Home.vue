@@ -265,7 +265,9 @@
           </template>
           <template #cell(expandAction)="row">
             <div class="text-center">
-              <b-button size="sm" class="mr-1 btn-custom" @click="row.toggleDetails" :disabled="row.item.instances.length <= 0">{{!row.detailsShowing ? 'MORE' : 'LESS'}}</b-button>
+            <!--!row.detailsShowing-->
+              <b-button size="sm" class="mr-1 btn-custom" @click="row.toggleDetails" :disabled="row.item.instances.length <= 0" v-if="!row.detailsShowing"><b-icon-chevron-down></b-icon-chevron-down></b-button>
+              <b-button size="sm" class="mr-1 btn-custom" @click="row.toggleDetails" :disabled="row.item.instances.length <= 0" v-else><b-icon-chevron-up></b-icon-chevron-up></b-button>
             </div>
           </template>
           <template slot="row-details" slot-scope="row">
@@ -314,6 +316,7 @@
 
 <script>
   import DoughnutChart from '@/components/DoughnutChart.vue';
+  import {BIconChevronDown, BIconChevronUp} from 'bootstrap-vue';
 
   export default {
     mounted() {
@@ -321,7 +324,7 @@
 
       this.fetchCryptos();
     },
-    components: { DoughnutChart },
+    components: { DoughnutChart, BIconChevronDown, BIconChevronUp },
     data() {
       return {
         search: '',
