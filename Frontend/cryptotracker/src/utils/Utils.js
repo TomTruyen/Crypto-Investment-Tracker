@@ -21,12 +21,12 @@ export default class Utils {
         return true;
     }
 
-    static numberWithCommas(x, decimals = 2, withFranctionDigits = false) {
-        if (x < 1) decimals = 6;
+    static numberWithCommas(x, decimals = 2, withFranctionDigits = false, isCurrency = false) {
+        if (Math.abs(x) < 1 && !isCurrency) decimals = 6;
 
         x = Number(x.toFixed(decimals));
 
-        if (x < 1) return x;
+        if (Math.abs(x) < 1) return x;
 
         if (withFranctionDigits) {
             return x.toLocaleString('en-US', { minimumFractionDigits: 2 });

@@ -94,19 +94,19 @@ export default new Vuex.Store({
                         const ticker = coingeckoCrypto.ticker;
                         const image = coingeckoCrypto.image;
 
-                        const avgPrice = Utils.numberWithCommas(averagePrice, 2, true);
-                        const price = Utils.numberWithCommas(coingeckoCrypto.price, 2, true);
+                        const avgPrice = Utils.numberWithCommas(averagePrice, 2, true, true);
+                        const price = Utils.numberWithCommas(coingeckoCrypto.price, 2, true, true);
                         const price_percent_change_24h = coingeckoCrypto.price_percent_change_24h;
                         const balance = Utils.numberWithCommas(totalAmount, 6);
 
                         let value = totalAmount * coingeckoCrypto.price;
-                        value = Utils.numberWithCommas(value, 2, true);
+                        value = Utils.numberWithCommas(value, 2, true, true);
 
                         let profit = (coingeckoCrypto.price - averagePrice) / averagePrice * 100;
                         profit = Utils.numberWithCommas(profit, 2, true);
 
                         let profitUSD = (totalAmount * coingeckoCrypto.price) - (totalAmount * averagePrice);
-                        profitUSD = Utils.numberWithCommas(profitUSD, 2, true);
+                        profitUSD = Utils.numberWithCommas(profitUSD, 2, true, true);
 
                         let foundInstances = state.portfolio.filter(p => p.ticker == ticker);
                         let instances = [];
