@@ -121,7 +121,7 @@ export default new Vuex.Store({
                             // Show details logic
                             let showDetails = false;
                             console.log("checking details");
-                            if (state.showDetails.hasOwnProperty(ticker) && state.showDetails[ticker]) {
+                            if (Object.prototype.hasOwnProperty.call(state.showDetails, ticker) && state.showDetails[ticker]) {
                                 showDetails = true;
                             }
 
@@ -330,7 +330,7 @@ export default new Vuex.Store({
             state.search = '';
         },
         toggleShowDetails(state, ticker) {
-            if (state.showDetails.hasOwnProperty(ticker)) {
+            if (Object.prototype.hasOwnProperty.call(state.showDetails, ticker)) {
                 state.showDetails[ticker] = !state.showDetails[ticker];
             } else {
                 state.showDetails[ticker] = true;
