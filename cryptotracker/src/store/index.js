@@ -120,7 +120,6 @@ export default new Vuex.Store({
 
                             // Show details logic
                             let showDetails = false;
-                            console.log("checking details");
                             if (Object.prototype.hasOwnProperty.call(state.showDetails, ticker) && state.showDetails[ticker]) {
                                 showDetails = true;
                             }
@@ -145,8 +144,6 @@ export default new Vuex.Store({
                 }
             }
 
-            console.log("returning cryptos");
-
             return cryptos;
         },
         getPortfolioHistoryOptions(state) {
@@ -160,9 +157,12 @@ export default new Vuex.Store({
                     let crypto = null;
                     if (state.coingeckoCryptos.length > 0) {
                         crypto = state.coingeckoCryptos.find(c => c.ticker == ticker);
+
+                        if (crypto != undefined) {
+                            cryptos.push(state.portfolioHistory[i].toHistoryOption(crypto));
+                        }
                     }
 
-                    cryptos.push(state.portfolioHistory[i].toHistoryOption(crypto));
                 }
             }
 

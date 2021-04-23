@@ -83,7 +83,7 @@ export default class Crypto {
             'sell_amount': this.sellAmount,
             'sell_price': `$${this.sellPrice.toFixed(2)}`,
             'profit': `${profit.toFixed(2)}%`,
-            'profit_usd': `$${Number(profitUSD.toFixed(2)).toLocaleString('en-US', {minimumFractionDigits: 2})}`,
+            'profit_usd': `$${Number(profitUSD.toFixed(2)).toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
             'profitGreaterThanZero': profitUSD >= 0,
             'details': crypto
         };
