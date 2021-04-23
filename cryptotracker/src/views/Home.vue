@@ -68,7 +68,7 @@
             placeholder="0"
           ></b-form-input>
         </b-form-group>
-        <b-form-group label="Price" label-for="crypto-price">
+        <b-form-group label="Price per coin" label-for="crypto-price">
           <b-form-input
             id="crypto-price"
             type="number"
@@ -112,7 +112,7 @@
             placeholder="0"
           ></b-form-input>
         </b-form-group>
-        <b-form-group label="Price" label-for="crypto-price">
+        <b-form-group label="Price per coin" label-for="crypto-price">
           <b-form-input
             id="crypto-price"
             type="number"
