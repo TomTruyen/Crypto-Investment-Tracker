@@ -40,6 +40,8 @@ public class CryptoRepository {
         }
 
         if(index > -1) {
+            crypto.setColor(this.cryptos.get(index).getColor());
+
             this.cryptos.set(index, crypto);
         } else {
             this.cryptos.add(crypto);
