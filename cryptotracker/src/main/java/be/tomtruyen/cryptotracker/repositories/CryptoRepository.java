@@ -30,7 +30,20 @@ public class CryptoRepository {
     }
 
     public void add(CoingeckoCrypto crypto) {
-        this.cryptos.add(crypto);
+        int index = -1;
+
+        for(int i = 0; i < cryptos.size(); i++) {
+            if(cryptos.get(i).getSymbol().equalsIgnoreCase(crypto.getSymbol())) {
+                index = i;
+                break;
+            }
+        }
+
+        if(index > -1) {
+            this.cryptos.set(index, crypto);
+        } else {
+            this.cryptos.add(crypto);
+        }
     }
 
     public CoingeckoCrypto find(String ticker) {

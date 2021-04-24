@@ -103,7 +103,6 @@ public class CoingeckoApiService {
             List<Map<String, Object>> cryptos = gson.fromJson(result, type);
 
             if(cryptos.size() > 0) {
-                cryptoRepository.clear();
                 for (Map<String, Object> stringObjectMap : cryptos) {
                     CoingeckoCrypto crypto = CoingeckoCrypto.fromJSON(stringObjectMap);
 
