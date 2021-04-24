@@ -66,6 +66,8 @@ export default {
       this.error = null;
     },
     handleBuySubmit() {
+      this.error = null;
+
       const _amount = parseFloat(this.amount);
       const _price = parseFloat(this.price);
 

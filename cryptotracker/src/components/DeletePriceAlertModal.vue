@@ -44,7 +44,7 @@ export default {
       this.error = null;
     },
     handleDeletePriceAlert() {
-      this.error = "";
+      this.error = null;
 
       const _id = parseInt(this.alertId);
 

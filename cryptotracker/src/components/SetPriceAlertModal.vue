@@ -49,7 +49,7 @@ export default {
       this.error = null;
     },
     handleSetPriceAlert() {
-      this.error = "";
+      this.error = null;
 
       const _id = this.alertId;
       const _price = this.alertPrice;
