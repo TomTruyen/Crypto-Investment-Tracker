@@ -39,6 +39,14 @@ public class EmailService {
         sendEmail(toMail, subject, content, "Reset Password");
     }
 
+    public static void sendPriceAlertEmail(String toMail, String ticker, double alertPrice, double price) {
+        String subject = "[CryptoTracker] - Price Alert (" + ticker + ")";
+
+        String content = String.format("%s has just reached your price alert of $%s. <br />The current price is $%s.", ticker, Utils.priceWithDecimal(alertPrice), Utils.priceWithDecimal(price));
+
+        sendEmail(toMail, subject, content, "Price Alert");
+    }
+
     static void sendEmail(String toMail, String subject, String content, String type) {
         new Thread(() -> {
             Properties properties = System.getProperties();
@@ -75,4 +83,6 @@ public class EmailService {
         }).start();
 
     }
+
+
 }

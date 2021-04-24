@@ -1,6 +1,7 @@
 package be.tomtruyen.cryptotracker.rest;
 
 import be.tomtruyen.cryptotracker.services.CryptoService;
+import org.apache.coyote.Response;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,5 +34,15 @@ public class CryptoController {
     @PostMapping(path = "sell")
     public ResponseEntity<Object> sellCrypto(@RequestHeader Map<String, String> header, @RequestBody Map<String, Object> body) {
         return CryptoService.sell(header, body);
+    }
+
+    @PostMapping(path = "alert/set")
+    public ResponseEntity<Object> setPriceAlert(@RequestHeader Map<String, String> header, @RequestBody Map<String, Object> body) {
+        return CryptoService.setPriceAlert(header, body);
+    }
+
+    @PostMapping(path = "alert/delete")
+    public ResponseEntity<Object> deletePriceAlert(@RequestHeader Map<String, String> header, @RequestBody Map<String, Object> body) {
+        return CryptoService.deletePriceAlert(header, body);
     }
 }

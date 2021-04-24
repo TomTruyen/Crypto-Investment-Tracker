@@ -235,6 +235,96 @@ public class CryptoService {
         );
     }
 
+    public static ResponseEntity<Object> setPriceAlert(Map<String, String> header, Map<String, Object> body) {
+        CryptoResult result = validate(header, null);
+
+        boolean success = result.isSuccess();
+
+        if(success) {
+            try {
+                DatabaseService databaseService = new DatabaseService();
+
+                String token = header.getOrDefault("authorization", "");
+                Claims claims = JWTService.verifyToken(token);
+
+                assert claims != null;
+                int userId = (int) claims.getOrDefault("id", -1);
+
+                if(userId == -1) throw new SQLException();
+
+                int id = (int) body.getOrDefault("id", 0);
+                double alert = Double.parseDouble(String.valueOf(body.getOrDefault("alert", "0")));
+
+
+                if(id == 0 || alert == 0) {
+                    result = CryptoResult.ERR_MISSING_PARAMETERS;
+                } else {
+                    databaseService.setPriceAlert(userId, id, alert);
+                }
+            } catch (SQLException se) {
+                result = CryptoResult.ERR_UNKNOWN;
+                se.printStackTrace();
+            }
+        }
+
+        success = result.isSuccess();
+        String message = result.getMessage();
+        HttpStatus status = result.getStatus();
+
+        return ResponseEntity.status(status).body(
+                Map.of(
+                        "path", "/cryptocurrencies/alert/set",
+                        "success", success,
+                        "message", message,
+                        "time", new Date()
+                )
+        );
+    }
+
+    public static ResponseEntity<Object> deletePriceAlert(Map<String, String> header, Map<String, Object> body) {
+        CryptoResult result = validate(header, null);
+
+        boolean success = result.isSuccess();
+
+        if(success) {
+            try {
+                DatabaseService databaseService = new DatabaseService();
+
+                String token = header.getOrDefault("authorization", "");
+                Claims claims = JWTService.verifyToken(token);
+
+                assert claims != null;
+                int userId = (int) claims.getOrDefault("id", -1);
+
+                if(userId == -1) throw new SQLException();
+
+                int id = (int) body.get("id");
+
+                if(id == 0) {
+                    result = CryptoResult.ERR_MISSING_PARAMETERS;
+                } else {
+                    databaseService.deletePriceAlert(userId, id);
+                }
+            } catch (SQLException se) {
+                result = CryptoResult.ERR_UNKNOWN;
+                se.printStackTrace();
+            }
+        }
+
+        success = result.isSuccess();
+        String message = result.getMessage();
+        HttpStatus status = result.getStatus();
+
+        return ResponseEntity.status(status).body(
+                Map.of(
+                        "path", "/cryptocurrencies/alert/set",
+                        "success", success,
+                        "message", message,
+                        "time", new Date()
+                )
+        );
+    }
+
     private static CryptoResult validate(Map<String, String> header, Map<String, Object> body) {
         if (!header.containsKey("authorization")) return CryptoResult.ERR_MISSING_TOKEN;
 
@@ -266,5 +356,4 @@ public class CryptoService {
 
         return CryptoResult.SUCCESS;
     }
-
 }

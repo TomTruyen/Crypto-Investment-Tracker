@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -118,6 +119,16 @@ public class CoingeckoApiService {
                 cryptoRepository.sortByRank();
 
                 if(cryptoRepository.getAll().size() > 0) {
+                    // Check for price Alerts
+                    new Thread(() -> {
+                        try {
+                            DatabaseService databaseService = new DatabaseService();
+
+                            databaseService.checkPriceAlerts(cryptoRepository);
+                        } catch (SQLException ignored) {}
+                    }).start();
+
+                    // Write to file
                     new Thread(() -> {
                         FileService.writeCryptoToFile(cryptoRepository.getAll());
                     }).start();

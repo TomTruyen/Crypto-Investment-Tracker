@@ -1,8 +1,10 @@
 package be.tomtruyen.cryptotracker.services;
 
+import be.tomtruyen.cryptotracker.domain.CoingeckoCrypto;
 import be.tomtruyen.cryptotracker.domain.Crypto;
 import be.tomtruyen.cryptotracker.domain.User;
 import be.tomtruyen.cryptotracker.interfaces.DatabaseServiceInterface;
+import be.tomtruyen.cryptotracker.repositories.CryptoRepository;
 import org.springframework.stereotype.Service;
 
 import java.sql.*;
@@ -19,9 +21,11 @@ public class DatabaseService implements DatabaseServiceInterface {
     }
 
     public Connection getConnection() throws SQLException{
-        String database = "jdbc:mysql://localhost:3306/cryptotracker?useAffectedRows=true";
-        String user = "admin";
-        String password = "root";
+        String database = "jdbc:mysql://localhost:3306/cryptotracker?useAffectedRows=true&zerodatetimebehavior=Converttonull";
+//        String user = "admin";
+//        String password = "root";
+        String user = "root";
+        String password = "";
 
         Connection conn;
 
@@ -120,11 +124,10 @@ public class DatabaseService implements DatabaseServiceInterface {
             double buyPrice = rs.getDouble("buy_price");
             Date buyDate = rs.getDate("buy_date");
             double sellAmount = rs.getDouble("sell_amount");
-            double sellPrice = rs.getDouble("sell_price");
-            Date sellDate = rs.getDate("sell_date");
+            double priceAlert = rs.getDouble("price_alert");
 
             if(sellAmount < buyAmount) {
-                Crypto crypto = new Crypto(id, name, ticker, buyAmount, buyPrice, buyDate, sellAmount, sellPrice, sellDate);
+                Crypto crypto = new Crypto(id, name, ticker, buyAmount, buyPrice, buyDate, sellAmount, 0, null, priceAlert);
                 cryptos.add(crypto);
             }
         }
@@ -161,7 +164,7 @@ public class DatabaseService implements DatabaseServiceInterface {
     }
 
     public void buyCrypto(int id, String name, String ticker, double buyAmount, double buyPrice) throws SQLException {
-        String query = "INSERT INTO crypto (user_id, name, ticker, buy_amount, buy_price, buy_date) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO crypto (user_id, name, ticker, buy_amount, buy_price, buy_date, price_alert) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         preparedStatement.setInt(1, id);
@@ -170,6 +173,7 @@ public class DatabaseService implements DatabaseServiceInterface {
         preparedStatement.setDouble(4, buyAmount);
         preparedStatement.setDouble(5, buyPrice);
         preparedStatement.setDate(6, new Date(System.currentTimeMillis()));
+        preparedStatement.setDouble(7, 0);
 
         preparedStatement.executeUpdate();
     }
@@ -231,10 +235,9 @@ public class DatabaseService implements DatabaseServiceInterface {
             double buyPrice = rs.getDouble("buy_price");
             Date buyDate = rs.getDate("buy_date");
             double sellAmount = rs.getDouble("sell_amount");
-            double sellPrice = rs.getDouble("sell_price");
-            Date sellDate = rs.getDate("sell_date");
+            double priceAlert = rs.getDouble("price_alert");
 
-            crypto = new Crypto(id, name, ticker, buyAmount, buyPrice, buyDate, sellAmount, sellPrice, sellDate);
+            crypto = new Crypto(id, name, ticker, buyAmount, buyPrice, buyDate, sellAmount, 0, null, priceAlert);
         }
 
         return crypto;
@@ -250,5 +253,64 @@ public class DatabaseService implements DatabaseServiceInterface {
         preparedStatement.executeUpdate();
 
         return preparedStatement.getUpdateCount() <= 0;
+    }
+
+    public void setPriceAlert(int userId, int id, double alert) throws SQLException{
+        String query = "UPDATE crypto SET price_alert = ? WHERE id = ? AND user_id = ?";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setDouble(1, alert);
+        preparedStatement.setInt(2, id);
+        preparedStatement.setInt(3, userId);
+
+        preparedStatement.executeUpdate();
+    }
+
+    public void deletePriceAlert(int userId, int id) throws SQLException {
+        String query = "UPDATE crypto SET price_alert = ? WHERE id = ? AND user_id = ?";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setDouble(1, 0);
+        preparedStatement.setInt(2, id);
+        preparedStatement.setInt(3, userId);
+
+        preparedStatement.executeUpdate();
+    }
+
+    public void checkPriceAlerts(CryptoRepository repository) throws SQLException {
+        String query = "SELECT user_id, ticker, price_alert, email FROM crypto INNER JOIN users ON crypto.user_id = users.id WHERE price_alert > 0";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        ResultSet rs = preparedStatement.executeQuery();
+
+        while(rs.next()) {
+            int userId = rs.getInt("user_id");
+            String ticker = rs.getString("ticker");
+            double priceAlert = rs.getDouble("price_alert");
+            String email = rs.getString("email");
+
+            CoingeckoCrypto crypto = repository.find(ticker);
+
+            if(crypto != null) {
+                if(crypto.getPrice() >= priceAlert) {
+                    EmailService.sendPriceAlertEmail(email, ticker, priceAlert, crypto.getPrice());
+
+                    try {
+                        removePriceAlert(userId, ticker);
+                    } catch (SQLException ignored) {}
+                }
+            }
+        }
+    }
+
+    private void removePriceAlert(int userId, String ticker) throws SQLException {
+        String query = "UPDATE crypto SET price_alert = ? WHERE user_id = ? AND ticker = ?";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setDouble(1, 0);
+        preparedStatement.setInt(2, userId);
+        preparedStatement.setString(3, ticker);
+
+        preparedStatement.executeUpdate();
     }
 }

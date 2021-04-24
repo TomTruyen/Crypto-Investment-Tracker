@@ -17,6 +17,20 @@ public class Crypto {
     private double sellAmount;
     private double sellPrice;
     private Date sellDate;
+    private double priceAlert;
+
+    public Crypto(int id, String name, String ticker, double buyAmount, double buyPrice, Date buyDate, double sellAmount, double sellPrice, Date sellDate, double priceAlert) {
+        this.id = id;
+        this.name = name;
+        this.ticker = ticker;
+        this.buyAmount = buyAmount;
+        this.buyPrice = buyPrice;
+        this.buyDate = buyDate;
+        this.sellAmount = sellAmount;
+        this.sellPrice = sellPrice;
+        this.sellDate = sellDate;
+        this.priceAlert = priceAlert;
+    }
 
     public Crypto(int id, String name, String ticker, double buyAmount, double buyPrice, Date buyDate, double sellAmount, double sellPrice, Date sellDate) {
         this.id = id;
@@ -29,6 +43,7 @@ public class Crypto {
         this.sellPrice = sellPrice;
         this.sellDate = sellDate;
     }
+
 
     public int getId() {
         return id;
@@ -108,5 +123,13 @@ public class Crypto {
 
     public void setSellDate(Date sellDate) {
         this.sellDate = sellDate;
+    }
+
+    public double getPriceAlert() {
+        return priceAlert;
+    }
+
+    public void setPriceAlert(double priceAlert) {
+        this.priceAlert = priceAlert;
     }
 }

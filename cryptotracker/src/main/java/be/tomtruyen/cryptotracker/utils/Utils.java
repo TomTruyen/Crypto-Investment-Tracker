@@ -2,6 +2,7 @@ package be.tomtruyen.cryptotracker.utils;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
@@ -59,5 +60,10 @@ public class Utils {
         LocalDateTime now = LocalDateTime.now();
 
         return dtf.format(now);
+    }
+
+    public static String priceWithDecimal (double price) {
+        DecimalFormat formatter = new DecimalFormat("###,###,##0.00");
+        return formatter.format(price);
     }
 }
