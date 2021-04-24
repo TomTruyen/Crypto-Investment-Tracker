@@ -22,10 +22,10 @@ public class DatabaseService implements DatabaseServiceInterface {
 
     public Connection getConnection() throws SQLException{
         String database = "jdbc:mysql://localhost:3306/cryptotracker?useAffectedRows=true&zerodatetimebehavior=Converttonull";
-//        String user = "admin";
-//        String password = "root";
-        String user = "root";
-        String password = "";
+        String user = "admin";
+        String password = "root";
+//        String user = "root";
+//        String password = "";
 
         Connection conn;
 
