@@ -1,7 +1,7 @@
 import Utils from '@/utils/Utils.js';
 
 export default class Crypto {
-    constructor(id, name, ticker, buyAmount, buyPrice, buyDate, sellAmount, sellPrice, sellDate) {
+    constructor(id, name, ticker, buyAmount, buyPrice, buyDate, sellAmount, sellPrice, sellDate, priceAlert) {
         this.id = id;
         this.name = name;
         this.ticker = ticker;
@@ -11,6 +11,8 @@ export default class Crypto {
         this.sellAmount = sellAmount;
         this.sellPrice = sellPrice;
         this.sellDate = sellDate;
+        if (priceAlert == undefined) priceAlert = 0;
+        this.priceAlert = priceAlert;
     }
 
     static fromJSON(json) {
@@ -24,6 +26,7 @@ export default class Crypto {
             json['sellAmount'],
             json['sellPrice'],
             json['sellDate'],
+            json['priceAlert']
         );
     }
 

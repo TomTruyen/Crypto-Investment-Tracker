@@ -5,7 +5,8 @@ import LoginResult from '../models/LoginResult';
 import RegisterResult from '../models/RegisterResult';
 import VerifyResult from '../models/VerifyResult';
 
-const baseURL = "http://84.195.217.213:8888/";
+// const baseURL = "http://84.195.217.213:8888/";
+const baseURL = "http://localhost:8888/";
 
 export default class API {
     static async login(email, password) {
@@ -336,5 +337,48 @@ export default class API {
         }).catch((err) => { result = err.response.data; });
 
         return result;
+    }
+
+    static async setPriceAlert(token, id, alert) {
+        const bearer = `Bearer ${token}`;
+
+        let options = {
+            method: 'POST',
+            baseURL: baseURL,
+            url: '/cryptocurrencies/alert/set',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Authorization': bearer
+            },
+            data: {
+                'id': id,
+                'alert': alert,
+            },
+        };
+
+        await axios.request(options).then(() => { }).catch(() => { });
+    }
+
+    static async deletePriceAlert(token, id) {
+        const bearer = `Bearer ${token}`;
+
+        let options = {
+            method: 'POST',
+            baseURL: baseURL,
+            url: '/cryptocurrencies/alert/delete',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Authorization': bearer
+            },
+            data: {
+                'id': id,
+            },
+        };
+
+        await axios.request(options).then(() => { }).catch(() => { });
     }
 }

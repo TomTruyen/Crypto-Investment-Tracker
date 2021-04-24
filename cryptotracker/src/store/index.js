@@ -96,6 +96,9 @@ export default new Vuex.Store({
                         if (state.search == '' || name.toLowerCase().includes(state.search) || ticker.toLowerCase().includes(state.search)) {
                             const image = coingeckoCrypto.image;
 
+                            const id = crypto[0].portfolioCrypto.id;
+                            const alert = crypto[0].portfolioCrypto.priceAlert;
+
                             const avgPrice = Utils.numberWithCommas(averagePrice, 2, true);
                             const price = Utils.numberWithCommas(coingeckoCrypto.price, 2, true);
                             const price_percent_change_24h = coingeckoCrypto.price_percent_change_24h;
@@ -125,9 +128,11 @@ export default new Vuex.Store({
                             }
 
                             cryptos.push({
+                                'id': id,
                                 'name': name,
                                 'ticker': ticker,
                                 'image': image,
+                                "alert": alert,
                                 'avg_price': `$${avgPrice}`,
                                 'price': `$${price}`,
                                 '24h': price_percent_change_24h,
@@ -403,6 +408,27 @@ export default new Vuex.Store({
             const password = payload['password'];
 
             return API.resetPasswordConfirm(email, password);
+        },
+        setPriceAlert(context, payload) {
+            const token = payload['token'];
+            const id = Number(payload['id']);
+            const alert = Number(payload['alert']);
+
+            API.setPriceAlert(token, id, alert).then(() => {
+                API.getCryptos(token).then((cryptos) => {
+                    context.commit('setPortfolio', cryptos);
+                });
+            });
+        },
+        deletePriceAlert(context, payload) {
+            const token = payload['token'];
+            const id = Number(payload['id']);
+
+            API.deletePriceAlert(token, id).then(() => {
+                API.getCryptos(token).then((cryptos) => {
+                    context.commit('setPortfolio', cryptos);
+                });
+            });
         }
     }
 })

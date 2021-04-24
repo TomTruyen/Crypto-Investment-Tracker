@@ -66,6 +66,14 @@ table th:focus {
     padding: 6px 10px 0 3px;
 }
 
+.price-alert-icon {
+    cursor: pointer;
+}
+
+.price-alert-icon:hover, .price-alert-icon.filled {
+    fill: rgb(56, 97, 251);
+}
+
 .form-control {
     background-color: rgb(239, 242, 245);
     border: none;

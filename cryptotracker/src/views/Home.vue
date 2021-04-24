@@ -28,7 +28,7 @@
           placeholder="Search..."
           class="form-control width-200px info-sub-title"
           v-model="search"
-          v-on:keyup="searchUpdate()"
+          @keyup="searchUpdate"
         />
       </div>
       <div class="col margin-vertical-1em">
@@ -128,6 +128,65 @@
 
       <template slot="modal-footer">
         <button class="btn btn-custom" @click="handleSell">Sell</button>
+      </template>
+    </b-modal>
+
+    <b-modal
+      id="alertSet"
+      ref="modal"
+      title="Set price alert"
+      @hidden="resetModal"
+    >
+      <form ref="form" @submit.stop.prevent="handleSetPriceAlert">
+        <b-form-group
+          :label="'Price per ' + alertCrypto"
+          label-for="crypto-price"
+        >
+          <b-form-input
+            id="crypto-price"
+            type="number"
+            v-model="alertPrice"
+            placeholder="0"
+          ></b-form-input>
+        </b-form-group>
+
+        <p>
+          NOTE: Your price alert will be removed when it is reached! You will
+          receive an email to notify you.
+        </p>
+
+        <b-alert show variant="danger" v-if="errorMessage != null">{{
+          errorMessage
+        }}</b-alert>
+      </form>
+
+      <template slot="modal-footer">
+        <button class="btn btn-custom" @click="handleSetPriceAlert">
+          Set Alert
+        </button>
+      </template>
+    </b-modal>
+
+    <b-modal
+      id="alertDelete"
+      ref="modal"
+      title="Delete price alert"
+      @hidden="resetModal"
+    >
+      <form ref="form" @submit.stop.prevent="handleDeletePriceAlert">
+        <p>
+          NOTE: Your price alert for {{ this.alertCrypto }} will be deleted!
+        </p>
+
+        <b-alert show variant="danger" v-if="errorMessage != null">{{
+          errorMessage
+        }}</b-alert>
+      </form>
+
+      <template slot="modal-footer">
+        <button class="btn btn-custom" @click="handleDeletePriceAlert">
+          Delete Alert
+        </button>
       </template>
     </b-modal>
 
@@ -443,6 +502,21 @@
     <b-row>
       <b-col class="overflow-x-auto">
         <b-table hover :items="getPortfolioOptions" :fields="fields">
+          <template #cell(alert)="row">
+            <b-icon-bell
+              class="price-alert-icon"
+              v-if="row.item.alert == 0"
+              v-b-modal.alertSet
+              @click="setupAlert(row.item.id, row.item.ticker, 0)"
+            ></b-icon-bell>
+            <b-icon-bell-fill
+              class="price-alert-icon filled"
+              v-else
+              v-b-modal.alertDelete
+              @click="setupAlert(row.item.id, row.item.ticker, row.item.alert)"
+            ></b-icon-bell-fill>
+          </template>
+
           <template #cell(name)="row">
             <img width="20" height="20" :src="row.item.image" />
             <div class="spacer"></div>
@@ -509,7 +583,6 @@
           </template>
           <template #cell(expandAction)="row">
             <div class="text-center">
-              <!--!row.detailsShowing-->
               <b-button
                 size="sm"
                 class="mr-1 btn-custom"
@@ -590,7 +663,12 @@
 
 <script>
 import DoughnutChart from "@/components/DoughnutChart.vue";
-import { BIconChevronDown, BIconChevronUp } from "bootstrap-vue";
+import {
+  BIconChevronDown,
+  BIconChevronUp,
+  BIconBell,
+  BIconBellFill,
+} from "bootstrap-vue";
 
 export default {
   mounted() {
@@ -598,7 +676,13 @@ export default {
 
     this.fetchCryptos();
   },
-  components: { DoughnutChart, BIconChevronDown, BIconChevronUp },
+  components: {
+    DoughnutChart,
+    BIconChevronDown,
+    BIconChevronUp,
+    BIconBell,
+    BIconBellFill,
+  },
   data() {
     return {
       search: "",
@@ -613,12 +697,16 @@ export default {
       sellMaxAmount: 0,
       sellPrice: 0,
       errorMessage: null,
+      alertId: 0,
+      alertPrice: 0,
+      alertCrypto: "",
       info: {
         title: "",
         item: null,
       },
       // used for table displaying
       fields: [
+        { key: "alert", label: "" },
         { key: "name", label: "Name", sortable: true },
         { key: "avg_price", label: "Avg. Price", sortable: true },
         { key: "price", label: "Price", sortable: true },
@@ -713,6 +801,10 @@ export default {
       this.sellPrice = 0;
 
       this.errorMessage = null;
+
+      this.alertId = 0;
+      this.alertPrice = 0;
+      this.alertCrypto = "";
     },
     handleBuy(e) {
       e.preventDefault();
@@ -783,13 +875,9 @@ export default {
       }
     },
     sell(item) {
-      const id = item.id;
-      const ticker = item.ticker;
-      const maxAmount = item.balance;
-
-      this.$data.sellCrypto = ticker;
-      this.$data.sellId = id;
-      this.$data.sellMaxAmount = maxAmount;
+      this.sellId = item.id;
+      this.sellCrypto = item.ticker;
+      this.sellMaxAmount = item.balance;
     },
     setInfo(item) {
       this.$data.info.title = `${item.name} (${item.ticker}) Statistics`;
@@ -801,6 +889,46 @@ export default {
     toggleShowDetails(ticker) {
       this.$store.commit("toggleShowDetails", ticker);
     },
+    setupAlert(id, ticker, price) {
+      this.alertId = id;
+      this.alertPrice = price;
+      this.alertCrypto = ticker;
+    },
+    handleSetPriceAlert() {
+      this.errorMessage = "";
+
+      if (this.alertId == 0) this.errorMessage = "Crypto missing";
+      else if (this.alertPrice == 0)
+        this.errorMessage = "Price alert be greater than 0 per coin";
+
+      if (this.alertId != 0 && this.alertPrice != 0) {
+        this.$store.dispatch("setPriceAlert", {
+          token: this.$session.get("access_token"),
+          id: this.alertId,
+          alert: this.alertPrice,
+        });
+
+        this.$nextTick(() => {
+          this.$bvModal.hide("alertSet");
+        });
+      }
+    },
+    handleDeletePriceAlert() {
+      this.errorMessage = "";
+
+      if(this.alertId == 0) this.errorMessage = "Crypto missing";
+
+      if(this.alertId != 0) {
+        this.$store.dispatch("deletePriceAlert", {
+           token: this.$session.get("access_token"),
+          id: this.alertId,
+        });
+
+        this.$nextTick(() => {
+          this.$bvModal.hide("alertDelete");
+        });
+      }
+    }
   },
 };
 </script>
