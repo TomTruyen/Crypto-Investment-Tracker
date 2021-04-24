@@ -32,7 +32,7 @@ export default {
               total += dataset.data[i];
             }
 
-            const percentage = Number(
+            const percentage = parseFloat(
               ((value / total) * 100).toFixed(2)
             ).toLocaleString("en-US", { minimumFractionDigits: 2 });
 
@@ -40,7 +40,7 @@ export default {
               return "$0.00";
             }
 
-            value = Number(value.toFixed(2)).toLocaleString("en-US", {
+            value = parseFloat(value.toFixed(2)).toLocaleString("en-US", {
               minimumFractionDigits: 2,
             });
 

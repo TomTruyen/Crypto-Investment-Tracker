@@ -51,8 +51,8 @@ export default {
     handleSetPriceAlert() {
       this.error = null;
 
-      const _id = this.alertId;
-      const _price = this.alertPrice;
+      const _id = parseInt(this.alertId);
+      const _price = parseFloat(this.alertPrice);
 
       if (this.isValidInput(_id, _price)) {
         this.$store.dispatch("setPriceAlert", {

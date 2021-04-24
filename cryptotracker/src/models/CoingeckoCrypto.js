@@ -33,49 +33,59 @@ export default class CoingeckoCrypto {
 
     static fromJSON(json) {
         return new CoingeckoCrypto(
-            json['id'],
-            json['symbol'],
-            json['name'],
-            json['image'],
-            json['price'],
-            json['marketCap'],
-            json['rank'],
-            json['fullyDilutedValuation'],
-            json['volume_24h'],
-            json['high_24h'],
-            json['low_24h'],
-            json['allTimeHigh'],
-            json['allTimeHighPercentage'],
-            json['allTimeHighDate'],
-            json['allTimeLow'],
-            json['allTimeLowPercentage'],
-            json['allTimeLowDate'],
-            json['circulatingSupply'],
-            json['totalSupply'],
-            json['maxSupply'],
-            json['market_cap_change_24h'],
-            json['market_cap_percent_change_24h'],
-            json['price_change_24h'],
-            json['price_percent_change_24h'],
-            json['price_percent_change_7d'],
-            json['price_percent_change_30d'],
-            json['price_percent_change_1y'],
-            json['lastUpdated'],
-            json['color']
+            parseInt(json['id']),
+            json['symbol'].toString(),
+            json['name'].toString(),
+            json['image'].toString(),
+            parseFloat(json['price']),
+            parseFloat(json['marketCap']),
+            parseInt(json['rank']),
+            parseFloat(json['fullyDilutedValuation']),
+            parseFloat(json['volume_24h']),
+            parseFloat(json['high_24h']),
+            parseFloat(json['low_24h']),
+            parseFloat(json['allTimeHigh']),
+            parseFloat(json['allTimeHighPercentage']),
+            new Date(json['allTimeHighDate']),
+            parseFloat(json['allTimeLow']),
+            parseFloat(json['allTimeLowPercentage']),
+            new Date(json['allTimeLowDate']),
+            parseInt(json['circulatingSupply']),
+            parseInt(json['totalSupply']),
+            parseInt(json['maxSupply']),
+            parseFloat(json['market_cap_change_24h']),
+            parseFloat(json['market_cap_percent_change_24h']),
+            parseFloat(json['price_change_24h']),
+            parseFloat(json['price_percent_change_24h']),
+            parseFloat(json['price_percent_change_7d']),
+            parseFloat(json['price_percent_change_30d']),
+            parseFloat(json['price_percent_change_1y']),
+            new Date(json['lastUpdated']),
+            new Object(json['color'])
         );
     }
 
     toPercent(number, decimals = 2) {
-        return `${Number.parseFloat(number).toFixed(decimals)}%`;
+        const numberDecimals = parseFloat(number).toFixed(decimals);
+        const numberFractionDigits = parseFloat(numberDecimals).toLocaleString('en-US', { minimumFractionDigits: 2 });
+
+        return `${numberFractionDigits}%`;
     }
 
     toDollar(number, decimals = 2) {
-        if (number < 1) return `$${number.toFixed(6)}`;
+        let numberDecimals = parseFloat(number);
 
-        return `$${Number(Number.parseFloat(number).toFixed(decimals)).toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+        if (numberDecimals < 1) return `$${numberDecimals.toFixed(6)}`;
+
+        numberDecimals = numberDecimals.toFixed(decimals);
+        const numberFractionDigits = parseFloat(numberDecimals).toLocaleString('en-US', { minimumFractionDigits: 2 });
+
+        return `$${numberFractionDigits}`;
     }
 
     toFormat(number) {
+        number = parseInt(number);
+
         if (number == 0) return '-';
 
         return number.toLocaleString('en-US');
@@ -83,8 +93,6 @@ export default class CoingeckoCrypto {
 
     toDate(date) {
         function daysDiff(first, second) {
-            // Take the difference between the dates and divide by milliseconds per day.
-            // Round to nearest whole number to deal with DST.
             return Math.round((second - first) / (1000 * 60 * 60 * 24));
         }
 

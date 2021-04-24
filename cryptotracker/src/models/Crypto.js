@@ -16,29 +16,40 @@ export default class Crypto {
     }
 
     static fromJSON(json) {
+
+
         return new Crypto(
-            json['id'],
-            json['name'],
-            json['ticker'],
-            json['buyAmount'],
-            json['buyPrice'],
-            json['buyDate'],
-            json['sellAmount'],
-            json['sellPrice'],
-            json['sellDate'],
-            json['priceAlert']
+            parseInt(json['id']),
+            json['name'].toString(),
+            json['ticker'].toString(),
+            parseFloat(json['buyAmount']),
+            parseFloat(json['buyPrice']),
+            Utils.toFormatDate(new Date(json['buyDate'])),
+            parseFloat(json['sellAmount']),
+            parseFloat(json['sellPrice']),
+            Utils.toFormatDate(new Date(json['sellDate'])),
+            parseFloat(json['priceAlert'])
         );
     }
 
-    calculateProfit(currentPrice) {
-        let increase = currentPrice - this.buyPrice;
+    calculateProfit(price) {
+        price = parseFloat(price);
+
+        let increase = price - this.buyPrice;
         let profit = (increase / this.buyPrice * 100);
 
-        return Number(profit.toFixed(2));
+        return parseFloat(profit.toFixed(2));
     }
 
     calculateProfitUSD(amount, buyPrice, sellPrice) {
-        return Number(((amount * sellPrice) - (amount * buyPrice)).toFixed(2));
+        amount = parseFloat(amount);
+        buyPrice = parseFloat(buyPrice);
+        sellPrice = parseFloat(sellPrice);
+
+        let profit = (amount * sellPrice) - (amount * buyPrice);
+        profit = parseFloat(profit.toFixed(2));
+
+        return profit;
     }
 
     getBalance() {
@@ -47,8 +58,12 @@ export default class Crypto {
         return this.buyAmount - this.sellAmount;
     }
 
-    getValue(currentPrice) {
-        return Number(this.getBalance() * currentPrice);
+    getValue(price) {
+        price = parseFloat(price);
+
+        const value = parseFloat(this.getBalance() * price);
+
+        return value;
     }
 
     toOption(crypto) {

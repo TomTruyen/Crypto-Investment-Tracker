@@ -2,7 +2,6 @@
   <b-modal id="sell" ref="modal" title="Sell crypto" @hidden="resetModal">
     <form ref="form" @submit.stop.prevent="handleSellSubmit">
       <b-form-group label="Asset" label-for="crypto-select">
-        <span>MAXAMOUNT {{ maxAmount }}</span>
         <v-select
           id="crypto-select"
           :options="coingeckoCryptos"

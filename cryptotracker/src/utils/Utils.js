@@ -24,7 +24,7 @@ export default class Utils {
     static numberWithCommas(x, decimals = 2, withFranctionDigits = false, isCurrency = false) {
         if (Math.abs(x) < 1 && !isCurrency) decimals = 6;
 
-        x = Number(x.toFixed(decimals));
+        x = parseFloat(x.toFixed(decimals));
 
         if (Math.abs(x) < 1) return x;
 
@@ -52,5 +52,13 @@ export default class Utils {
         const rgb = this.hexToRgb(hex);
 
         return `rgba(${rgb.r},${rgb.g},${rgb.b},${alpha})`;
+    }
+
+    static toFormatDate(d) {
+        return [
+            ('0' + d.getDate()).slice(-2),
+            ('0' + (d.getMonth() + 1)).slice(-2),
+            d.getFullYear()
+        ].join('-');
     }
 }

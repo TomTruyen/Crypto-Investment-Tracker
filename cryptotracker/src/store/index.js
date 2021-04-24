@@ -58,9 +58,7 @@ export default new Vuex.Store({
             for (let i = 0; i < state.portfolio.length; i++) {
                 const ticker = state.portfolio[i].ticker;
 
-
                 if (cryptoInstances[ticker] == undefined) {
-                    // Not found yet, add the crypto with empty array!
                     cryptoInstances[ticker] = [];
                 }
 
@@ -184,7 +182,7 @@ export default new Vuex.Store({
                 totalProfit += state.portfolioHistory[i].calculateProfitUSD(amount, buyPrice, sellPrice);
             }
 
-            return Number(totalProfit.toFixed(2)).toLocaleString('en-US', { minimumFractionDigits: 2 });
+            return parseFloat(totalProfit.toFixed(2)).toLocaleString('en-US', { minimumFractionDigits: 2 });
         },
         getPortfolioValue(state) {
             let totalValue = 0;
@@ -204,7 +202,7 @@ export default new Vuex.Store({
                 }
             }
 
-            return Number(totalValue.toFixed(2)).toLocaleString('en-US', { minimumFractionDigits: 2 });
+            return parseFloat(totalValue.toFixed(2)).toLocaleString('en-US', { minimumFractionDigits: 2 });
         },
         getPortfolioAssets(state) {
             if (state.portfolio == null) return 0;
@@ -235,7 +233,7 @@ export default new Vuex.Store({
                     const crypto = state.coingeckoCryptos.find(c => c.ticker == ticker);
 
                     if (crypto != undefined) {
-                        const value = Number(state.portfolio[i].getValue(crypto.price).toFixed(2));
+                        const value = parseFloat(state.portfolio[i].getValue(crypto.price).toFixed(2));
 
                         const label = `${crypto.name} (${crypto.ticker})`;
 
@@ -411,8 +409,8 @@ export default new Vuex.Store({
         },
         setPriceAlert(context, payload) {
             const token = payload['token'];
-            const id = Number(payload['id']);
-            const alert = Number(payload['alert']);
+            const id = parseInt(payload['id']);
+            const alert = parseFloat(payload['alert']);
 
             API.setPriceAlert(token, id, alert).then(() => {
                 API.getCryptos(token).then((cryptos) => {
@@ -422,7 +420,7 @@ export default new Vuex.Store({
         },
         deletePriceAlert(context, payload) {
             const token = payload['token'];
-            const id = Number(payload['id']);
+            const id = parseInt(payload['id']);
 
             API.deletePriceAlert(token, id).then(() => {
                 API.getCryptos(token).then((cryptos) => {
