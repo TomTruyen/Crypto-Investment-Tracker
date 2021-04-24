@@ -296,12 +296,16 @@ div[role="combobox"] {
 
 #info .modal-header,
 #sell .modal-header,
-#buy .modal-header {
+#buy .modal-header,
+#alertDelete .modal-header,
+#alertSet .modal-header {
     border-bottom: none;
 }
 
 #sell .modal-footer,
-#buy .modal-footer {
+#buy .modal-footer,
+#alertDelete .modal-footer,
+#alertSet .modal-footer {
     border-top: none;
 }
 
