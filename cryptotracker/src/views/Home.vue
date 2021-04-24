@@ -6,19 +6,12 @@
           ref="portfolio_chart"
           :chart-data="getPortfolioChartData"
           v-if="getPortfolioChartData.labels.length > 0"
-        ></DoughnutChart>
-        <h2 class="absolute-center text-center">
-          <span class="info-value font-weight-normal font-size-2-half-rem">{{
-            "$" + getPortfolioValue
-          }}</span>
-          <br />
-          <span class="info-sub-title font-size-1-quarter-rem">{{
-            getPortfolioAssets + " Assets"
-          }}</span>
-        </h2>
-        <p class="position-absolute refresh-position info-title">
-          Refresh in: {{ formattedTime }}
-        </p>
+        />
+        <DoughnutChartText
+          :value="getPortfolioValue"
+          :count="getPortfolioAssets"
+          :refreshTime="formattedTime"
+        />
       </div>
     </div>
     <div class="row">
@@ -38,466 +31,20 @@
       </div>
     </div>
 
-    <b-modal
-      id="buy"
-      ref="modal"
-      title="Buy crypto"
-      @show="resetModal"
-      @hidden="resetModal"
-    >
-      <form ref="form" @submit.stop.prevent="handleBuySubmit">
-        <b-form-group label="Asset" label-for="crypto-select">
-          <v-select
-            id="crypto-select"
-            :options="getCoingeckoCryptoOptions"
-            :reduce="(option) => option.value"
-            v-model="crypto"
-          >
-            <template slot="option" slot-scope="option">
-              <img width="32" height="32" :src="option.img" />
-              <div class="spacer"></div>
-              {{ option.label }}
-            </template>
-          </v-select>
-        </b-form-group>
-        <b-form-group label="Amount" label-for="crypto-amount">
-          <b-form-input
-            id="crypto-amount"
-            type="number"
-            v-model="amount"
-            placeholder="0"
-          ></b-form-input>
-        </b-form-group>
-        <b-form-group label="Price per coin" label-for="crypto-price">
-          <b-form-input
-            id="crypto-price"
-            type="number"
-            v-model="price"
-            placeholder="0"
-          ></b-form-input>
-        </b-form-group>
-
-        <b-alert show variant="danger" v-if="errorMessage != null">{{
-          errorMessage
-        }}</b-alert>
-      </form>
-
-      <template slot="modal-footer">
-        <button class="btn btn-custom" @click="handleBuy">Buy</button>
-      </template>
-    </b-modal>
-
-    <b-modal id="sell" ref="modal" title="Sell crypto" @hidden="resetModal">
-      <form ref="form" @submit.stop.prevent="handleSellSubmit">
-        <b-form-group label="Asset" label-for="crypto-select">
-          <v-select
-            id="crypto-select"
-            :options="getCoingeckoCryptoOptions"
-            :reduce="(option) => option.value"
-            v-model="sellCrypto"
-            disabled
-          >
-            <template slot="option" slot-scope="option">
-              <img width="32" height="32" :src="option.img" />
-              <div class="spacer"></div>
-              {{ option.label }}
-            </template>
-          </v-select>
-        </b-form-group>
-        <b-form-group label="Amount" label-for="crypto-amount">
-          <b-form-input
-            id="crypto-amount"
-            type="number"
-            v-model="sellAmount"
-            placeholder="0"
-          ></b-form-input>
-        </b-form-group>
-        <b-form-group label="Price per coin" label-for="crypto-price">
-          <b-form-input
-            id="crypto-price"
-            type="number"
-            v-model="sellPrice"
-            placeholder="0"
-          ></b-form-input>
-        </b-form-group>
-
-        <b-alert show variant="danger" v-if="errorMessage != null">{{
-          errorMessage
-        }}</b-alert>
-      </form>
-
-      <template slot="modal-footer">
-        <button class="btn btn-custom" @click="handleSell">Sell</button>
-      </template>
-    </b-modal>
-
-    <b-modal
-      id="alertSet"
-      ref="modal"
-      title="Set price alert"
-      @hidden="resetModal"
-    >
-      <form ref="form" @submit.stop.prevent="handleSetPriceAlert">
-        <b-form-group
-          :label="'Price per ' + alertCrypto"
-          label-for="crypto-price"
-        >
-          <b-form-input
-            id="crypto-price"
-            type="number"
-            v-model="alertPrice"
-            placeholder="0"
-          ></b-form-input>
-        </b-form-group>
-
-        <p>
-          NOTE: Your price alert will be removed when it is reached! You will
-          receive an email to notify you.
-        </p>
-
-        <b-alert show variant="danger" v-if="errorMessage != null">{{
-          errorMessage
-        }}</b-alert>
-      </form>
-
-      <template slot="modal-footer">
-        <button class="btn btn-custom" @click="handleSetPriceAlert">
-          Set Alert
-        </button>
-      </template>
-    </b-modal>
-
-    <b-modal
-      id="alertDelete"
-      ref="modal"
-      title="Delete price alert"
-      @hidden="resetModal"
-    >
-      <form ref="form" @submit.stop.prevent="handleDeletePriceAlert">
-        <p>
-          NOTE: Your price alert for {{ this.alertCrypto }} will be deleted!
-        </p>
-
-        <b-alert show variant="danger" v-if="errorMessage != null">{{
-          errorMessage
-        }}</b-alert>
-      </form>
-
-      <template slot="modal-footer">
-        <button class="btn btn-custom" @click="handleDeletePriceAlert">
-          Delete Alert
-        </button>
-      </template>
-    </b-modal>
-
-    <b-modal
-      id="info"
-      ref="modal"
-      :title="info.title"
-      v-if="info.item != null"
-      :hide-footer="true"
-    >
-      <b-row>
-        <b-col class="info-chapter"
-          ><caption>
-            {{
-              info.item.name
-            }}
-            Price Today
-          </caption></b-col
-        >
-      </b-row>
-      <hr />
-      <b-row>
-        <b-col class="info-title my-auto">{{ info.item.name }} Price</b-col>
-        <b-col class="text-right my-auto info-value">{{
-          info.item.details.getPriceDollar()
-        }}</b-col>
-      </b-row>
-      <hr />
-      <b-row>
-        <b-col class="info-title my-auto">Price Change (24h)</b-col>
-        <b-col class="text-right my-auto">
-          <b-row>
-            <b-col class="info-value">{{
-              info.item.details.getPriceChangeDollar()
-            }}</b-col>
-          </b-row>
-          <b-row>
-            <b-col
-              :class="
-                info.item.details['price_change_24h'] >= 0
-                  ? 'info-sub-value-up'
-                  : 'info-sub-value-down'
-              "
-              >{{
-                info.item.details["price_change_24h"] >= 0
-                  ? "&#9650;"
-                  : "&#9660;"
-              }}{{ info.item.details.getPriceChangePercentage() }}</b-col
-            >
-          </b-row>
-        </b-col>
-      </b-row>
-      <hr />
-      <b-row>
-        <b-col class="info-title my-auto">24h Low / 24h High</b-col>
-        <b-col class="text-right my-auto info-value"
-          >{{ info.item.details.getLow24hDollar() }} /
-          {{ info.item.details.getHigh24hDollar() }}</b-col
-        >
-      </b-row>
-      <hr />
-      <b-row>
-        <b-col class="info-title my-auto">Trading Volume (24h)</b-col>
-        <b-col class="text-right my-auto info-value">{{
-          info.item.details.getVolume24hDollar()
-        }}</b-col>
-      </b-row>
-      <hr />
-      <b-row>
-        <b-col class="info-title my-auto">Market Rank</b-col>
-        <b-col class="text-right my-auto info-value"
-          >#{{ info.item.details.rank }}</b-col
-        >
-      </b-row>
-      <div class="info-spacing"></div>
-      <b-row>
-        <b-col class="info-chapter"
-          ><caption>
-            {{
-              info.item.name
-            }}
-            Market Cap
-          </caption></b-col
-        >
-      </b-row>
-      <hr />
-      <b-row>
-        <b-col class="info-title my-auto">Market Cap</b-col>
-        <b-col class="text-right my-auto">
-          <b-row>
-            <b-col class="info-value">{{
-              info.item.details.getMarketCapDollar()
-            }}</b-col>
-          </b-row>
-          <b-row>
-            <b-col
-              :class="
-                info.item.details['market_cap_percent_change_24h'] >= 0
-                  ? 'info-sub-value-up'
-                  : 'info-sub-value-down'
-              "
-              >{{
-                info.item.details["market_cap_percent_change_24h"] >= 0
-                  ? "&#9650;"
-                  : "&#9660;"
-              }}{{ info.item.details.getMarketCapPercentage() }}</b-col
-            >
-          </b-row>
-        </b-col>
-      </b-row>
-      <hr />
-      <b-row>
-        <b-col class="info-title my-auto">Fully Diluted Market Cap</b-col>
-        <b-col class="text-right my-auto">
-          <b-row>
-            <b-col class="info-value">{{
-              info.item.details.getFullyDilutedMarketCapDollar()
-            }}</b-col>
-          </b-row>
-          <b-row>
-            <b-col
-              :class="
-                info.item.details['market_cap_percent_change_24h'] >= 0
-                  ? 'info-sub-value-up'
-                  : 'info-sub-value-down'
-              "
-              >{{
-                info.item.details["market_cap_percent_change_24h"] >= 0
-                  ? "&#9650;"
-                  : "&#9660;"
-              }}{{ info.item.details.getMarketCapPercentage() }}</b-col
-            >
-          </b-row>
-        </b-col>
-      </b-row>
-      <div class="info-spacing"></div>
-      <b-row>
-        <b-col class="info-chapter"
-          ><caption>
-            {{
-              info.item.name
-            }}
-            Price History
-          </caption></b-col
-        >
-      </b-row>
-      <hr />
-      <b-row>
-        <b-col class="info-title my-auto">24h Price Change (Percentage)</b-col>
-        <b-col
-          :class="
-            info.item.details['price_percent_change_24h'] >= 0
-              ? 'text-right my-auto info-value up'
-              : 'text-right my-auto info-value down'
-          "
-          >{{
-            info.item.details["price_percent_change_24h"] >= 0
-              ? "&#9650;"
-              : "&#9660;"
-          }}{{ info.item.details.getPriceChangePercentage() }}</b-col
-        >
-      </b-row>
-      <hr />
-      <b-row>
-        <b-col class="info-title my-auto">7d Price Change (Percentage)</b-col>
-        <b-col
-          :class="
-            info.item.details['price_percent_change_7d'] >= 0
-              ? 'text-right my-auto info-value up'
-              : 'text-right my-auto info-value down'
-          "
-          >{{
-            info.item.details["price_percent_change_7d"] >= 0
-              ? "&#9650;"
-              : "&#9660;"
-          }}{{ info.item.details.getPriceChange7dPercentage() }}</b-col
-        >
-      </b-row>
-      <hr />
-      <b-row>
-        <b-col class="info-title my-auto">30d Price Change (Percentage)</b-col>
-        <b-col
-          :class="
-            info.item.details['price_percent_change_30d'] >= 0
-              ? 'text-right my-auto info-value up'
-              : 'text-right my-auto info-value down'
-          "
-          >{{
-            info.item.details["price_percent_change_30d"] >= 0
-              ? "&#9650;"
-              : "&#9660;"
-          }}{{ info.item.details.getPriceChange30dPercentage() }}</b-col
-        >
-      </b-row>
-      <hr />
-      <b-row>
-        <b-col class="info-title my-auto">1y Price Change (Percentage)</b-col>
-        <b-col
-          :class="
-            info.item.details['price_percent_change_1y'] >= 0
-              ? 'text-right my-auto info-value up'
-              : 'text-right my-auto info-value down'
-          "
-          >{{
-            info.item.details["price_percent_change_1y"] >= 0
-              ? "&#9650;"
-              : "&#9660;"
-          }}{{ info.item.details.getPriceChange1yPercentage() }}</b-col
-        >
-      </b-row>
-      <hr />
-      <b-row>
-        <b-col>
-          <b-row class="my-auto">
-            <b-col class="info-title">All Time High</b-col>
-          </b-row>
-          <b-row>
-            <b-col class="info-sub-title">{{
-              info.item.details.getAllTimeHighDate()
-            }}</b-col>
-          </b-row>
-        </b-col>
-        <b-col class="text-right my-auto">
-          <b-row>
-            <b-col class="info-value">{{
-              info.item.details.getAllTimeHighDollar()
-            }}</b-col>
-          </b-row>
-          <b-row>
-            <b-col
-              :class="
-                info.item.details['allTimeHighPercentage'] >= 0
-                  ? 'info-sub-value-up'
-                  : 'info-sub-value-down'
-              "
-              >{{
-                info.item.details["allTimeHighPercentage"] >= 0
-                  ? "&#9650;"
-                  : "&#9660;"
-              }}{{ info.item.details.getAllTimeHighPercentage() }}</b-col
-            >
-          </b-row>
-        </b-col>
-      </b-row>
-      <hr />
-      <b-row>
-        <b-col>
-          <b-row class="my-auto">
-            <b-col class="info-title">All Time Low</b-col>
-          </b-row>
-          <b-row>
-            <b-col class="info-sub-title">{{
-              info.item.details.getAllTimeLowDate()
-            }}</b-col>
-          </b-row>
-        </b-col>
-        <b-col class="text-right my-auto">
-          <b-row>
-            <b-col class="info-value">{{
-              info.item.details.getAllTimeLowDollar()
-            }}</b-col>
-          </b-row>
-          <b-row>
-            <b-col
-              :class="
-                info.item.details['allTimeLowPercentage'] >= 0
-                  ? 'info-sub-value-up'
-                  : 'info-sub-value-down'
-              "
-              >{{
-                info.item.details["allTimeLowPercentage"] >= 0
-                  ? "&#9650;"
-                  : "&#9660;"
-              }}{{ info.item.details.getAllTimeLowPercentage() }}</b-col
-            >
-          </b-row>
-        </b-col>
-      </b-row>
-      <div class="info-spacing"></div>
-      <b-row>
-        <b-col class="info-chapter"
-          ><caption>
-            {{
-              info.item.name
-            }}
-            Supply
-          </caption></b-col
-        >
-      </b-row>
-      <hr />
-      <b-row>
-        <b-col class="info-title my-auto">Circulating Supply</b-col>
-        <b-col class="text-right my-auto info-value">{{
-          info.item.details.getCirculatingSupply()
-        }}</b-col>
-      </b-row>
-      <hr />
-      <b-row>
-        <b-col class="info-title my-auto">Total Supply</b-col>
-        <b-col class="text-right my-auto info-value">{{
-          info.item.details.getTotalSupply()
-        }}</b-col>
-      </b-row>
-      <hr />
-      <b-row>
-        <b-col class="info-title my-auto">Max Supply</b-col>
-        <b-col class="text-right my-auto info-value">{{
-          info.item.details.getMaxSupply()
-        }}</b-col>
-      </b-row>
-    </b-modal>
+    <BuyCryptoModal :coingeckoCryptos="getCoingeckoCryptoOptions" />
+    <SellCryptoModal
+      :id="sellId"
+      :crypto="sellCrypto"
+      :maxAmount="sellMaxAmount"
+      :coingeckoCryptos="getCoingeckoCryptoOptions"
+    />
+    <SetPriceAlertModal :alertId="alertId" :alertCrypto="alertCrypto" />
+    <DeletePriceAlertModal
+      :alertId="alertId"
+      :alertPrice="alertPrice"
+      :alertCrypto="alertCrypto"
+    />
+    <CryptoInfoModal :info="info" />
 
     <b-row>
       <b-col class="overflow-x-auto">
@@ -662,13 +209,20 @@
 </template>
 
 <script>
-import DoughnutChart from "@/components/DoughnutChart.vue";
 import {
   BIconChevronDown,
   BIconChevronUp,
   BIconBell,
   BIconBellFill,
 } from "bootstrap-vue";
+
+import DoughnutChart from "@/components/DoughnutChart.vue";
+import DoughnutChartText from "@/components/DoughnutChartText.vue";
+import BuyCryptoModal from "@/components/BuyCryptoModal.vue";
+import SellCryptoModal from "@/components/SellCryptoModal.vue";
+import SetPriceAlertModal from "@/components/SetPriceAlertModal.vue";
+import DeletePriceAlertModal from "@/components/DeletePriceAlertModal.vue";
+import CryptoInfoModal from "@/components/CryptoInfoModal.vue";
 
 export default {
   mounted() {
@@ -677,11 +231,17 @@ export default {
     this.fetchCryptos();
   },
   components: {
-    DoughnutChart,
     BIconChevronDown,
     BIconChevronUp,
     BIconBell,
     BIconBellFill,
+    DoughnutChart,
+    DoughnutChartText,
+    BuyCryptoModal,
+    SellCryptoModal,
+    SetPriceAlertModal,
+    DeletePriceAlertModal,
+    CryptoInfoModal,
   },
   data() {
     return {
@@ -689,13 +249,9 @@ export default {
       timer: 0,
       formattedTime: "01:00",
       crypto: "",
-      amount: 0,
-      price: 0,
       sellCrypto: "",
       sellId: 0,
-      sellAmount: 0,
       sellMaxAmount: 0,
-      sellPrice: 0,
       errorMessage: null,
       alertId: 0,
       alertPrice: 0,
@@ -730,18 +286,7 @@ export default {
   },
   computed: {
     getCoingeckoCryptoOptions() {
-      const coingeckoCryptos = this.$store.getters.getCoingeckoCryptosAsOptions;
-
-      if (crypto != "") {
-        const found = coingeckoCryptos.find(
-          (crypto) =>
-            crypto.value.toUpperCase() == this.$data.sellCrypto.toUpperCase()
-        );
-
-        if (found != undefined) return [found];
-      }
-
-      return coingeckoCryptos;
+      return this.$store.getters.getCoingeckoCryptosAsOptions;
     },
     getPortfolioOptions() {
       return this.$store.getters.getPortfolioOptions;
@@ -791,77 +336,6 @@ export default {
 
       this.formattedTime = `${minutes}:${seconds}`;
     },
-    resetModal() {
-      this.crypto = "";
-      this.amount = 0;
-      this.price = 0;
-
-      this.sellCrypto = "";
-      this.sellAmount = 0;
-      this.sellPrice = 0;
-
-      this.errorMessage = null;
-
-      this.alertId = 0;
-      this.alertPrice = 0;
-      this.alertCrypto = "";
-    },
-    handleBuy(e) {
-      e.preventDefault();
-      this.handleBuySubmit();
-    },
-    handleBuySubmit() {
-      if (this.crypto == "") this.errorMessage = "Crypto missing";
-      else if (this.amount == 0)
-        this.errorMessage = "Buy amount must be greater than 0";
-      else if (this.price == 0)
-        this.errorMessage = "Buy price must be greater than 0";
-
-      if (this.crypto != "" && this.amount != 0 && this.price != 0) {
-        this.$store.dispatch("buyCrypto", {
-          token: this.$session.get("access_token"),
-          crypto: this.crypto,
-          amount: this.amount,
-          price: this.price,
-        });
-
-        this.$nextTick(() => {
-          this.$bvModal.hide("buy");
-        });
-      }
-    },
-    handleSell(e) {
-      e.preventDefault();
-      this.handleSellSubmit();
-    },
-    handleSellSubmit() {
-      if (this.sellCrypto == "") this.errorMessage = "Crypto missing";
-      else if (this.sellAmount == 0)
-        this.errorMessage = "Sell amount must be greater than 0";
-      else if (this.sellMaxAmount < this.sellAmount)
-        this.errorMessage =
-          "Sell amount can't be more than " + this.sellMaxAmount;
-      else if (this.sellPrice == 0)
-        this.errorMessage = "Sell price must be greater than 0";
-
-      if (
-        this.sellCrypto != "" &&
-        this.sellAmount != 0 &&
-        this.sellPrice != 0
-      ) {
-        this.$store.dispatch("sellCrypto", {
-          token: this.$session.get("access_token"),
-          id: this.sellId,
-          crypto: this.sellCrypto,
-          amount: this.sellAmount,
-          price: this.sellPrice,
-        });
-
-        this.$nextTick(() => {
-          this.$bvModal.hide("sell");
-        });
-      }
-    },
     async fetchCryptos() {
       const token = this.$session.get("access_token");
       const isSuccess = await this.$store.dispatch(
@@ -883,52 +357,17 @@ export default {
       this.$data.info.title = `${item.name} (${item.ticker}) Statistics`;
       this.$data.info.item = item;
     },
+    setupAlert(id, ticker, price) {
+      this.alertId = id;
+      this.alertPrice = price;
+      this.alertCrypto = ticker;
+    },
     searchUpdate() {
       this.$store.commit("updateSearch", this.search);
     },
     toggleShowDetails(ticker) {
       this.$store.commit("toggleShowDetails", ticker);
     },
-    setupAlert(id, ticker, price) {
-      this.alertId = id;
-      this.alertPrice = price;
-      this.alertCrypto = ticker;
-    },
-    handleSetPriceAlert() {
-      this.errorMessage = "";
-
-      if (this.alertId == 0) this.errorMessage = "Crypto missing";
-      else if (this.alertPrice == 0)
-        this.errorMessage = "Price alert be greater than 0 per coin";
-
-      if (this.alertId != 0 && this.alertPrice != 0) {
-        this.$store.dispatch("setPriceAlert", {
-          token: this.$session.get("access_token"),
-          id: this.alertId,
-          alert: this.alertPrice,
-        });
-
-        this.$nextTick(() => {
-          this.$bvModal.hide("alertSet");
-        });
-      }
-    },
-    handleDeletePriceAlert() {
-      this.errorMessage = "";
-
-      if(this.alertId == 0) this.errorMessage = "Crypto missing";
-
-      if(this.alertId != 0) {
-        this.$store.dispatch("deletePriceAlert", {
-           token: this.$session.get("access_token"),
-          id: this.alertId,
-        });
-
-        this.$nextTick(() => {
-          this.$bvModal.hide("alertDelete");
-        });
-      }
-    }
   },
 };
 </script>
