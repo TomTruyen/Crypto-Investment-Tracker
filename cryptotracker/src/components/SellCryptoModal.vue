@@ -1,5 +1,11 @@
 <template>
-  <b-modal id="sell" ref="modal" title="Sell crypto" @hidden="resetModal">
+  <b-modal
+    id="sell"
+    ref="modal"
+    title="Sell crypto"
+    @hidden="resetModal"
+    no-close-on-backdrop
+  >
     <form ref="form" @submit.stop.prevent="handleSellSubmit">
       <b-form-group label="Asset" label-for="crypto-select">
         <v-select
@@ -24,6 +30,11 @@
           placeholder="0"
         ></b-form-input>
       </b-form-group>
+      <b-form-group>
+        <b-form-checkbox v-model="isGas" value="true" unchecked-value="false"
+          ><span class="font-size-16-px">Gas Fee</span></b-form-checkbox
+        >
+      </b-form-group>
       <b-form-group label="Price per coin" label-for="crypto-price">
         <b-form-input
           id="crypto-price"
@@ -47,6 +58,7 @@ export default {
   props: ["id", "crypto", "maxAmount", "coingeckoCryptos"],
   data() {
     return {
+      isGas: "false",
       price: 0,
       amount: 0,
       error: null,
@@ -54,6 +66,7 @@ export default {
   },
   methods: {
     resetModal() {
+      this.isGas = "false";
       this.amount = 0;
       this.price = 0;
       this.error = null;
@@ -63,25 +76,25 @@ export default {
 
       const _amount = parseFloat(this.amount);
       const _maxAmount = parseFloat(this.maxAmount);
+      const _isGas = this.isGas.toLowerCase() === "true";
       const _price = parseFloat(this.price);
 
-      if (this.isValidInput(_amount, _maxAmount, _price)) {
+      if (this.isValidInput(_amount, _maxAmount, _isGas, _price)) {
         this.$store.dispatch("sellCrypto", {
           token: this.$session.get("access_token"),
           id: this.id,
           crypto: this.crypto,
-          amount: this.amount,
-          price: this.price,
+          amount: _amount,
+          isGas: _isGas,
+          price: _price,
         });
-
-        // CHECK ERROR MESSAGE ON RETURN!!!
 
         this.$nextTick(() => {
           this.$bvModal.hide("sell");
         });
       }
     },
-    isValidInput(_amount, _maxAmount, _price) {
+    isValidInput(_amount, _maxAmount, _isGas, _price) {
       if (this.crypto == "") {
         this.error = "Crypto missing";
         return false;
@@ -91,7 +104,7 @@ export default {
       } else if (_maxAmount <= _amount) {
         this.error = "Sell amount can't be more than " + this.maxAmount;
         return false;
-      } else if (_price <= 0) {
+      } else if (_price <= 0 && !_isGas) {
         this.error = "Sell price must be greater than 0";
         return false;
       }

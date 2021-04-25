@@ -274,6 +274,7 @@ export default class API {
                 'ticker': payload.crypto,
                 'amount': payload.amount,
                 'price': payload.price,
+                'isGas': payload.isGas,
             },
         };
 
