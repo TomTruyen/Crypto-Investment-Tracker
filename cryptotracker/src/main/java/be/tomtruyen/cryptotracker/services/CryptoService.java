@@ -17,7 +17,7 @@ public class CryptoService {
     public static ResponseEntity<Object> getPortfolio(Map<String, String> header) {
         List<Crypto> cryptos = new ArrayList<>();
 
-        CryptoResult result = validate(header, null);
+        CryptoResult result = validate(header, null, false);
 
         boolean success = result.isSuccess();
 
@@ -60,7 +60,7 @@ public class CryptoService {
     public static ResponseEntity<Object> getPortfolioHistory(Map<String, String> header) {
         List<Crypto> cryptos = new ArrayList<>();
 
-        CryptoResult result = validate(header, null);
+        CryptoResult result = validate(header, null, false);
 
         boolean success = result.isSuccess();
 
@@ -103,7 +103,7 @@ public class CryptoService {
     public static ResponseEntity<Object> getCryptoList(Map<String, String> header) {
         List<CoingeckoCrypto> cyptos = new ArrayList<>();
 
-        CryptoResult result = validate(header, null);
+        CryptoResult result = validate(header, null,false);
 
         boolean success = result.isSuccess();
 
@@ -131,7 +131,7 @@ public class CryptoService {
     }
 
     public static ResponseEntity<Object> buy(Map<String, String> header, Map<String, Object> body) {
-        CryptoResult result = validate(header, body);
+        CryptoResult result = validate(header, body, false);
 
         boolean success = result.isSuccess();
 
@@ -151,8 +151,8 @@ public class CryptoService {
                 try {
                     String ticker = (String) body.get("ticker");
                     String name = CryptoRepository.getInstance().find(ticker).getName();
-                    double buyAmount = Double.parseDouble((String)body.getOrDefault("amount", "0"));
-                    double buyPrice = Double.parseDouble((String) body.getOrDefault("price", "0"));
+                    double buyAmount = Utils.toDouble(body.get("amount"));
+                    double buyPrice = Utils.toDouble(body.get("price"));
 
                     databaseService.buyCrypto(id, name, ticker, buyAmount, buyPrice);
 
@@ -183,7 +183,7 @@ public class CryptoService {
     }
 
     public static ResponseEntity<Object> sell(Map<String, String> header, Map<String, Object> body) {
-        CryptoResult result = validate(header, body);
+        CryptoResult result = validate(header, body, true);
 
         boolean success = result.isSuccess();
 
@@ -202,8 +202,9 @@ public class CryptoService {
                 int id = (int) body.get("id");
                 String ticker = (String) body.get("ticker");
                 String name = CryptoRepository.getInstance().find(ticker).getName();
-                double sellAmount = Double.parseDouble((String)body.getOrDefault("amount", "0"));
-                double sellPrice = Double.parseDouble((String) body.getOrDefault("price", "0"));
+                double sellAmount = Utils.toDouble(body.get("amount"));
+                boolean isGas = (boolean) body.get("isGas");
+                double sellPrice = Utils.toDouble(body.get("price"));
 
                 Crypto crypto = databaseService.findCryptoById(id);
 
@@ -211,7 +212,7 @@ public class CryptoService {
                 if(crypto.getBuyAmount() - crypto.getSellAmount() < sellAmount) {
                     result = CryptoResult.ERR_AMOUNT_TOO_LARGE;
                 } else {
-                    databaseService.sellCrypto(userId, id, name, ticker, sellAmount, sellPrice);
+                    databaseService.sellCrypto(userId, id, name, ticker, sellAmount, sellPrice, isGas);
                 }
 
                 databaseService.closeConnection();
@@ -236,7 +237,7 @@ public class CryptoService {
     }
 
     public static ResponseEntity<Object> setPriceAlert(Map<String, String> header, Map<String, Object> body) {
-        CryptoResult result = validate(header, null);
+        CryptoResult result = validate(header, null, false);
 
         boolean success = result.isSuccess();
 
@@ -253,7 +254,7 @@ public class CryptoService {
                 if(userId == -1) throw new SQLException();
 
                 int id = (int) body.getOrDefault("id", 0);
-                double alert = Double.parseDouble(String.valueOf(body.getOrDefault("alert", "0")));
+                double alert = Utils.toDouble(body.get("alert"));
 
 
                 if(id == 0 || alert == 0) {
@@ -282,7 +283,7 @@ public class CryptoService {
     }
 
     public static ResponseEntity<Object> deletePriceAlert(Map<String, String> header, Map<String, Object> body) {
-        CryptoResult result = validate(header, null);
+        CryptoResult result = validate(header, null, false);
 
         boolean success = result.isSuccess();
 
@@ -325,7 +326,7 @@ public class CryptoService {
         );
     }
 
-    private static CryptoResult validate(Map<String, String> header, Map<String, Object> body) {
+    private static CryptoResult validate(Map<String, String> header, Map<String, Object> body, boolean checkGas) {
         if (!header.containsKey("authorization")) return CryptoResult.ERR_MISSING_TOKEN;
 
         String token = header.getOrDefault("authorization", "");
@@ -343,15 +344,24 @@ public class CryptoService {
             if(!body.containsKey("ticker") || !body.containsKey("amount") || !body.containsKey("price")) return CryptoResult.ERR_MISSING_PARAMETERS;
 
             String ticker = (String) body.get("ticker");
-            double amount = Double.parseDouble((String)body.getOrDefault("amount", "0"));
-            double price = Double.parseDouble((String)body.getOrDefault("price", "0"));
+            double amount = Utils.toDouble(body.get("amount"));
+            double price = Utils.toDouble(body.get("price"));
 
+            if(checkGas &&!body.containsKey("isGas")) {
+                return CryptoResult.ERR_MISSING_PARAMETERS;
+            }
 
             if(ticker.isEmpty()) return CryptoResult.ERR_TICKER_EMPTY;
 
             if(amount <= 0) return CryptoResult.ERR_AMOUNT_GREATER_THAN_ZERO;
 
-            if(price <= 0) return CryptoResult.ERR_PRICE_GREATER_THAN_ZERO;
+            if(checkGas) {
+                boolean isGas = (boolean) body.get("isGas");
+
+                if (price <= 0 && !isGas) return CryptoResult.ERR_PRICE_GREATER_THAN_ZERO;
+            } else {
+                if (price <= 0) return CryptoResult.ERR_PRICE_GREATER_THAN_ZERO;
+            }
         }
 
         return CryptoResult.SUCCESS;

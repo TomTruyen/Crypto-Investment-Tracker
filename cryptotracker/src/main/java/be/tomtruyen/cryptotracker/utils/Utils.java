@@ -66,4 +66,16 @@ public class Utils {
         DecimalFormat formatter = new DecimalFormat("###,###,##0.00");
         return formatter.format(price);
     }
+
+    public static double toDouble(Object number) {
+        if(number == null) return 0d;
+
+        if (number instanceof Double) {
+            return (Double) number;
+        } else if (number instanceof Integer) {
+            return (Integer) number;
+        }
+
+        return 0d;
+    }
 }

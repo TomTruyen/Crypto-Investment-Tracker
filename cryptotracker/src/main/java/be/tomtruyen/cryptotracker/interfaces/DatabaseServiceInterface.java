@@ -17,5 +17,5 @@ public interface DatabaseServiceInterface {
     List<Crypto> getPortfolio(int userId) throws SQLException;
     List<Crypto> getPortfolioHistory(int userId) throws SQLException;
     void buyCrypto(int id, String name, String ticker, double buyAmount, double buyPrice) throws SQLException;
-    void sellCrypto(int userId, int id, String name, String ticker, double sellAmount, double sellPrice) throws SQLException;
+    void sellCrypto(int userId, int id, String name, String ticker, double sellAmount, double sellPrice, boolean isGas) throws SQLException;
 }

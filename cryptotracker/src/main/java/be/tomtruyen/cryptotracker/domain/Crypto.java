@@ -18,6 +18,7 @@ public class Crypto {
     private double sellPrice;
     private Date sellDate;
     private double priceAlert;
+    private boolean isGas;
 
     public Crypto(int id, String name, String ticker, double buyAmount, double buyPrice, Date buyDate, double sellAmount, double sellPrice, Date sellDate, double priceAlert) {
         this.id = id;
@@ -32,7 +33,7 @@ public class Crypto {
         this.priceAlert = priceAlert;
     }
 
-    public Crypto(int id, String name, String ticker, double buyAmount, double buyPrice, Date buyDate, double sellAmount, double sellPrice, Date sellDate) {
+    public Crypto(int id, String name, String ticker, double buyAmount, double buyPrice, Date buyDate, double sellAmount, double sellPrice, Date sellDate, boolean isGas) {
         this.id = id;
         this.name = name;
         this.ticker = ticker;
@@ -42,6 +43,7 @@ public class Crypto {
         this.sellAmount = sellAmount;
         this.sellPrice = sellPrice;
         this.sellDate = sellDate;
+        this.isGas = isGas;
     }
 
 
@@ -131,5 +133,13 @@ public class Crypto {
 
     public void setPriceAlert(double priceAlert) {
         this.priceAlert = priceAlert;
+    }
+
+    public boolean isGas() {
+        return isGas;
+    }
+
+    public void setGas(boolean gas) {
+        isGas = gas;
     }
 }

@@ -126,6 +126,7 @@ public class DatabaseService implements DatabaseServiceInterface {
             double sellAmount = rs.getDouble("sell_amount");
             double priceAlert = rs.getDouble("price_alert");
 
+
             if(sellAmount < buyAmount) {
                 Crypto crypto = new Crypto(id, name, ticker, buyAmount, buyPrice, buyDate, sellAmount, 0, null, priceAlert);
                 cryptos.add(crypto);
@@ -155,8 +156,9 @@ public class DatabaseService implements DatabaseServiceInterface {
             double sellAmount = rs.getDouble("sell_amount");
             double sellPrice = rs.getDouble("sell_price");
             Date sellDate = rs.getDate("sell_date");
+            boolean isGas = rs.getBoolean("is_gas");
 
-            Crypto crypto = new Crypto(id, name, ticker, buyAmount, buyPrice, buyDate, sellAmount, sellPrice, sellDate);
+            Crypto crypto = new Crypto(id, name, ticker, buyAmount, buyPrice, buyDate, sellAmount, sellPrice, sellDate, isGas);
             cryptos.add(crypto);
         }
 
@@ -179,13 +181,15 @@ public class DatabaseService implements DatabaseServiceInterface {
     }
 
     @Override
-    public void sellCrypto(int userId, int id, String name, String ticker, double sellAmount, double sellPrice) throws SQLException {
+    public void sellCrypto(int userId, int id, String name, String ticker, double sellAmount, double sellPrice, boolean isGas) throws SQLException {
+        if(isGas) sellPrice = 0;
+
         Crypto crypto = findCryptoById(id);
 
         if(crypto == null) throw new SQLException();
 
         // INSERT INTO HISTORY
-        String query = "INSERT INTO history (user_id, name, ticker, buy_amount, buy_price, buy_date, sell_amount, sell_price, sell_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO history (user_id, name, ticker, buy_amount, buy_price, buy_date, sell_amount, sell_price, sell_date, is_gas) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         preparedStatement.setInt(1, userId);
@@ -197,6 +201,7 @@ public class DatabaseService implements DatabaseServiceInterface {
         preparedStatement.setDouble(7, sellAmount);
         preparedStatement.setDouble(8, sellPrice);
         preparedStatement.setDate(9, new Date(System.currentTimeMillis()));
+        preparedStatement.setBoolean(10, isGas);
 
         preparedStatement.executeUpdate();
 
