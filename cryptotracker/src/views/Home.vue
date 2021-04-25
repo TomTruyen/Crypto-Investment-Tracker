@@ -351,7 +351,7 @@ export default {
     sell(item) {
       this.sellId = item.id;
       this.sellCrypto = item.ticker;
-      this.sellMaxAmount = item.balance;
+      this.sellMaxAmount = item.balanceValue;
     },
     setInfo(item) {
       this.$data.info.title = `${item.name} (${item.ticker}) Statistics`;
