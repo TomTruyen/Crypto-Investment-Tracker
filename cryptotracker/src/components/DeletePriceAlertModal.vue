@@ -4,6 +4,7 @@
     ref="modal"
     title="Delete price alert"
     @hidden="resetModal"
+    no-close-on-backdrop
   >
     <form ref="form" @submit.stop.prevent="handleDeletePriceAlert">
       <p>

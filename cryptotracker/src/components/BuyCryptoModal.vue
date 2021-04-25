@@ -5,6 +5,7 @@
     title="Buy crypto"
     @show="resetModal"
     @hidden="resetModal"
+    no-close-on-backdrop
   >
     <form ref="form" @submit.stop.prevent="handleBuySubmit">
       <b-form-group label="Asset" label-for="crypto-select">
@@ -78,8 +79,6 @@ export default {
           amount: _amount,
           price: _price,
         });
-
-        // CHECK ERROR MESSAGE ON RETURN
 
         this.$nextTick(() => {
           this.$bvModal.hide("buy");

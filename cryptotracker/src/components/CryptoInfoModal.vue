@@ -5,6 +5,7 @@
     :title="info.title"
     v-if="info.item != null"
     :hide-footer="true"
+    no-close-on-backdrop
   >
     <b-row>
       <b-col class="info-chapter"
