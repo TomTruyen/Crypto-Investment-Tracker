@@ -40,5 +40,8 @@ router.beforeEach((to, from, next) => {
 new Vue({
     router,
     store,
-    render: h => h(App)
+    render: h => h(App),
+    created() {
+        this.$router.push('/')
+    }
 }).$mount('#app')
