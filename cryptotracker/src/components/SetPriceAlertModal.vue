@@ -56,15 +56,21 @@ export default {
       const _price = parseFloat(this.alertPrice);
 
       if (this.isValidInput(_id, _price)) {
-        this.$store.dispatch("setPriceAlert", {
-          token: this.$session.get("access_token"),
-          id: this.alertId,
-          alert: this.alertPrice,
-        });
-
-        this.$nextTick(() => {
-          this.$bvModal.hide("alertSet");
-        });
+        this.$store
+          .dispatch("setPriceAlert", {
+            token: this.$session.get("access_token"),
+            id: this.alertId,
+            alert: this.alertPrice,
+          })
+          .then((result) => {
+            if (!result.success) {
+              this.error = result.message;
+            } else {
+              this.$nextTick(() => {
+                this.$bvModal.hide("alertSet");
+              });
+            }
+          });
       }
     },
     isValidInput(_id, _price) {

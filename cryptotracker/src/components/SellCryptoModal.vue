@@ -80,18 +80,24 @@ export default {
       const _price = parseFloat(this.price);
 
       if (this.isValidInput(_amount, _maxAmount, _isGas, _price)) {
-        this.$store.dispatch("sellCrypto", {
-          token: this.$session.get("access_token"),
-          id: this.id,
-          crypto: this.crypto,
-          amount: _amount,
-          isGas: _isGas,
-          price: _price,
-        });
-
-        this.$nextTick(() => {
-          this.$bvModal.hide("sell");
-        });
+        this.$store
+          .dispatch("sellCrypto", {
+            token: this.$session.get("access_token"),
+            id: this.id,
+            crypto: this.crypto,
+            amount: _amount,
+            isGas: _isGas,
+            price: _price,
+          })
+          .then((result) => {
+            if (!result.success) {
+              this.error = result.message;
+            } else {
+              this.$nextTick(() => {
+                this.$bvModal.hide("sell");
+              });
+            }
+          });
       }
     },
     isValidInput(_amount, _maxAmount, _isGas, _price) {

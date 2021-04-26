@@ -226,8 +226,6 @@ export default class API {
     static async buyCrypto(payload) {
         const bearer = `Bearer ${payload.token}`;
 
-        let success = false;
-
         let options = {
             method: 'POST',
             baseURL: baseURL,
@@ -245,19 +243,19 @@ export default class API {
             },
         };
 
+        let result = null;
+
         await axios.request(options).then((res) => {
-            if (res.data != null && res.data.success) success = true;
-        }).catch((err) => { console.log(err.response.data) });
+            result = res.data;
+        }).catch((err) => { result = err.response.data; });
 
         // console.clear();
 
-        return success;
+        return result;
     }
 
     static async sellCrypto(payload) {
         const bearer = `Bearer ${payload.token}`;
-
-        let success = false;
 
         let options = {
             method: 'POST',
@@ -278,13 +276,15 @@ export default class API {
             },
         };
 
+        let result = null;
+
         await axios.request(options).then((res) => {
-            if (res.data != null && res.data.success) success = true;
-        }).catch((err) => { console.log(err.response.data) });
+            result = res.data;
+        }).catch((err) => { result = err.response.data; });
 
         // console.clear();
 
-        return success;
+        return result;
     }
 
     static async resetPassword(email) {
@@ -359,7 +359,11 @@ export default class API {
             },
         };
 
-        await axios.request(options).then(() => { }).catch(() => { });
+        let result = null;
+
+        await axios.request(options).then((res) => { result = res.data; }).catch((err) => { result = err.response.data; });
+
+        return result;
     }
 
     static async deletePriceAlert(token, id) {
@@ -380,6 +384,10 @@ export default class API {
             },
         };
 
-        await axios.request(options).then(() => { }).catch(() => { });
+        let result = null;
+
+        await axios.request(options).then((res) => { result = res.data; }).catch((err) => { result = err.response.data; });
+
+        return result;
     }
 }

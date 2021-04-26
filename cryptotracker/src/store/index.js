@@ -381,21 +381,25 @@ export default new Vuex.Store({
             })
         },
         buyCrypto(context, payload) {
-            API.buyCrypto(payload).then((isSuccess) => {
-                if (isSuccess) {
-                    API.getCryptos(payload.token).then((cryptos) => {
+            return API.buyCrypto(payload).then(async (result) => {
+                if (result.success) {
+                    await API.getCryptos(payload.token).then((cryptos) => {
                         context.commit('setPortfolio', cryptos);
                     });
                 }
+
+                return result;
             });
         },
         sellCrypto(context, payload) {
-            API.sellCrypto(payload).then((isSuccess) => {
-                if (isSuccess) {
-                    API.getCryptos(payload.token).then((cryptos) => {
+            return API.sellCrypto(payload).then(async (result) => {
+                if (result.success) {
+                    await API.getCryptos(payload.token).then((cryptos) => {
                         context.commit('setPortfolio', cryptos);
                     });
                 }
+
+                return result;
             });
         },
         resetPassword(context, email) {
@@ -412,20 +416,24 @@ export default new Vuex.Store({
             const id = parseInt(payload['id']);
             const alert = parseFloat(payload['alert']);
 
-            API.setPriceAlert(token, id, alert).then(() => {
-                API.getCryptos(token).then((cryptos) => {
+            return API.setPriceAlert(token, id, alert).then(async (result) => {
+                await API.getCryptos(token).then((cryptos) => {
                     context.commit('setPortfolio', cryptos);
                 });
+
+                return result;
             });
         },
         deletePriceAlert(context, payload) {
             const token = payload['token'];
             const id = parseInt(payload['id']);
 
-            API.deletePriceAlert(token, id).then(() => {
-                API.getCryptos(token).then((cryptos) => {
+            return API.deletePriceAlert(token, id).then(async (result) => {
+                await API.getCryptos(token).then((cryptos) => {
                     context.commit('setPortfolio', cryptos);
                 });
+
+                return result;
             });
         }
     }

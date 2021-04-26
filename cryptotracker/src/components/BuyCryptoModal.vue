@@ -73,16 +73,22 @@ export default {
       const _price = parseFloat(this.price);
 
       if (this.isValidInput(_amount, _price)) {
-        this.$store.dispatch("buyCrypto", {
-          token: this.$session.get("access_token"),
-          crypto: this.crypto,
-          amount: _amount,
-          price: _price,
-        });
-
-        this.$nextTick(() => {
-          this.$bvModal.hide("buy");
-        });
+        this.$store
+          .dispatch("buyCrypto", {
+            token: this.$session.get("access_token"),
+            crypto: this.crypto,
+            amount: _amount,
+            price: _price,
+          })
+          .then((result) => {
+            if (!result.success) {
+              this.error = result.message;
+            } else {
+              this.$nextTick(() => {
+                this.$bvModal.hide("buy");
+              });
+            }
+          });
       }
     },
     isValidInput(_amount, _price) {

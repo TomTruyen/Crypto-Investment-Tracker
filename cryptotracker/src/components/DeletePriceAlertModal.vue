@@ -50,14 +50,20 @@ export default {
       const _id = parseInt(this.alertId);
 
       if (this.isValidInput(_id)) {
-        this.$store.dispatch("deletePriceAlert", {
-          token: this.$session.get("access_token"),
-          id: _id,
-        });
-
-        this.$nextTick(() => {
-          this.$bvModal.hide("alertDelete");
-        });
+        this.$store
+          .dispatch("deletePriceAlert", {
+            token: this.$session.get("access_token"),
+            id: _id,
+          })
+          .then((result) => {
+            if (!result.success) {
+              this.error = result.message;
+            } else {
+              this.$nextTick(() => {
+                this.$bvModal.hide("alertDelete");
+              });
+            }
+          });
       }
     },
     isValidInput(_id) {
