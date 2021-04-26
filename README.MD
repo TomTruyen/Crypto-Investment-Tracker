@@ -15,7 +15,7 @@
     <i>The same as npm run serve, but running locally as an Electron application</i>
   </li>
   <li>
-    <b>npm run electron:builder</b>
+    <b>npm run electron:build</b>
     <br />
     <i>The same as npm run build, but the builder for Electron will also bundle everything with an executable for your target system (Windows, MacOS or Linux). In some cases the default setting will also create simple setups (Windows), Apps (MacOS) and Packages (e.g. *.deb for Linux).</i>
   </li>
