@@ -93,6 +93,11 @@ table th:focus {
     border-color: #cec4da;
 }
 
+input.form-control:disabled {
+    opacity: 0.5;
+    cursor:not-allowed;
+}
+
 div[role="combobox"] {
     border: none;
     border-radius: 8px;
@@ -296,6 +301,7 @@ div[role="combobox"] {
 
 .font-size-16-px {
     font-size: 16px;
+    user-select: none;
 }
 
 #info .modal-header,

@@ -41,6 +41,7 @@
           type="number"
           v-model="price"
           placeholder="0"
+          :disabled="isGas == 'true'"
         ></b-form-input>
       </b-form-group>
 
