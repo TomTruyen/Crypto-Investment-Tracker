@@ -2,10 +2,8 @@
   <div class="history">
     <div class="row">
       <div class="col my-auto history-total-profit">
-        <span :class="isProfit >= 0 ? 'up' : 'down'"
-          >{{ isProfit >= 0 ? "&#9650;" : "&#9660;" }} ${{
-            getTotalProfit
-          }}</span
+        <span :class="isProfit ? 'up' : 'down'"
+          >{{ isProfit ? "&#9650;" : "&#9660;" }} ${{ getTotalProfit }}</span
         >
       </div>
     </div>
