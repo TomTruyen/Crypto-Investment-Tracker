@@ -7,11 +7,13 @@ import be.tomtruyen.cryptotracker.domain.VerifyResult;
 import be.tomtruyen.cryptotracker.utils.Utils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.Map;
 
+@Service
 public class ResetPasswordService {
     public static ResponseEntity<Object> reset(Map<String, Object> body) {
         ResetPasswordResult result = validate(body, false);

@@ -16,6 +16,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
 import javax.swing.text.html.Option;
@@ -31,6 +32,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.List;
 
+@Service
 public class CoingeckoApiService {
     private static Color findCryptoColor(CoingeckoCrypto crypto) {
         String imageUrl = crypto.getImage();

@@ -8,11 +8,13 @@ import be.tomtruyen.cryptotracker.utils.Utils;
 import io.jsonwebtoken.Claims;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Service
 public class CryptoService {
     public static ResponseEntity<Object> getPortfolio(Map<String, String> header) {
         List<Crypto> cryptos = new ArrayList<>();

@@ -1,11 +1,13 @@
 package be.tomtruyen.cryptotracker.services;
 
 import be.tomtruyen.cryptotracker.domain.CoingeckoCrypto;
+import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class FileService {
     public static void writeCryptoToFile(List<CoingeckoCrypto> list) {
         if(!list.isEmpty()) {
