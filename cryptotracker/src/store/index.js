@@ -102,6 +102,7 @@ export default new Vuex.Store({
                             const price_percent_change_24h = coingeckoCrypto.price_percent_change_24h;
                             const balance = Utils.numberWithCommas(totalAmount, 6);
 
+
                             let value = totalAmount * coingeckoCrypto.price;
                             value = Utils.numberWithCommas(value, 2, true, true);
 
@@ -135,6 +136,7 @@ export default new Vuex.Store({
                                 'price': `$${price}`,
                                 '24h': price_percent_change_24h,
                                 'balance': balance,
+                                'balance_number': totalAmount,
                                 'value': `$${value}`,
                                 'profit': `${profit}% ($${profitUSD})`,
                                 'profitGreaterThanZero': profit >= 0,
@@ -146,6 +148,27 @@ export default new Vuex.Store({
                     }
                 }
             }
+
+            cryptos = cryptos.sort((a, b) => {
+                let aCrypto = state.coingeckoCryptos.find(c => c.ticker == a.ticker);
+                let bCrypto = state.coingeckoCryptos.find(c => c.ticker == b.ticker);
+
+                if (aCrypto != undefined && bCrypto != undefined) {
+                    const aPrice = parseFloat(aCrypto.price);
+                    const bPrice = parseFloat(bCrypto.price);
+
+                    const aAmount = parseFloat(a.balance_number);
+                    const bAmount = parseFloat(b.balance_number);
+
+                    const aValue = aPrice * aAmount;
+                    const bValue = bPrice * bAmount;
+
+                    if (aValue < bValue) return -1;
+                    if (aValue > bValue) return 1;
+                }
+
+                return 0;
+            }).reverse();
 
             return cryptos;
         },

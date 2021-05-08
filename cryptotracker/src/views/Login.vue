@@ -100,7 +100,8 @@ export default {
 
         eventBus.$emit("accessTokenSet", newResult.token);
 
-        this.$router.push("/");
+
+        this.$router.push("/").catch(() => {});
       }
     },
   },
