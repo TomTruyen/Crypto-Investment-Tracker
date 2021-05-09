@@ -243,11 +243,7 @@ export default new Vuex.Store({
             return uniqueAssets.length;
         },
         getPortfolioChartData(state) {
-            let labels = [];
-            const borderWidth = 1;
-            let borderColor = [];
-            let backgroundColor = [];
-            let data = [];
+            let cryptos = [];
 
             for (let i = 0; i < state.portfolio.length; i++) {
                 const ticker = state.portfolio[i].ticker;
@@ -260,26 +256,45 @@ export default new Vuex.Store({
 
                         const label = `${crypto.name} (${crypto.ticker})`;
 
-                        if (labels.indexOf(label) > -1) {
-                            const index = labels.indexOf(label);
+                        const index = cryptos.findIndex((c) => c.label === label);
 
-                            data[index] += value;
+                        if (index > -1) {
+                            cryptos[index].value += value;
                         } else {
-                            labels.push(label);
-
-                            borderColor.push(crypto.getRgbColor(1));
-                            backgroundColor.push(crypto.getRgbColor(0.5));
-
-                            data.push(value);
+                            cryptos.push({
+                                label: label,
+                                value: value,
+                                borderColor: crypto.getRgbColor(1),
+                                backgroundColor: crypto.getRgbColor(0.5)
+                            });
                         }
                     }
                 }
             }
 
+            cryptos = cryptos.sort((a, b) => {
+                if (a.value < b.value) return -1;
+                if (a.value > b.value) return 1;
+
+                return 0;
+            }).reverse();
+
+            let labels = [];
+            let borderColor = [];
+            let backgroundColor = [];
+            let data = [];
+
+            cryptos.forEach((c) => {
+                labels.push(c.label);
+                borderColor.push(c.borderColor);
+                backgroundColor.push(c.backgroundColor);
+                data.push(c.value);
+            });
+
             let chartData = {
                 labels: labels,
                 datasets: [{
-                    borderWidth: borderWidth,
+                    borderWidth: 1,
                     borderColor: borderColor,
                     backgroundColor: backgroundColor,
                     data: data
