@@ -1,7 +1,7 @@
 ## Todo
 - Custom icon for the website & electron app
 
-
+## How to run
 <ul>
   <li>
     <b>npm run serve</b>
