@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class RegisterService {
-    private static final Logger LOGGER = LogManager.getLogger(LoginService.class);
+    private static final Logger LOGGER = LogManager.getLogger(RegisterService.class);
 
     private final UserDao userDao;
 
@@ -43,7 +43,7 @@ public class RegisterService {
 
             return new UserResponseBuilder().withPath("/register").withOk().build();
         } catch (Exception e) {
-            LOGGER.log(Level.ERROR, Utils.createErrorMessage(e.getMessage()));
+            LOGGER.log(Level.ERROR, Utils.createErrorMessage("register", e.getMessage()));
             return new UserResponseBuilder().withPath("/register").withInternalError().build();
         }
     }

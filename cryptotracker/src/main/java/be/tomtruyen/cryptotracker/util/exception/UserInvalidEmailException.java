@@ -1,7 +1,7 @@
 package be.tomtruyen.cryptotracker.util.exception;
 
 public class UserInvalidEmailException extends RuntimeException{
-    private String path;
+    private final String path;
 
     public UserInvalidEmailException(String message, String path) {
         super(message);

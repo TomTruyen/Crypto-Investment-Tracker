@@ -40,7 +40,7 @@ public class LoginService {
 
             return new UserResponseBuilder().withPath("/login").withToken(token).withOk().build();
         } catch (Exception e) {
-            LOGGER.log(Level.ERROR, Utils.createErrorMessage(e.getMessage()));
+            LOGGER.log(Level.ERROR, Utils.createErrorMessage("login", e.getMessage()));
             return new UserResponseBuilder().withPath("/login").withInternalError().build();
         }
     }

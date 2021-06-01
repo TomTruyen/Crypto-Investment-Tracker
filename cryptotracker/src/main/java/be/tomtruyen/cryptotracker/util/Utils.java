@@ -38,8 +38,8 @@ public class Utils {
         return DIGITCASE_REGEX.matcher(password).find();
     }
 
-    public static String createErrorMessage(String message) {
-        return String.format("[%s] - %s", getDateTime(), message);
+    public static String createErrorMessage(String path, String message) {
+        return String.format("[%s] @%s - %s", getDateTime(), path.toUpperCase(), message);
     }
 
     public static Date getDateFromMillis(long millis) {

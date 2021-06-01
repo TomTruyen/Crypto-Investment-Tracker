@@ -19,33 +19,16 @@ import java.util.Objects;
 
 @RestControllerAdvice
 public class UserExceptionHandler {
-    private static final Logger LOGGER = LogManager.getLogger(UserExceptionHandler.class);
-
-    // Custom JPA Valid exception
-    @ExceptionHandler(value = BindException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public UserResponse jpaValidException(BindException e) {
-        String error = "";
-
-        if(e.hasErrors()) {
-            try {
-                if(e.getFieldError("email") != null) {
-                    error = Objects.requireNonNull(e.getFieldError("email")).getDefaultMessage();
-                } else if (e.getFieldError("password") != null) {
-                    error = Objects.requireNonNull(e.getFieldError("password")).getDefaultMessage();
-                }
-            } catch (NullPointerException ex) {
-                LOGGER.log(Level.ERROR, Utils.createErrorMessage(ex.getMessage()));
-            }
-        }
-
-        return new UserResponseBuilder().withMessage(error).withBadRequest().build();
-    }
-
     @ExceptionHandler(value = UserNotFoundException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public UserResponse userNotFoundException(UserNotFoundException e) {
         return new UserResponseBuilder().withPath(e.getPath()).withMessage(e.getMessage()).withNotFound().build();
+    }
+
+    @ExceptionHandler(value = UserAlreadyVerifiedException.class)
+    @ResponseStatus(value = HttpStatus.CONFLICT)
+    public UserResponse userAlreadyVerifiedException(UserAlreadyVerifiedException e) {
+        return new UserResponseBuilder().withPath(e.getPath()).withMessage(e.getMessage()).withConflict().build();
     }
 
     @ExceptionHandler(value = UserNotVerifiedException.class)
