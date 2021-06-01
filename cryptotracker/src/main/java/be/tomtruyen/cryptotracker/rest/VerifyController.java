@@ -1,7 +1,7 @@
 package be.tomtruyen.cryptotracker.rest;
 
 import be.tomtruyen.cryptotracker.domain.response.UserResponse;
-import be.tomtruyen.cryptotracker.rest.resources.VerifyResource;
+import be.tomtruyen.cryptotracker.rest.resources.EmailResource;
 import be.tomtruyen.cryptotracker.service.VerifyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,7 +23,7 @@ public class VerifyController {
     }
 
     @PostMapping
-    public ResponseEntity<UserResponse> verify(@RequestBody @Valid VerifyResource verifyResource) {
+    public ResponseEntity<UserResponse> verify(@RequestBody @Valid EmailResource verifyResource) {
         UserResponse response = verifyService.verify(verifyResource);
 
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));

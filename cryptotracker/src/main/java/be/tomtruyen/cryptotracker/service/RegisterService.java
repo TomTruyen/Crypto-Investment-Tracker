@@ -7,8 +7,8 @@ import be.tomtruyen.cryptotracker.domain.response.UserResponse;
 import be.tomtruyen.cryptotracker.rest.resources.UserResource;
 import be.tomtruyen.cryptotracker.util.Utils;
 import be.tomtruyen.cryptotracker.util.email.EmailService;
-import be.tomtruyen.cryptotracker.util.exception.*;
-import org.apache.logging.log4j.Level;
+import be.tomtruyen.cryptotracker.util.exception.UserAlreadyExistsException;
+import be.tomtruyen.cryptotracker.util.exception.UserInvalidPasswordException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,6 @@ public class RegisterService {
     }
 
     public UserResponse register(UserResource userResource) {
-        try {
             if (!Utils.isValidPassword(userResource.getPassword()))
                 throw new UserInvalidPasswordException("Password is too weak", "/register");
 
@@ -42,9 +41,5 @@ public class RegisterService {
             EmailService.sendVerificationEmail(user.getEmail());
 
             return new UserResponseBuilder().withPath("/register").withOk().build();
-        } catch (Exception e) {
-            LOGGER.log(Level.ERROR, Utils.createErrorMessage("register", e.getMessage()));
-            return new UserResponseBuilder().withPath("/register").withInternalError().build();
-        }
     }
 }
