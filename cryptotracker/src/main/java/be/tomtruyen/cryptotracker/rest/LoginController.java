@@ -27,7 +27,7 @@ public class LoginController {
     }
 
     @PostMapping
-    public ResponseEntity<UserResponse> login(@Valid @RequestBody UserResource user) {
+    public ResponseEntity<UserResponse> login(@RequestBody @Valid UserResource user) {
         UserResponse response = loginService.login(user);
 
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
