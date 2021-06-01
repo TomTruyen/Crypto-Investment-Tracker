@@ -4,7 +4,7 @@ import be.tomtruyen.cryptotracker.domain.response.UserResponse;
 import org.springframework.http.HttpStatus;
 
 public class UserResponseBuilder {
-    private UserResponse userResponse;
+    private final UserResponse userResponse;
 
     public UserResponseBuilder() {
         this.userResponse = new UserResponse();
