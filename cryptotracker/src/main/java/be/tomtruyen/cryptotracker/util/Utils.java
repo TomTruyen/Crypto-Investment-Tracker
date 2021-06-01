@@ -38,6 +38,10 @@ public class Utils {
         return DIGITCASE_REGEX.matcher(password).find();
     }
 
+    public static String createErrorMessage(String message) {
+        return String.format("[%s] - %s", getDateTime(), message);
+    }
+
     public static Date getDateFromMillis(long millis) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(millis);

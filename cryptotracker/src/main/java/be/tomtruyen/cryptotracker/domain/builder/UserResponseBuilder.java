@@ -46,6 +46,12 @@ public class UserResponseBuilder {
         return this;
     }
 
+    public UserResponseBuilder withInternalError() {
+        this.userResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+
+        return this;
+    }
+
     public UserResponseBuilder withOk() {
         this.userResponse.setStatus(HttpStatus.OK.value());
         this.userResponse.setSuccess(true);

@@ -9,6 +9,7 @@ import be.tomtruyen.cryptotracker.util.Utils;
 import be.tomtruyen.cryptotracker.util.exception.UserNotFoundException;
 import be.tomtruyen.cryptotracker.util.exception.UserNotVerifiedException;
 import be.tomtruyen.cryptotracker.util.jwt.JwtService;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -26,16 +27,21 @@ public class LoginService {
     }
 
     public UserResponse login(UserResource userResource) {
-        String password = Utils.hashPassword(userResource.getPassword());
+        try {
+            String password = Utils.hashPassword(userResource.getPassword());
 
-        User user = userDao.findUserByEmailAndPassword(userResource.getEmail(), password);
+            User user = userDao.findUserByEmailAndPassword(userResource.getEmail(), password);
 
-        if(user == null) throw new UserNotFoundException("Invalid email/password combination", "/login");
+            if (user == null) throw new UserNotFoundException("Invalid email/password combination", "/login");
 
-        if(!user.isVerified()) throw new UserNotVerifiedException("Email not verified", "/login");
+            if (!user.isVerified()) throw new UserNotVerifiedException("Email not verified", "/login");
 
-        String token = jwtService.generateToken(user.getId(), user.getEmail(), null);
+            String token = jwtService.generateToken(user.getId(), user.getEmail(), null);
 
-        return new UserResponseBuilder().withPath("/login").withToken(token).withOk().build();
+            return new UserResponseBuilder().withPath("/login").withToken(token).withOk().build();
+        } catch (Exception e) {
+            LOGGER.log(Level.ERROR, Utils.createErrorMessage(e.getMessage()));
+            return new UserResponseBuilder().withPath("/login").withInternalError().build();
+        }
     }
 }
