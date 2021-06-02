@@ -8,6 +8,12 @@ public class EmailResource {
     @Email(message = "Email is invalid")
     private String email;
 
+    public EmailResource() {}
+
+    public EmailResource(String email) {
+        this.email = email;
+    }
+
     public String getEmail() {
         return email;
     }

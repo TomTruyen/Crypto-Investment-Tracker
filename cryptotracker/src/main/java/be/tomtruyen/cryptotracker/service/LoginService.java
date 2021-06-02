@@ -17,12 +17,13 @@ import org.springframework.stereotype.Service;
 public class LoginService {
     private static final Logger LOGGER = LogManager.getLogger(LoginService.class);
 
-    private final UserDao userDao;
-    private final JwtService jwtService;
+    final JwtService jwtService;
 
-    public LoginService(UserDao userDao, JwtService jwtService) {
-        this.userDao = userDao;
+    final UserDao userDao;
+
+    public LoginService(JwtService jwtService, UserDao userDao) {
         this.jwtService = jwtService;
+        this.userDao = userDao;
     }
 
     public UserResponse login(UserResource userResource) {

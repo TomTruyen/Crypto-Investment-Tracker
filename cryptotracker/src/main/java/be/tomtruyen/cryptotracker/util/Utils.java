@@ -19,12 +19,6 @@ public class Utils {
     public static final Pattern DIGITCASE_REGEX = Pattern.compile("[0-9 ]");
     public static final int MIN_PASSWORD_LENGTH = 8;
 
-
-    public static boolean isValidEmail(String email) {
-        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(email);
-        return matcher.find();
-    }
-
     public static boolean isValidPassword(String password) {
         if (password.length() < MIN_PASSWORD_LENGTH)
             return false;
@@ -52,12 +46,6 @@ public class Utils {
         return DigestUtils.sha512Hex(password);
     }
 
-    public static Object checkNull (Object input, Object defaultValue){
-        if(input == null) return defaultValue;
-
-        return input;
-    }
-
     public static String getDateTime() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
@@ -68,17 +56,5 @@ public class Utils {
     public static String priceWithDecimal (double price) {
         DecimalFormat formatter = new DecimalFormat("###,###,##0.00");
         return formatter.format(price);
-    }
-
-    public static double toDouble(Object number) {
-        if(number == null) return 0d;
-
-        if (number instanceof Double) {
-            return (Double) number;
-        } else if (number instanceof Integer) {
-            return (Integer) number;
-        }
-
-        return 0d;
     }
 }
