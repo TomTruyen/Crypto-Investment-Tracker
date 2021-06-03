@@ -8,11 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class CryptotrackerApplication {
-	private static final Logger LOGGER = LogManager.getLogger(CryptotrackerApplication.class);
-
 	public static void main(String[] args) {
-		LOGGER.info("Starting Application.");
-
 		SpringApplication.run(CryptotrackerApplication.class, args);
 	}
 

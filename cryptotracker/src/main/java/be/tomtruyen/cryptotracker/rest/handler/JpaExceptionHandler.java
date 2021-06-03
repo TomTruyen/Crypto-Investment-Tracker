@@ -47,7 +47,7 @@ public class JpaExceptionHandler {
     @ExceptionHandler(value = MissingRequestHeaderException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public CryptoResponse jpaHeaderException(MissingRequestHeaderException e) {
-        LOGGER.info(Utils.createErrorMessage("missing header", e.getMessage()));
+        LOGGER.error(Utils.createErrorMessage("missing header", e.getMessage()));
 
         return new CryptoResponseBuilder().withPath("/error").withMessage(e.getMessage()).withBadRequest().build();
     }

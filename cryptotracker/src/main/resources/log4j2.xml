@@ -1,17 +1,14 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
     <Appenders>
-        <File name="LogToFile" fileName="logs/log.txt">
+        <File name="LogToFile" fileName="src/main/resources/logs/cryptotracker.log">
             <PatternLayout>
-                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+                <Pattern>%m%n</Pattern>
             </PatternLayout>
         </File>
     </Appenders>
     <Loggers>
         <Root level="error">
-            <AppenderRef ref="LogToFile" />
-        </Root>
-        <Root level="info">
             <AppenderRef ref="LogToFile" />
         </Root>
     </Loggers>
