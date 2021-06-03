@@ -66,7 +66,7 @@ public class CoingeckoCrypto implements Serializable {
     private double pricePercentChange1y;
     @SerializedName("last_updated")
     private String lastUpdated;
-    private Color color;
+    private transient Color color;
 
     public String getId() {
         return id;
