@@ -27,11 +27,11 @@ public class CoingeckoCrypto implements Serializable {
     @SerializedName("fully_diluted_valuation")
     private double fullyDilutedValuation;
     @SerializedName("total_volume")
-    private double volume_24h;
+    private double volume24h;
     @SerializedName("high_24h")
-    private double high_24h;
+    private double high24h;
     @SerializedName("low_24h")
-    private double low_24h;
+    private double low24h;
     @SerializedName("ath")
     private double allTimeHigh;
     @SerializedName("ath_change_percentage")
@@ -132,28 +132,28 @@ public class CoingeckoCrypto implements Serializable {
         this.fullyDilutedValuation = fullyDilutedValuation;
     }
 
-    public double getVolume_24h() {
-        return volume_24h;
+    public double getVolume24h() {
+        return volume24h;
     }
 
-    public void setVolume_24h(double volume_24h) {
-        this.volume_24h = volume_24h;
+    public void setVolume24h(double volume24h) {
+        this.volume24h = volume24h;
     }
 
-    public double getHigh_24h() {
-        return high_24h;
+    public double getHigh24h() {
+        return high24h;
     }
 
-    public void setHigh_24h(double high_24h) {
-        this.high_24h = high_24h;
+    public void setHigh24h(double high24h) {
+        this.high24h = high24h;
     }
 
-    public double getLow_24h() {
-        return low_24h;
+    public double getLow24h() {
+        return low24h;
     }
 
-    public void setLow_24h(double low_24h) {
-        this.low_24h = low_24h;
+    public void setLow24h(double low24h) {
+        this.low24h = low24h;
     }
 
     public double getAllTimeHigh() {
