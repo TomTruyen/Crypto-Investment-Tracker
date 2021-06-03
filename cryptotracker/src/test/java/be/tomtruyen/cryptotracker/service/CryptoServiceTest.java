@@ -61,4 +61,7 @@ public class CryptoServiceTest
 
         Assertions.assertThrows(InvalidTokenException.class, () -> cryptoService.getPortfolio(token));
     }
+
+//    TODO
+//    Write remaining tests
 }

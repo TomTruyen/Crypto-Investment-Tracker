@@ -3,11 +3,13 @@ package be.tomtruyen.cryptotracker.service;
 import be.tomtruyen.cryptotracker.dao.CryptoDao;
 import be.tomtruyen.cryptotracker.dao.HistoryCryptoDao;
 import be.tomtruyen.cryptotracker.dao.UserDao;
+import be.tomtruyen.cryptotracker.domain.CoingeckoCrypto;
 import be.tomtruyen.cryptotracker.domain.Crypto;
 import be.tomtruyen.cryptotracker.domain.HistoryCrypto;
 import be.tomtruyen.cryptotracker.domain.User;
 import be.tomtruyen.cryptotracker.domain.builder.CryptoResponseBuilder;
 import be.tomtruyen.cryptotracker.domain.response.CryptoResponse;
+import be.tomtruyen.cryptotracker.repository.CryptoRepository;
 import be.tomtruyen.cryptotracker.util.exception.CryptoUserNotFoundException;
 import be.tomtruyen.cryptotracker.util.exception.InvalidTokenException;
 import be.tomtruyen.cryptotracker.util.jwt.JwtService;
@@ -31,10 +33,16 @@ public class CryptoService {
         this.jwtService = jwtService;
     }
 
-    private User validateTokenAndGetUser(String token, String path) {
+    private Claims validateTokenAndGetClaims(String token, String path) {
         Claims claims = jwtService.verifyToken(token);
 
         if(claims == null) throw new InvalidTokenException("Token is invalid", path);
+
+        return claims;
+    }
+
+    private User validateTokenAndGetUser(String token, String path) {
+        Claims claims = validateTokenAndGetClaims(token, path);
 
         long id = (long) (int) claims.getOrDefault("id", -1);
 
@@ -61,5 +69,13 @@ public class CryptoService {
         List<HistoryCrypto> crypto = historyCryptoDao.findHistoryCryptoByUserOrderBySellDate(user);
 
         return new CryptoResponseBuilder().withPath("/cryptocurrencies/portfolio/history").withCrypto(crypto).withOk().build();
+    }
+
+    public CryptoResponse getCryptoList(String token) {
+        validateTokenAndGetClaims(token, "/cryptocurrencies/list");
+
+        List<CoingeckoCrypto> crypto = CryptoRepository.getInstance().get(150);
+
+        return new CryptoResponseBuilder().withPath("/cryptocurrencies/list").withCrypto(crypto).withOk().build();
     }
 }

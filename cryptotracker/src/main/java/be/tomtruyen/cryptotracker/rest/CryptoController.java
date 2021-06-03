@@ -37,4 +37,11 @@ public class CryptoController {
 
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
     }
+
+    @GetMapping(path = "list")
+    public ResponseEntity<CryptoResponse> getCryptoList(@RequestHeader(name = "authorization") String token) {
+        CryptoResponse response = cryptoService.getCryptoList(token);
+
+        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
+    }
 }

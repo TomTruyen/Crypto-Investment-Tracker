@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface CryptoDao extends JpaRepository<Crypto, Long> {
     List<Crypto> findCryptosByUserOrderByBuyDateAscNameAsc(User user);
+    List<Crypto> findCryptosByPriceAlertGreaterThan(double priceAlert);
 }
