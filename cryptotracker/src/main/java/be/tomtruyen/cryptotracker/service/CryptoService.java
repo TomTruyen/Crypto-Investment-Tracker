@@ -11,7 +11,9 @@ import be.tomtruyen.cryptotracker.domain.builder.CryptoResponseBuilder;
 import be.tomtruyen.cryptotracker.domain.response.CryptoResponse;
 import be.tomtruyen.cryptotracker.repository.CryptoRepository;
 import be.tomtruyen.cryptotracker.rest.resources.CryptoBuyResource;
+import be.tomtruyen.cryptotracker.rest.resources.CryptoDeleteAlertResource;
 import be.tomtruyen.cryptotracker.rest.resources.CryptoSellResource;
+import be.tomtruyen.cryptotracker.rest.resources.CryptoSetAlertResource;
 import be.tomtruyen.cryptotracker.util.exception.CryptoUserNotFoundException;
 import be.tomtruyen.cryptotracker.util.exception.InvalidTokenException;
 import be.tomtruyen.cryptotracker.util.jwt.JwtService;
@@ -56,7 +58,7 @@ public class CryptoService {
 
         return user;
     }
-
+    
     public CryptoResponse getPortfolio(String token) {
         User user = validateTokenAndGetUser(token, "/cryptocurrencies/portfolio");
 
@@ -100,7 +102,7 @@ public class CryptoService {
     }
 
     public CryptoResponse sell(String token, CryptoSellResource cryptoResource) {
-        User user = validateTokenAndGetUser(token,"/cryptocurrencies/sell");
+        validateTokenAndGetUser(token,"/cryptocurrencies/sell");
 
         Crypto crypto = cryptoDao.findFirstById(cryptoResource.getId());
 
@@ -132,5 +134,27 @@ public class CryptoService {
         }
 
         return new CryptoResponseBuilder().withPath("/cryptocurrencies/sell").withOk().build();
+    }
+
+    public CryptoResponse setAlert(String token, CryptoSetAlertResource alertResource) {
+        validateTokenAndGetUser(token, "/cryptocurrencies/alert/set");
+
+        Crypto crypto = cryptoDao.findFirstById(alertResource.getId());
+        crypto.setPriceAlert(alertResource.getAlert());
+
+        cryptoDao.save(crypto);
+
+        return new CryptoResponseBuilder().withPath("/cryptocurrencies/alert/set").withOk().build();
+    }
+
+    public CryptoResponse deleteAlert(String token, CryptoDeleteAlertResource alertResource) {
+        validateTokenAndGetUser(token, "/cryptocurrencies/alert/delete");
+
+        Crypto crypto = cryptoDao.findFirstById(alertResource.getId());
+        crypto.setPriceAlert(0);
+
+        cryptoDao.save(crypto);
+
+        return new CryptoResponseBuilder().withPath("/cryptocurrencies/alert/delete").withOk().build();
     }
 }

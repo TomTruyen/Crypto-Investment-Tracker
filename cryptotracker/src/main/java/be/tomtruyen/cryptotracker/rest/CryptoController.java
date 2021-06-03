@@ -2,7 +2,9 @@ package be.tomtruyen.cryptotracker.rest;
 
 import be.tomtruyen.cryptotracker.domain.response.CryptoResponse;
 import be.tomtruyen.cryptotracker.rest.resources.CryptoBuyResource;
+import be.tomtruyen.cryptotracker.rest.resources.CryptoDeleteAlertResource;
 import be.tomtruyen.cryptotracker.rest.resources.CryptoSellResource;
+import be.tomtruyen.cryptotracker.rest.resources.CryptoSetAlertResource;
 import be.tomtruyen.cryptotracker.service.CryptoService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -55,6 +57,20 @@ public class CryptoController {
     @PostMapping(path = "sell")
     public ResponseEntity<CryptoResponse> sellCrypto(@RequestHeader(name = "authorization") String token, @RequestBody @Valid CryptoSellResource cryptoResource) {
         CryptoResponse response = cryptoService.sell(token, cryptoResource);
+
+        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
+    }
+
+    @PostMapping(path = "alert/set")
+    public ResponseEntity<CryptoResponse> setPriceAlert(@RequestHeader(name = "authorization") String token, @RequestBody @Valid CryptoSetAlertResource alertResource) {
+        CryptoResponse response = cryptoService.setAlert(token, alertResource);
+
+        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
+    }
+
+    @PostMapping(path = "alert/delete")
+    public ResponseEntity<CryptoResponse> deletePriceAlert(@RequestHeader(name = "authorization") String token, @RequestBody @Valid CryptoDeleteAlertResource alertResource) {
+        CryptoResponse response = cryptoService.deleteAlert(token, alertResource);
 
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
     }
