@@ -14,6 +14,7 @@ import be.tomtruyen.cryptotracker.rest.resources.CryptoBuyResource;
 import be.tomtruyen.cryptotracker.rest.resources.CryptoDeleteAlertResource;
 import be.tomtruyen.cryptotracker.rest.resources.CryptoSellResource;
 import be.tomtruyen.cryptotracker.rest.resources.CryptoSetAlertResource;
+import be.tomtruyen.cryptotracker.util.exception.CryptoNotFoundException;
 import be.tomtruyen.cryptotracker.util.exception.CryptoUserNotFoundException;
 import be.tomtruyen.cryptotracker.util.exception.InvalidTokenException;
 import be.tomtruyen.cryptotracker.util.jwt.JwtService;
@@ -88,6 +89,8 @@ public class CryptoService {
 
         CoingeckoCrypto coingeckoCrypto = CryptoRepository.getInstance().find(cryptoResource.getTicker());
 
+        if(coingeckoCrypto == null) throw new CryptoNotFoundException("Cryptocurrency not found", "/cryptocurrencies/buy");
+
         Crypto crypto = new Crypto();
         crypto.setName(coingeckoCrypto.getName());
         crypto.setTicker(crypto.getTicker());
@@ -105,6 +108,8 @@ public class CryptoService {
         validateTokenAndGetUser(token,"/cryptocurrencies/sell");
 
         Crypto crypto = cryptoDao.findFirstById(cryptoResource.getId());
+
+        if(crypto == null) throw new CryptoNotFoundException("Cryptocurrency not found", "/cryptocurrencies/sell");
 
         // Insert history
         HistoryCrypto sellCrypto = new HistoryCrypto();
@@ -140,6 +145,9 @@ public class CryptoService {
         validateTokenAndGetUser(token, "/cryptocurrencies/alert/set");
 
         Crypto crypto = cryptoDao.findFirstById(alertResource.getId());
+
+        if(crypto == null) throw new CryptoNotFoundException("Cryptocurrency not found", "/cryptocurrencies/alert/set");
+
         crypto.setPriceAlert(alertResource.getAlert());
 
         cryptoDao.save(crypto);
@@ -151,6 +159,9 @@ public class CryptoService {
         validateTokenAndGetUser(token, "/cryptocurrencies/alert/delete");
 
         Crypto crypto = cryptoDao.findFirstById(alertResource.getId());
+
+        if(crypto == null) throw new CryptoNotFoundException("Cryptocurrency not found", "/cryptocurrencies/delete");
+
         crypto.setPriceAlert(0);
 
         cryptoDao.save(crypto);

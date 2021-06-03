@@ -1,9 +1,9 @@
 package be.tomtruyen.cryptotracker.util.exception;
 
-public class CryptoUserNotFoundException extends RuntimeException {
+public class CryptoNotFoundException extends RuntimeException {
     private final String path;
 
-    public CryptoUserNotFoundException(String message, String path) {
+    public CryptoNotFoundException(String message, String path) {
         super(message);
 
         this.path = path;
