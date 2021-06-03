@@ -123,7 +123,7 @@ public class CryptoServiceTest
     }
 
     @Test
-    void getPortfolioHistoryStatusOkWhenPortfolioFetched() {
+    void getPortfolioHistoryStatusOkWhenPortfolioHistoryFetched() {
         Claims claims = new DefaultClaims();
         claims.put("id", 1);
 
@@ -135,5 +135,26 @@ public class CryptoServiceTest
         Assertions.assertNotNull(cryptoResponse);
         Assertions.assertEquals(200, cryptoResponse.getStatus());
         Assertions.assertEquals("/cryptocurrencies/portfolio/history", cryptoResponse.getPath());
+    }
+
+    @Test
+    void getCryptoListThrowsInvalidTokenExceptionWhenInvalidToken() {
+        when(jwtService.verifyToken(anyString())).thenReturn(null);
+
+        Assertions.assertThrows(InvalidTokenException.class, () -> cryptoService.getCryptoList(""));
+    }
+
+    @Test
+    void  getCryptoListStatusOkWhenCryptosFetched() {
+        Claims claims = new DefaultClaims();
+        claims.put("id", 1);
+
+        when(jwtService.verifyToken(anyString())).thenReturn(claims);
+
+        CryptoResponse cryptoResponse = cryptoService.getCryptoList("");
+
+        Assertions.assertNotNull(cryptoResponse);
+        Assertions.assertEquals(200, cryptoResponse.getStatus());
+        Assertions.assertEquals("/cryptocurrencies/list", cryptoResponse.getPath());
     }
 }
