@@ -30,4 +30,11 @@ public class CryptoController {
 
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
     }
+
+    @GetMapping(path = "portfolio/history")
+    public ResponseEntity<CryptoResponse> getPortfolioHistory(@RequestHeader(name = "authorization") String token) {
+        CryptoResponse response = cryptoService.getPortfolioHistory(token);
+
+        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
+    }
 }

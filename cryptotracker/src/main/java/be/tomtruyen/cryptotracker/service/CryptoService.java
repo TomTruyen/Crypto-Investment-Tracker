@@ -4,6 +4,7 @@ import be.tomtruyen.cryptotracker.dao.CryptoDao;
 import be.tomtruyen.cryptotracker.dao.HistoryCryptoDao;
 import be.tomtruyen.cryptotracker.dao.UserDao;
 import be.tomtruyen.cryptotracker.domain.Crypto;
+import be.tomtruyen.cryptotracker.domain.HistoryCrypto;
 import be.tomtruyen.cryptotracker.domain.User;
 import be.tomtruyen.cryptotracker.domain.builder.CryptoResponseBuilder;
 import be.tomtruyen.cryptotracker.domain.response.CryptoResponse;
@@ -30,21 +31,35 @@ public class CryptoService {
         this.jwtService = jwtService;
     }
 
-    public CryptoResponse getPortfolio(String token) {
+    private User validateTokenAndGetUser(String token, String path) {
         Claims claims = jwtService.verifyToken(token);
 
-        if(claims == null) throw new InvalidTokenException("Token is invalid", "/cryptocurrencies/portfolio");
+        if(claims == null) throw new InvalidTokenException("Token is invalid", path);
 
         long id = (long) (int) claims.getOrDefault("id", -1);
 
-        if(id == -1) throw new InvalidTokenException("Token is invalid", "/cryptocurrencies/portfolio");
+        if(id == -1) throw new InvalidTokenException("Token is invalid", path);
 
         User user = userDao.findUserById(id);
 
-        if(user == null) throw new CryptoUserNotFoundException("User not found", "/cryptocurrencies/portfolio");
+        if(user == null) throw new CryptoUserNotFoundException("User not found", path);
+
+        return user;
+    }
+
+    public CryptoResponse getPortfolio(String token) {
+        User user = validateTokenAndGetUser(token, "/cryptocurrencies/portfolio");
 
         List<Crypto> crypto = cryptoDao.findCryptosByUserOrderByBuyDateAscNameAsc(user);
 
         return new CryptoResponseBuilder().withPath("/cryptocurrencies/portfolio").withCrypto(crypto).withOk().build();
+    }
+
+    public CryptoResponse getPortfolioHistory(String token) {
+        User user = validateTokenAndGetUser(token, "/cryptocurrencies/portfolio/history");
+
+        List<HistoryCrypto> crypto = historyCryptoDao.findHistoryCryptoByUserOrderBySellDate(user);
+
+        return new CryptoResponseBuilder().withPath("/cryptocurrencies/portfolio/history").withCrypto(crypto).withOk().build();
     }
 }
