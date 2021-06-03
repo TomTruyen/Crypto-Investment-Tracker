@@ -2,7 +2,6 @@ package be.tomtruyen.cryptotracker.rest.resources;
 
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
 
 public class CryptoSetAlertResource {
     @Min(value = 1, message = "Id invalid")

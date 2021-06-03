@@ -3,23 +3,19 @@ package be.tomtruyen.cryptotracker.service;
 import be.tomtruyen.cryptotracker.dao.CryptoDao;
 import be.tomtruyen.cryptotracker.dao.HistoryCryptoDao;
 import be.tomtruyen.cryptotracker.dao.UserDao;
-import be.tomtruyen.cryptotracker.domain.CoingeckoCrypto;
 import be.tomtruyen.cryptotracker.domain.User;
 import be.tomtruyen.cryptotracker.domain.response.CryptoResponse;
 import be.tomtruyen.cryptotracker.model.CryptoBuyResourceBuilder;
+import be.tomtruyen.cryptotracker.model.CryptoDeleteAlertResourceBuilder;
 import be.tomtruyen.cryptotracker.model.CryptoSellResourceBuilder;
-import be.tomtruyen.cryptotracker.model.UserResourceBuilder;
+import be.tomtruyen.cryptotracker.model.CryptoSetAlertResourceBuilder;
 import be.tomtruyen.cryptotracker.repository.CryptoRepository;
 import be.tomtruyen.cryptotracker.rest.resources.*;
 import be.tomtruyen.cryptotracker.util.exception.CryptoNotFoundException;
 import be.tomtruyen.cryptotracker.util.exception.CryptoUserNotFoundException;
 import be.tomtruyen.cryptotracker.util.exception.InvalidTokenException;
-import be.tomtruyen.cryptotracker.util.exception.UserNotFoundException;
 import be.tomtruyen.cryptotracker.util.jwt.JwtService;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.DefaultClaims;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,9 +26,6 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.Date;
-import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
@@ -52,9 +45,6 @@ public class CryptoServiceTest
     @Mock
     private JwtService jwtService;
 
-    @Mock
-    private CryptoRepository cryptoRepositoryInstance = CryptoRepository.getInstance();
-
     @InjectMocks
     private CryptoService cryptoService;
     private CryptoBuyResource cryptoBuyResource;
@@ -69,6 +59,8 @@ public class CryptoServiceTest
     void init() {
         cryptoBuyResource = CryptoBuyResourceBuilder.anCryptoBuyResource().build();
         cryptoSellResource = CryptoSellResourceBuilder.anCryptoBuyResource().build();
+        cryptoSetAlertResource = CryptoSetAlertResourceBuilder.anCryptoSetAlertResource().build();
+        cryptoDeleteAlertResource = CryptoDeleteAlertResourceBuilder.anCryptoSetAlertResource().build();
     }
 
     @Test
@@ -254,5 +246,83 @@ public class CryptoServiceTest
         when(userDao.findUserById(anyLong())).thenReturn(new User());
 
         Assertions.assertThrows(CryptoNotFoundException.class, () -> cryptoService.sell("", cryptoSellResource));
+    }
+
+    @Test
+    void setAlertThrowsInvalidTokenExceptionWhenInvalidToken() {
+        when(jwtService.verifyToken(anyString())).thenReturn(null);
+
+        Assertions.assertThrows(InvalidTokenException.class, () -> cryptoService.setAlert("", cryptoSetAlertResource));
+    }
+
+    @Test
+    void setAlertThrowsInvalidTokenExceptionWhenIdNotValid() {
+        Claims claims = new DefaultClaims();
+        claims.put("id", -1);
+
+        when(jwtService.verifyToken(anyString())).thenReturn(claims);
+
+        Assertions.assertThrows(InvalidTokenException.class, () -> cryptoService.setAlert("", cryptoSetAlertResource));
+    }
+
+    @Test
+    void setAlertThrowsUserNotFoundExceptionWhenUserNotFound() {
+        Claims claims = new DefaultClaims();
+        claims.put("id", 1);
+
+        when(jwtService.verifyToken(anyString())).thenReturn(claims);
+        when(userDao.findUserById(anyLong())).thenReturn(null);
+
+        Assertions.assertThrows(CryptoUserNotFoundException.class, () -> cryptoService.setAlert("", cryptoSetAlertResource));
+    }
+
+    @Test
+    void setAlertThrowsCryptoNotFoundExceptionWhenCryptoNotFound() {
+        Claims claims = new DefaultClaims();
+        claims.put("id", 1);
+
+        when(jwtService.verifyToken(anyString())).thenReturn(claims);
+        when(userDao.findUserById(anyLong())).thenReturn(new User());
+
+        Assertions.assertThrows(CryptoNotFoundException.class, () -> cryptoService.setAlert("", cryptoSetAlertResource));
+    }
+
+    @Test
+    void deleteAlertThrowsInvalidTokenExceptionWhenInvalidToken() {
+        when(jwtService.verifyToken(anyString())).thenReturn(null);
+
+        Assertions.assertThrows(InvalidTokenException.class, () -> cryptoService.deleteAlert("", cryptoDeleteAlertResource));
+    }
+
+    @Test
+    void deleteAlertThrowsInvalidTokenExceptionWhenIdNotValid() {
+        Claims claims = new DefaultClaims();
+        claims.put("id", -1);
+
+        when(jwtService.verifyToken(anyString())).thenReturn(claims);
+
+        Assertions.assertThrows(InvalidTokenException.class, () -> cryptoService.deleteAlert("", cryptoDeleteAlertResource));
+    }
+
+    @Test
+    void deleteAlertThrowsUserNotFoundExceptionWhenUserNotFound() {
+        Claims claims = new DefaultClaims();
+        claims.put("id", 1);
+
+        when(jwtService.verifyToken(anyString())).thenReturn(claims);
+        when(userDao.findUserById(anyLong())).thenReturn(null);
+
+        Assertions.assertThrows(CryptoUserNotFoundException.class, () -> cryptoService.deleteAlert("", cryptoDeleteAlertResource));
+    }
+
+    @Test
+    void deleteAlertThrowsCryptoNotFoundExceptionWhenCryptoNotFound() {
+        Claims claims = new DefaultClaims();
+        claims.put("id", 1);
+
+        when(jwtService.verifyToken(anyString())).thenReturn(claims);
+        when(userDao.findUserById(anyLong())).thenReturn(new User());
+
+        Assertions.assertThrows(CryptoNotFoundException.class, () -> cryptoService.deleteAlert("", cryptoDeleteAlertResource));
     }
 }
