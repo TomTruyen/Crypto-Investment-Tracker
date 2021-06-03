@@ -24,8 +24,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Date;
 
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -61,13 +60,5 @@ public class CryptoServiceTest
         String token = "Bearer " + jwtService.generateToken(null, "test@test.com", null);
 
         Assertions.assertThrows(InvalidTokenException.class, () -> cryptoService.getPortfolio(token));
-    }
-
-    @Test
-    void getPortfolioThrowsCryptoUserNotFoundExceptionWhenUserNotFound() {
-        when(jwtService.verifyToken(anyString())).thenReturn(new DefaultClaims().setId("1"));
-        when(userDao.findUserById(anyLong())).thenReturn(null);
-
-        Assertions.assertThrows(CryptoUserNotFoundException.class, () -> cryptoService.getPortfolio(""));
     }
 }
