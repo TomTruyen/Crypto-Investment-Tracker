@@ -34,7 +34,7 @@ public class ResetPasswordControllerTest {
 
 
     @Test
-    public void resetStatusBadRequestWhenEmailNotGiven() throws Exception {
+    void resetStatusBadRequestWhenEmailNotGiven() throws Exception {
         String body = "{\"email\": \"\"}";
 
         mockMvc.perform(post("/resetpassword")
@@ -45,7 +45,7 @@ public class ResetPasswordControllerTest {
     }
 
     @Test
-    public void resetStatusBadRequestWhenEmailInvalid() throws Exception {
+    void resetStatusBadRequestWhenEmailInvalid() throws Exception {
         String body = "{\"email\": \"email\"}";
 
         mockMvc.perform(post("/resetpassword")
@@ -56,7 +56,7 @@ public class ResetPasswordControllerTest {
     }
 
     @Test
-    public void resetStatusOkWhenResourceValid() throws Exception {
+    void resetStatusOkWhenResourceValid() throws Exception {
         String body = "{\"email\": \"test@test.com\"}";
 
         when(userDao.findUserByEmailAndPassword(anyString(), anyString())).thenReturn(null);
@@ -70,7 +70,7 @@ public class ResetPasswordControllerTest {
     }
 
     @Test
-    public void confirmStatusBadRequestWhenEmailNotGiven() throws Exception {
+    void confirmStatusBadRequestWhenEmailNotGiven() throws Exception {
         String body = "{\"email\": \"\", \"password\": \"password\"}";
 
         mockMvc.perform(post("/resetpassword/confirm")
@@ -81,7 +81,7 @@ public class ResetPasswordControllerTest {
     }
 
     @Test
-    public void confirmStatusBadRequestWhenEmailInvalid() throws Exception {
+    void confirmStatusBadRequestWhenEmailInvalid() throws Exception {
         String body = "{\"email\": \"email\", \"password\": \"password\"}";
 
         mockMvc.perform(post("/resetpassword/confirm")
@@ -92,7 +92,7 @@ public class ResetPasswordControllerTest {
     }
 
     @Test
-    public void confirmStatusOkWhenResourceValid() throws Exception {
+    void confirmStatusOkWhenResourceValid() throws Exception {
         String body = "{\"email\": \"test@test.com\", \"password\": \"Password1\"}";
 
         when(userDao.findUserByEmailAndPassword(anyString(), anyString())).thenReturn(null);

@@ -34,7 +34,7 @@ public class RegisterControllerTest {
 
 
     @Test
-    public void statusBadRequestWhenEmailNotGiven() throws Exception {
+    void statusBadRequestWhenEmailNotGiven() throws Exception {
         String body = "{\"email\": \"\", \"password\": \"password\"}";
 
         mockMvc.perform(post("/register")
@@ -45,7 +45,7 @@ public class RegisterControllerTest {
     }
 
     @Test
-    public void statusBadRequestWhenEmailInvalid() throws Exception {
+    void statusBadRequestWhenEmailInvalid() throws Exception {
         String body = "{\"email\": \"email\", \"password\": \"password\"}";
 
         mockMvc.perform(post("/register")
@@ -56,7 +56,7 @@ public class RegisterControllerTest {
     }
 
     @Test
-    public void statusOkWhenResourceValid() throws Exception {
+    void statusOkWhenResourceValid() throws Exception {
         String body = "{\"email\": \"test@test.com\", \"password\": \"Password1\"}";
 
         when(userDao.findUserByEmailAndPassword(anyString(), anyString())).thenReturn(null);

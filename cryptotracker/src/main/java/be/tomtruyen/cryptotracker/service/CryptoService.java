@@ -58,7 +58,7 @@ public class CryptoService {
 
         return user;
     }
-    
+
     public CryptoResponse getPortfolio(String token) {
         User user = validateTokenAndGetUser(token, "/cryptocurrencies/portfolio");
 

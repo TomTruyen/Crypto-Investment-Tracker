@@ -29,12 +29,9 @@ public class VerifyControllerTest {
     @MockBean
     private VerifyService verifyService;
 
-    @MockBean
-    private UserDao userDao;
-
 
     @Test
-    public void statusBadRequestWhenEmailNotGiven() throws Exception {
+    void statusBadRequestWhenEmailNotGiven() throws Exception {
         String body = "{\"email\": \"\"}";
 
         mockMvc.perform(post("/verify")
@@ -45,7 +42,7 @@ public class VerifyControllerTest {
     }
 
     @Test
-    public void statusBadRequestWhenEmailInvalid() throws Exception {
+    void statusBadRequestWhenEmailInvalid() throws Exception {
         String body = "{\"email\": \"email\"}";
 
         mockMvc.perform(post("/verify")
@@ -56,10 +53,9 @@ public class VerifyControllerTest {
     }
 
     @Test
-    public void statusOkWhenResourceValid() throws Exception {
+    void statusOkWhenResourceValid() throws Exception {
         String body = "{\"email\": \"test@test.com\"}";
 
-        when(userDao.findUserByEmailAndPassword(anyString(), anyString())).thenReturn(null);
         when(verifyService.verify(any())).thenReturn(new UserResponseBuilder().withOk().build());
 
         mockMvc.perform(post("/verify")
