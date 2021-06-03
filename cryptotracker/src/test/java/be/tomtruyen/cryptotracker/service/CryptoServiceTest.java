@@ -93,4 +93,47 @@ public class CryptoServiceTest
         Assertions.assertEquals(200, cryptoResponse.getStatus());
         Assertions.assertEquals("/cryptocurrencies/portfolio", cryptoResponse.getPath());
     }
+
+    @Test
+    void getPortfolioHistoryThrowsInvalidTokenExceptionWhenInvalidToken() {
+        when(jwtService.verifyToken(anyString())).thenReturn(null);
+
+        Assertions.assertThrows(InvalidTokenException.class, () -> cryptoService.getPortfolioHistory(""));
+    }
+
+    @Test
+    void getPortfolioHistoryThrowsInvalidTokenExceptionWhenIdNotValid() {
+        Claims claims = new DefaultClaims();
+        claims.put("id", -1);
+
+        when(jwtService.verifyToken(anyString())).thenReturn(claims);
+
+        Assertions.assertThrows(InvalidTokenException.class, () -> cryptoService.getPortfolioHistory(""));
+    }
+
+    @Test
+    void getPortfolioHistoryThrowsUserNotFoundExceptionWhenUserNotFound() {
+        Claims claims = new DefaultClaims();
+        claims.put("id", 1);
+
+        when(jwtService.verifyToken(anyString())).thenReturn(claims);
+        when(userDao.findUserById(anyLong())).thenReturn(null);
+
+        Assertions.assertThrows(CryptoUserNotFoundException.class, () -> cryptoService.getPortfolioHistory(""));
+    }
+
+    @Test
+    void getPortfolioHistoryStatusOkWhenPortfolioFetched() {
+        Claims claims = new DefaultClaims();
+        claims.put("id", 1);
+
+        when(jwtService.verifyToken(anyString())).thenReturn(claims);
+        when(userDao.findUserById(anyLong())).thenReturn(new User());
+
+        CryptoResponse cryptoResponse = cryptoService.getPortfolioHistory("");
+
+        Assertions.assertNotNull(cryptoResponse);
+        Assertions.assertEquals(200, cryptoResponse.getStatus());
+        Assertions.assertEquals("/cryptocurrencies/portfolio/history", cryptoResponse.getPath());
+    }
 }
