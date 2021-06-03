@@ -10,14 +10,16 @@ import be.tomtruyen.cryptotracker.domain.User;
 import be.tomtruyen.cryptotracker.domain.builder.CryptoResponseBuilder;
 import be.tomtruyen.cryptotracker.domain.response.CryptoResponse;
 import be.tomtruyen.cryptotracker.repository.CryptoRepository;
+import be.tomtruyen.cryptotracker.rest.resources.CryptoBuyResource;
+import be.tomtruyen.cryptotracker.rest.resources.CryptoSellResource;
 import be.tomtruyen.cryptotracker.util.exception.CryptoUserNotFoundException;
 import be.tomtruyen.cryptotracker.util.exception.InvalidTokenException;
 import be.tomtruyen.cryptotracker.util.jwt.JwtService;
 import io.jsonwebtoken.Claims;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
-import java.util.ArrayList;
 
 @Service
 public class CryptoService {
@@ -77,5 +79,58 @@ public class CryptoService {
         List<CoingeckoCrypto> crypto = CryptoRepository.getInstance().get(150);
 
         return new CryptoResponseBuilder().withPath("/cryptocurrencies/list").withCrypto(crypto).withOk().build();
+    }
+
+    public CryptoResponse buy(String token, CryptoBuyResource cryptoResource) {
+        User user = validateTokenAndGetUser(token, "/cryptocurrencies/buy");
+
+        CoingeckoCrypto coingeckoCrypto = CryptoRepository.getInstance().find(cryptoResource.getTicker());
+
+        Crypto crypto = new Crypto();
+        crypto.setName(coingeckoCrypto.getName());
+        crypto.setTicker(crypto.getTicker());
+        crypto.setBuyAmount(cryptoResource.getAmount());
+        crypto.setBuyPrice(cryptoResource.getPrice());
+        crypto.setBuyDate(new Date());
+        crypto.setUser(user);
+
+        cryptoDao.save(crypto);
+
+        return new CryptoResponseBuilder().withPath("/cryptocurrencies/buy").withOk().build();
+    }
+
+    public CryptoResponse sell(String token, CryptoSellResource cryptoResource) {
+        User user = validateTokenAndGetUser(token,"/cryptocurrencies/sell");
+
+        Crypto crypto = cryptoDao.findFirstById(cryptoResource.getId());
+
+        // Insert history
+        HistoryCrypto sellCrypto = new HistoryCrypto();
+        sellCrypto.setName(crypto.getName());
+        sellCrypto.setTicker(crypto.getTicker());
+        sellCrypto.setBuyAmount(crypto.getBuyAmount());
+        sellCrypto.setBuyPrice(crypto.getBuyPrice());
+        sellCrypto.setBuyDate(crypto.getBuyDate());
+        sellCrypto.setSellAmount(cryptoResource.getAmount());
+        sellCrypto.setSellPrice(cryptoResource.getPrice());
+        sellCrypto.setSellDate(new Date());
+        sellCrypto.setGas(cryptoResource.isGas());
+        sellCrypto.setUser(crypto.getUser());
+
+        historyCryptoDao.save(sellCrypto);
+
+        // Update portfolio
+        double newSellAmount = crypto.getSellAmount() + cryptoResource.getAmount();
+
+        if(newSellAmount >= crypto.getBuyAmount() || crypto.getBuyAmount() - newSellAmount < 0.000001) {
+            // Delete crypto
+            cryptoDao.delete(crypto);
+        } else {
+            // Update crypto
+            crypto.setSellAmount(newSellAmount);
+            cryptoDao.save(crypto);
+        }
+
+        return new CryptoResponseBuilder().withPath("/cryptocurrencies/sell").withOk().build();
     }
 }
