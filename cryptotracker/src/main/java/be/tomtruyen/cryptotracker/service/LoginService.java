@@ -17,9 +17,9 @@ import org.springframework.stereotype.Service;
 public class LoginService {
     private static final Logger LOGGER = LogManager.getLogger(LoginService.class);
 
-    final JwtService jwtService;
+    private final JwtService jwtService;
 
-    final UserDao userDao;
+    private final UserDao userDao;
 
     public LoginService(JwtService jwtService, UserDao userDao) {
         this.jwtService = jwtService;
