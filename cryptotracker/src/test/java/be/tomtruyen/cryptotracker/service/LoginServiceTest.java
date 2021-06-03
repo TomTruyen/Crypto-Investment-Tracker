@@ -22,8 +22,6 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class LoginServiceTest {
-    private final Random random = new Random();
-
     @Mock
     private UserDao userDao;
 
@@ -44,7 +42,7 @@ public class LoginServiceTest {
 
     @Test
     void throwsUserNotFoundExceptionWhenUserNotFound() {
-        userResource.setEmail("random" + random.nextInt() + "@test.com");
+        when(userDao.findUserByEmailAndPassword(anyString(), anyString())).thenReturn(null);
 
         Assertions.assertThrows(UserNotFoundException.class, () -> loginService.login(userResource));
     }
