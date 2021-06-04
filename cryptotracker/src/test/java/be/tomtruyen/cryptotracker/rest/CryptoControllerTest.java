@@ -166,7 +166,7 @@ public class CryptoControllerTest {
 
     @Test
     void sellCryptoBadRequestWhenCryptoSellResourceContainsAmountOrPriceSmallerThanOrEqualToZeroInvalid() throws Exception {
-        String body = "{\"id\": \"1\", \"ticker\": \"BTC\", \"amount\": \"1\", \"price\": \"0\", \"isGas\": \"true\"}";
+        String body = "{\"id\": \"1\", \"ticker\": \"BTC\", \"amount\": \"0\", \"price\": \"1\", \"isGas\": \"true\"}";
 
         mockMvc.perform(post("/cryptocurrencies/sell")
                 .contentType(MediaType.APPLICATION_JSON)
