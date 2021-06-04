@@ -203,6 +203,8 @@ public class CryptoServiceTest
         Claims claims = new DefaultClaims();
         claims.put("id", 1);
 
+        cryptoBuyResource.setTicker("DOES NOT EXIST");
+
         when(jwtService.verifyToken(anyString())).thenReturn(claims);
         when(userDao.findUserById(anyLong())).thenReturn(new User());
 
