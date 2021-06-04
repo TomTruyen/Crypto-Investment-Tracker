@@ -5,8 +5,8 @@ import LoginResult from '../models/LoginResult';
 import RegisterResult from '../models/RegisterResult';
 import VerifyResult from '../models/VerifyResult';
 
-// const baseURL = "http://84.195.217.213:8888/";
-const baseURL = "http://localhost:8888/";
+const baseURL = "http://84.195.217.213:8888/";
+// const baseURL = "http://localhost:8888/";
 
 export default class API {
     static async login(email, password) {
