@@ -11,7 +11,6 @@ public class CryptoSellResource {
     private String ticker;
     @DecimalMin(value = "0.0", inclusive = false, message = "Amount must be greater than zero")
     private double amount;
-    @DecimalMin(value = "0.0", inclusive = false, message = "Amount must be greater than zero")
     private double price;
     private boolean isGas = false;
 

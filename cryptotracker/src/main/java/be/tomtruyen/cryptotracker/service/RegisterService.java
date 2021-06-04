@@ -40,6 +40,6 @@ public class RegisterService {
 
             EmailService.sendVerificationEmail(user.getEmail());
 
-            return new UserResponseBuilder().withPath("/register").withOk().build();
+            return new UserResponseBuilder().withPath("/register").withMessage("Email verification sent").withOk().build();
     }
 }

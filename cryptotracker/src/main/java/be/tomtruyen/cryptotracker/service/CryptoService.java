@@ -93,7 +93,7 @@ public class CryptoService {
 
         Crypto crypto = new Crypto();
         crypto.setName(coingeckoCrypto.getName());
-        crypto.setTicker(crypto.getTicker());
+        crypto.setTicker(cryptoResource.getTicker().toUpperCase());
         crypto.setBuyAmount(cryptoResource.getAmount());
         crypto.setBuyPrice(cryptoResource.getPrice());
         crypto.setBuyDate(new Date());
