@@ -338,14 +338,17 @@ export default {
     },
     async fetchCryptos() {
       const token = this.$session.get("access_token");
-      const isSuccess = await this.$store.dispatch(
-        "setCoingeckoCryptos",
-        token
-      );
 
-      if (isSuccess) {
-        this.resetTimer();
-        this.startTimer();
+      if (token) {
+        const isSuccess = await this.$store.dispatch(
+          "setCoingeckoCryptos",
+          token
+        );
+
+        if (isSuccess) {
+          this.resetTimer();
+          this.startTimer();
+        }
       }
     },
     sell(item) {
