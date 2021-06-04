@@ -5,8 +5,8 @@ import LoginResult from '../models/LoginResult';
 import RegisterResult from '../models/RegisterResult';
 import VerifyResult from '../models/VerifyResult';
 
-const baseURL = "http://84.195.217.213:8888/";
-// const baseURL = "http://localhost:8888/";
+// const baseURL = "http://84.195.217.213:8888/";
+const baseURL = "http://localhost:8888/";
 
 export default class API {
     static async login(email, password) {
@@ -27,7 +27,7 @@ export default class API {
 
         let result = new LoginResult();
         await axios.request(options).then((res) => {
-            if (res.data != null) {
+            if (res.data) {
                 result = LoginResult.fromJSON(res.data);
             }
         }).catch((err) => {
@@ -57,7 +57,7 @@ export default class API {
 
         let result = new RegisterResult();
         await axios.request(options).then((res) => {
-            if (res.data != null) {
+            if (res.data) {
                 result = RegisterResult.fromJSON(res.data);
             }
         }).catch((err) => {
@@ -86,7 +86,7 @@ export default class API {
 
         let result = new VerifyResult();
         await axios.request(options).then((res) => {
-            if (res.data != null) {
+            if (res.data) {
                 result = VerifyResult.fromJSON(res.data);
             }
         }).catch((err) => {
@@ -115,7 +115,7 @@ export default class API {
 
         let result = new VerifyResult();
         await axios.request(options).then((res) => {
-            if (res.data != null) {
+            if (res.data) {
                 result = VerifyResult.fromJSON(res.data);
             }
         }).catch((err) => {
@@ -145,14 +145,16 @@ export default class API {
 
         let cryptos = [];
         await axios.request(options).then((res) => {
-            if (res.data != null && res.data.success) {
+            console.log(res);
+
+            if (res.data && res.data.success) {
                 const _cryptos = res.data.crypto;
 
                 for (let i = 0; i < _cryptos.length; i++) {
                     cryptos.push(Crypto.fromJSON(_cryptos[i]));
                 }
             }
-        }).catch((err) => { console.log(err.response.data) });
+        }).catch((err) => { console.log(err); console.log(err.response.data) });
 
         // console.clear();
 
@@ -177,7 +179,7 @@ export default class API {
 
         let cryptos = [];
         await axios.request(options).then((res) => {
-            if (res.data != null && res.data.success) {
+            if (res.data && res.data.success) {
                 const _cryptos = res.data.crypto;
 
                 for (let i = 0; i < _cryptos.length; i++) {
@@ -209,7 +211,7 @@ export default class API {
 
         let cryptos = [];
         await axios.request(options).then((res) => {
-            if (res.data != null && res.data.success) {
+            if (res.data && res.data.success) {
                 const _cryptos = res.data.crypto;
 
                 for (let i = 0; i < _cryptos.length; i++) {

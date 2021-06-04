@@ -19,8 +19,8 @@ export default class Crypto {
     static fromJSON(json) {
         return new Crypto(
             parseInt(json['id']),
-            json['name'].toString(),
-            json['ticker'].toString(),
+            json['name']?.toString(),
+            json['ticker']?.toString()?.toUpperCase(),
             parseFloat(json['buyAmount']),
             parseFloat(json['buyPrice']),
             Utils.toFormatDate(new Date(json['buyDate'])),

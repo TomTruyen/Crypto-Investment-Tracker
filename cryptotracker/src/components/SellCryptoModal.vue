@@ -108,9 +108,6 @@ export default {
       } else if (_amount <= 0) {
         this.error = "Sell amount must be greater than 0";
         return false;
-      } else if (_maxAmount <= _amount) {
-        this.error = "Sell amount can't be more than " + this.maxAmount;
-        return false;
       } else if (_price <= 0 && !_isGas) {
         this.error = "Sell price must be greater than 0";
         return false;
