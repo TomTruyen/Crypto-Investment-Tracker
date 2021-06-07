@@ -28,7 +28,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CryptoServiceTest
@@ -104,6 +104,7 @@ public class CryptoServiceTest
         Assertions.assertNotNull(cryptoResponse);
         Assertions.assertEquals(200, cryptoResponse.getStatus());
         Assertions.assertEquals("/cryptocurrencies/portfolio", cryptoResponse.getPath());
+        verify(cryptoDao, times(1)).findCryptosByUserOrderByBuyDateAscNameAsc(any());
     }
 
     @Test
@@ -147,6 +148,7 @@ public class CryptoServiceTest
         Assertions.assertNotNull(cryptoResponse);
         Assertions.assertEquals(200, cryptoResponse.getStatus());
         Assertions.assertEquals("/cryptocurrencies/portfolio/history", cryptoResponse.getPath());
+        verify(historyCryptoDao, times(1)).findHistoryCryptoByUserOrderBySellDate(any());
     }
 
     @Test
