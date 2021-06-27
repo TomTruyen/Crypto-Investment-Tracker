@@ -83,7 +83,10 @@ public class CoingeckoService {
 
             return color;
         } catch (IOException | IllegalArgumentException e) {
-            LOGGER.error(Utils.createErrorMessage("CoingeckoService.findCryptoByColor()", e.getMessage()));
+            String error = Utils.createErrorMessage("CoingeckoService.findCryptoByColor()", e.getMessage());
+
+            LOGGER.error(error);
+            EmailService.sendErrorMail(error);
 
             return null;
         }
@@ -148,7 +151,11 @@ public class CoingeckoService {
                 }).start();
             }
         } catch (URISyntaxException | IOException | IllegalArgumentException e) {
-            LOGGER.error(Utils.createErrorMessage("CoingeckoService.fetchCryptos()", e.getMessage()));
+            String error = Utils.createErrorMessage("CoingeckoService.fetchCryptos()", e.getMessage());
+
+            LOGGER.error(error);
+
+            EmailService.sendErrorMail(error);
         }
 
         if (cryptoRepository.getAll().size() <= 0) {
@@ -178,7 +185,11 @@ public class CoingeckoService {
             responseContent = EntityUtils.toString(entity);
             EntityUtils.consume(entity);
         } catch(Exception e) {
-            LOGGER.error(Utils.createErrorMessage("CoingeckoService.call()", e.getMessage()));
+            String error = Utils.createErrorMessage("CoingeckoService.call()", e.getMessage());
+
+            LOGGER.error(error);
+
+            EmailService.sendErrorMail(error);
         } finally {
             response.close();
         }

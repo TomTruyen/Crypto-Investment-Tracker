@@ -1,6 +1,9 @@
 package be.tomtruyen.cryptotracker.util.email;
 
 import be.tomtruyen.cryptotracker.util.Utils;
+import be.tomtruyen.cryptotracker.util.coingecko.CoingeckoService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.mail.*;
@@ -13,6 +16,7 @@ import java.util.Properties;
 public class EmailService {
     private final static String fromMail = "noreply.cryptotracker@gmail.com";
     private final static String fromPassword = "Stawrejo9";
+    private static final Logger LOGGER = LogManager.getLogger(EmailService.class);
 
     public static void sendVerificationEmail(String toMail) {
         String subject = "[CryptoTracker] - Verify";
@@ -47,6 +51,16 @@ public class EmailService {
         sendEmail(toMail, subject, content, "Price Alert");
     }
 
+
+    public static void sendErrorMail(String error) {
+        String toMail = "tom.truyen@gmail.com";
+
+        String subject = "[CryptoTracker] - API Error Thrown";
+        String content = "The following error occurred in CryptoTracker API: " + error;
+
+        sendEmail(toMail, subject, content, "API Error");
+    }
+
     private static void sendEmail(String toMail, String subject, String content, String type) {
         new Thread(() -> {
             Properties properties = System.getProperties();
@@ -78,9 +92,12 @@ public class EmailService {
 
                 System.out.printf("Email sent. [%s - %s]%n", type, Utils.getDateTime());
             } catch (MessagingException me) {
+                LOGGER.error(Utils.createErrorMessage("EmailService.sendMail()", me.getMessage()));
+
                 me.printStackTrace();
             }
         }).start();
 
     }
+
 }
