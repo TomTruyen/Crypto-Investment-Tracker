@@ -4,6 +4,7 @@ import be.tomtruyen.cryptotracker.dao.CryptoDao;
 import be.tomtruyen.cryptotracker.domain.CoingeckoCrypto;
 import be.tomtruyen.cryptotracker.domain.Crypto;
 import be.tomtruyen.cryptotracker.repository.CryptoRepository;
+import be.tomtruyen.cryptotracker.rest.handler.JpaExceptionHandler;
 import be.tomtruyen.cryptotracker.util.Utils;
 import be.tomtruyen.cryptotracker.util.email.EmailService;
 import be.tomtruyen.cryptotracker.util.file.FileService;
@@ -19,6 +20,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +39,7 @@ import java.util.List;
 public class CoingeckoService {
     private final CryptoDao cryptoDao;
     private final FileService fileService;
+    private static final Logger LOGGER = LogManager.getLogger(CoingeckoService.class);
 
     public CoingeckoService(CryptoDao cryptoDao, FileService fileService) {
         this.cryptoDao = cryptoDao;
@@ -78,7 +82,9 @@ public class CoingeckoService {
             }
 
             return color;
-        } catch (IOException e) {
+        } catch (IOException | IllegalArgumentException e) {
+            LOGGER.error(Utils.createErrorMessage("CoingeckoService.findCryptoByColor()", e.getMessage()));
+
             return null;
         }
     }
@@ -141,8 +147,8 @@ public class CoingeckoService {
                     fileService.writeCryptoToFile(cryptoRepository.getAll());
                 }).start();
             }
-        } catch (URISyntaxException | IOException e) {
-            e.printStackTrace();
+        } catch (URISyntaxException | IOException | IllegalArgumentException e) {
+            LOGGER.error(Utils.createErrorMessage("CoingeckoService.fetchCryptos()", e.getMessage()));
         }
 
         if (cryptoRepository.getAll().size() <= 0) {
@@ -171,6 +177,8 @@ public class CoingeckoService {
             HttpEntity entity = response.getEntity();
             responseContent = EntityUtils.toString(entity);
             EntityUtils.consume(entity);
+        } catch(Exception e) {
+            LOGGER.error(Utils.createErrorMessage("CoingeckoService.call()", e.getMessage()));
         } finally {
             response.close();
         }
