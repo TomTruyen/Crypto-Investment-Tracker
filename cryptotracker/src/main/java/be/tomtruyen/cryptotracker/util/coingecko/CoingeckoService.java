@@ -107,7 +107,7 @@ public class CoingeckoService {
 
         cryptoRepository.incrementCount();
 
-        String uri = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=false&price_change_percentage=24h%2C7d%2C30d%2C1y";
+        String uri = "http://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=false&price_change_percentage=24h%2C7d%2C30d%2C1y";
         List<NameValuePair> parameters = new ArrayList<>();
         parameters.add(new BasicNameValuePair("sort", "cmc_rank"));
 
@@ -146,9 +146,7 @@ public class CoingeckoService {
                     }
                 }).start();
 
-                new Thread(() -> {
-                    fileService.writeCryptoToFile(cryptoRepository.getAll());
-                }).start();
+                new Thread(() -> fileService.writeCryptoToFile(cryptoRepository.getAll())).start();
             }
         } catch (URISyntaxException | IOException | IllegalArgumentException e) {
             String error = Utils.createErrorMessage("CoingeckoService.fetchCryptos()", e.getMessage());
@@ -178,20 +176,16 @@ public class CoingeckoService {
 
         request.setHeader(HttpHeaders.ACCEPT, "application/json");
 
-        CloseableHttpResponse response = client.execute(request);
-
-        try {
+        try (CloseableHttpResponse response = client.execute(request)) {
             HttpEntity entity = response.getEntity();
             responseContent = EntityUtils.toString(entity);
             EntityUtils.consume(entity);
-        } catch(Exception e) {
+        } catch (Exception e) {
             String error = Utils.createErrorMessage("CoingeckoService.call()", e.getMessage());
 
             LOGGER.error(error);
 
             EmailService.sendErrorMail(error);
-        } finally {
-            response.close();
         }
 
         return responseContent;
