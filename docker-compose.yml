@@ -10,6 +10,7 @@ services:
     depends_on:
       - db
   website:
+    tty: true
     container_name: website
     restart: always
     build: 

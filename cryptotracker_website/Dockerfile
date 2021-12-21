@@ -24,6 +24,6 @@ RUN git clone https://github.com/TomTruyen/Crypto-Investment-Tracker.git
 
 WORKDIR /usr/share/nginx/html/Crypto-Investment-Tracker/cryptotracker_website
 
-ENTRYPOINT rm -rf node_modules && git pull && npm i && npm run build
+ENTRYPOINT rm -rf node_modules && git pull && npm i && npm run build && nginx && tail
 
 EXPOSE 80
