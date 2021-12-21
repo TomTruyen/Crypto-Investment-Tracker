@@ -5,7 +5,7 @@ import LoginResult from '../models/LoginResult';
 import RegisterResult from '../models/RegisterResult';
 import VerifyResult from '../models/VerifyResult';
 
-const baseURL = process.env.BASE_URL;
+const baseURL = process.env.VUE_APP_BASE_URL;
 
 export default class API {
     static async login(email, password) {
