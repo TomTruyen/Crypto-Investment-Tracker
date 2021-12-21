@@ -3,10 +3,12 @@ package be.tomtruyen.cryptotracker.util;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -54,7 +56,9 @@ public class Utils {
     }
 
     public static String priceWithDecimal (double price) {
-        DecimalFormat formatter = new DecimalFormat("###,###,##0.00");
+        NumberFormat nf = NumberFormat.getInstance(Locale.GERMAN);
+        DecimalFormat formatter = (DecimalFormat) nf;
+        formatter.applyPattern("###,###,##0.00");
         return formatter.format(price);
     }
 }
