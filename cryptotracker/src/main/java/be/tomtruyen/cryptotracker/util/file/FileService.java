@@ -9,15 +9,18 @@ import java.util.List;
 
 @Service
 public class FileService {
+    private final String debugFile = "src/main/resources/cryptos.data";
+    private final String prodFile = System.getProperty("user.dir") + "/cryptos.data";
+
     public void writeCryptoToFile(List<CoingeckoCrypto> list) {
         if(!list.isEmpty()) {
             FileOutputStream fileOutputStream = null;
             ObjectOutputStream objectOutputStream = null;
 
             try {
-                File file = new File("src/main/resources/cryptos.data");
+                File file = new File(debugFile);
                 if(System.getProperty("os.name").equalsIgnoreCase("linux")) {
-                    file = new File("/home/pi/Desktop/cryptos.data");
+                    file = new File(prodFile);
                 }
 
 
@@ -56,15 +59,15 @@ public class FileService {
     }
 
     public List<CoingeckoCrypto> readCryptoFromFile() {
-        List<CoingeckoCrypto> cryptos = new ArrayList<CoingeckoCrypto>();
+        List<CoingeckoCrypto> cryptos = new ArrayList<>();
 
         FileInputStream fileInputStream;
         ObjectInputStream objectInputStream;
 
         try {
-            File file = new File("src/main/resources/cryptos.data");
+            File file = new File(debugFile);
             if(System.getProperty("os.name").equalsIgnoreCase("linux")) {
-                file = new File("/home/pi/Desktop/cryptos.data");
+                file = new File(prodFile);
             }
 
             if(file.exists()) {
