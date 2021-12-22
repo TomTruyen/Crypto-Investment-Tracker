@@ -4,9 +4,9 @@ FROM openjdk:11
 WORKDIR /
 
 # Install maven (mvn)
-RUN apt update
-RUN apt upgrade -y
-RUN apt install maven -y
+RUN apt-get update
+RUN apt-get upgrade -y
+RUN apt-get install maven -y
 
 # Get GitHub repository
 RUN git clone https://github.com/TomTruyen/Crypto-Investment-Tracker.git

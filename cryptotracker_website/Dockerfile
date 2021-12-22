@@ -15,9 +15,9 @@ WORKDIR /usr/share/nginx/html
 RUN rm *
 
 # Get required packages
-RUN apt update
-RUN apt upgrade -y
-RUN apt install npm nodejs -y
+RUN apt-get update
+RUN apt-get upgrade -y
+RUN apt-get install npm nodejs -y
 
 # Clone repository
 RUN git clone https://github.com/TomTruyen/Crypto-Investment-Tracker.git
