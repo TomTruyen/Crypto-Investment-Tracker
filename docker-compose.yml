@@ -18,7 +18,7 @@ services:
     ports: 
       - '80:80'
   db:
-    image: mariadb
+    image: lscr.io/linuxserver/mariadb
     container_name: db
     restart: always
     environment:

@@ -1,12 +1,12 @@
-FROM openjdk:11
+FROM arm32v7/openjdk:11
 
 # Set current directory to root
 WORKDIR /
 
 # Install maven (mvn)
 RUN apt-get update
-RUN apt-get upgrade -y
-RUN apt-get install maven -y
+RUN apt-get upgrade -y --allow-unauthenticated
+RUN apt-get install maven -y --allow-unauthenticated
 
 # Get GitHub repository
 RUN git clone https://github.com/TomTruyen/Crypto-Investment-Tracker.git

@@ -1,4 +1,4 @@
-FROM nginx
+FROM arm32v7/nginx
 
 # Set directory
 WORKDIR /etc/nginx/conf.d
@@ -15,7 +15,8 @@ WORKDIR /usr/share/nginx/html
 RUN rm *
 
 # Get required packages
-RUN apt-get update
+
+RUN apt-get update 
 RUN apt-get upgrade -y
 RUN apt-get install npm nodejs -y
 
